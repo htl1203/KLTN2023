@@ -12,42 +12,95 @@
   -textmiddle022: #0c6fbe;
   -inputdadien: #e8f0fe;
 }
-.header {
-  width: 83%;
+.headerkh {
+  width: 100%;
   height: 60px;
+  display: flex;
   justify-content: center;
-  background-color: #3871C1;
+  align-self: center;
+  align-items: center;
+  background-color: #296088;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   position: fixed;
   z-index: 1;
 }
 
-.header .container-header {
-  width: 95%;
+.headerkh .container-header {
+  width: 96%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
 }
-.header .search-bar form {
-  width: 300px;
-  position: relative;
+.headerkh .left-bar{
+  display: flex;
+  align-self: center;
+}
+.headerkh .left-bar .divHinhAnh{
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+.headerkh .left-bar .btnTinTuc{
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+}
+.headerkh .left-bar .btnTinTuc .btnTinTucMain{
+  width: 100%;
+  height: 20px;
+}
+.headerkh .left-bar .btnTinTuc a{
+  height: 40px;
+  text-decoration: none;
+}
+.headerkh .left-bar .btnTinTuc a :hover{
+  color: inherit;
+  text-decoration: none;
+}
+.headerkh .left-bar .btnTinTuc p{
+  color: #ffffff;
+  font-size: 22px;
+  align-self: center;
+  font-weight: 450;
 }
 
-.header .search-bar form input {
+.header .search-bar{
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+.headerkh .search-bar .div-search-bar{
+  height: 10px;
+  width: 100%;
+}
+.headerkh .search-bar form {
+  width: 80%;
+  position: relative;
+  align-self: center;
+}
+
+.headerkh .search-bar form input {
   width: 100%;
   background-color: #fff;
   height: 38px;
-  color: #3871C1;
+  color: #296088;
   font-size: 12px;
   border: 1px solid #e6ecf0;
   padding: 0 15px;
   border-radius: 20px !important;
 }
-.header .search-bar ::placeholder {
-  color: #3871C1;
+.headerkh .search-bar ::placeholder {
+  color: #296088;
 }
-.header .search-bar form input:focus {
+.headerkh .search-bar form input:focus {
   outline: none;
 }
-.header .search-bar form button {
+.headerkh .search-bar form button {
   position: absolute;
   top: 0;
   right: 0;
@@ -56,30 +109,43 @@
   height: 100%;
   border: 0;
 }
-.header .search-bar form button i {
-  color: #3871C1;
+.headerkh .search-bar form button i {
+  color: #296088;
   font-size: 16px;
 }
-.header .header-left {
+.headerkh .right-bar{
+}
+.headerkh .header-left {
   float: right;
   justify-content: center;
+  height: 60px;
 }
-.header .navbar-collapse {
+.headerkh .header-left .btnTinTucMain{
+  width: 100%;
+  height: 10px;
+}
+.headerkh .navbar-collapse {
   justify-content: right;
   align-items: center;
 }
 
-.header .header-left li > a {
+.headerkh .header-left li > a {
   font-weight: 500;
-  font-size: 16px;
+  font-size: 25px;
   color: #ffffff;
 }
 
-.header .header-left li div a:hover {
+.headerkh .header-left li div a:hover {
   background-color: #ffffff;
 }
-.header .header-left li > a > p {
-  font-size: 16px;
+.headerkh .header-left li > a > p {
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: 450;
+}
+
+.headerkh .header-left li > a > p >i{
+  font-size: 25px;
   color: #ffffff;
   font-weight: 450;
 }
@@ -109,7 +175,7 @@
 }
 
 .model-header-ql .container-model i {
-  color: #078c80;
+  color: #296088;
   font-size: 60px;
 }
 .model-header-ql .main-doi-mat-khau-header {
@@ -145,16 +211,5 @@
 }
 
 .menubar .nav-item :hover {
-  color: #3871C1;
+  color: #06a881;
 }
-
-.menubar .logo_header{
-  justify-content:center ; 
-  margin-left: 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin-left: -10px;
-}
-

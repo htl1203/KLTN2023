@@ -12,7 +12,7 @@
   margin-bottom: 30px;
 }
 .thongke .main-home h3 {
-  color: #06a881;
+  color: #3871C1;
   font-weight: 600;
   margin-top: 80px;
 }
@@ -24,7 +24,7 @@
 
 .thongke .main-home .active i,
 .thongke .main-home .active span {
-  color: #06a881;
+  color: #3871C1;
   font-weight: 600;
   margin-right: 3px;
 }
@@ -41,7 +41,7 @@
   margin-right: 2px;
 }
 .thongke .main-home .tab-content h5 {
-  color: #06a881;
+  color: #3871C1;
   font-weight: 600;
 }
 .thongke .main-home .tab-content select {
@@ -60,5 +60,5 @@
 }
 .thongke .main-home .tab-content .div-table-list th {
   background-color: #f3f7f9;
-  color: #06a881;
+  color: #3871C1;
 }

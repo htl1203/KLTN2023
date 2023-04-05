@@ -1,12 +1,28 @@
-<div class='navbar navbar-expand-lg header'>
+<div class='navbar-expand-lg headerkh'>
   <div class='row container-header'>
-    <div class='search-bar'>
+    <div class='col-4 left-bar row'>
+      <div class='col-3 divHinhAnh'>
+        <img
+          src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/logo_full.png'
+          alt='ảnh thẻ header'
+          style='height: 55px;width: 56px; background: white;border-radius:10px; padding:5px'
+        />
+      </div>
+      <div class='row btnTinTuc col-9'>
+        <div class='btnTinTucMain'></div>
+
+      </div>
+    </div>
+
+    <div class='row col-5 search-bar'>
+      <div class='div-search-bar'>
+      </div>
       <form action=''>
         <input
           type='text'
           id='searchHeader'
           name='searchHeader'
-          placeholder='Tìm kiếm...'
+          placeholder='Tìm kiếm bài viết...'
           required=''
         />
         <button type='submit'><i
@@ -14,32 +30,45 @@
             aria-hidden='true'
           ></i></button>
       </form>
+
     </div>
-    <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+    <div
+      class='col-3 collapse navbar-collapse right-bar'
+      id='navbarSupportedContent'
+    >
       <div class='header-left'>
 
-        {{#if messages.error}}
-          <p style='color:red'>
-            {{messages.error}}
-          </p>
-        {{/if}}
-
-        {{#if messages.success}}
-          <p style='color:green'>
-            {{messages.success}}
-          </p>
-        {{/if}}
-        <ul class='navbar-nav mr-auto nav-header'>
-          <li class='nav-item active' style='margin-right: 40px;'>
-            <a class='nav-link' href='/home'>
-              <p> <i class='fas fa-home'></i>Trang chủ</p>
+        <ul class='row navbar-nav mr-auto nav-header'>
+          <div class='btnTinTucMain'></div>
+          <li class='nav-item active' style='margin-right: 15px;'>
+            <a class='nav-link' href='/dangtin'>
+              <p> <i class='fa fa-pencil'></i></p>
               <span class='sr-only'>(current)</span>
             </a>
           </li>
-          <li class='nav-item dropdown row'>
+          <li class='nav-item active' style='margin-right: 15px;'>
+            <a class='nav-link' href='/thongtincanhan'>
+              <p> <i class='fa fa-bell-o'></i></p>
+              <span class='sr-only'>(current)</span>
+            </a>
+          </li>
+          {{! <li class='nav-item active'>
+            <a class='nav-link' href='/register'>
+              <p> Đăng ký</p>
+              <span class='sr-only'>(current)</span>
+            </a>
+          </li> }}
+          <li class='nav-item active'>
+            <a class='nav-link' href='/login'>
+              {{! <p> Đăng nhập</p> }}
+              <p> {{username}}</p>
+              <span class='sr-only'>(current)</span>
+            </a>
+          </li>
+          {{!-- <li class='nav-item dropdown row'>
 
             <img
-              src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/logo_full.png'
+              src='https://rubee.com.vn/wp-content/uploads/2021/05/Logo-IUH.jpg'
               alt='ảnh thẻ header'
               style='height: 28px;width: 28px;border-radius: 28px; margin-bottom: 10px;align-self: center;
                 '
@@ -63,7 +92,7 @@
               <div class='dropdown-divider'></div>
               <a class='dropdown-item' href='/login'>Đăng xuất</a>
             </div>
-          </li>
+          </li> --}}
         </ul>
       </div>
     </div>
@@ -158,4 +187,15 @@
   }, dataType: 'json', success: function (result) { alert("Cập nhật thành công
   !"); hideDoiMatKhau(); }, error: function (result) { alert("Mật khẩu cũ không
   hợp lệ !"); } }); } }); }
+</script>
+
+<script>
+  // step 1 const ipnElement = document.querySelector('#Password') const
+  btnElement = document.querySelector('#btnPassword') const iconEye =
+  document.querySelector('#iconEye') // step 2
+  btnElement.addEventListener('click', function() { // step 3 const currentType
+  = ipnElement.getAttribute('type') // step 4 ipnElement.setAttribute( 'type',
+  currentType === 'password' ? 'text' : 'password' ) if(currentType
+  ==="password"){ iconEye.classList.replace("fa-eye-slash", "fa-eye"); }else{
+  iconEye.classList.replace("fa-eye", "fa-eye-slash"); } })
 </script>

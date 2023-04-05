@@ -10,12 +10,11 @@ const bcrypt = require('bcryptjs');
 class MainController {
   // [GET] /home
   home(req, res) {
-    if (req.session.isAuth) {
-      res.render('home', { hoten: req.session.hoten });
-    } else {
-      req.session.back = '/home';
-      res.redirect('/login/');
-    }
+    res.render('home');
+  }
+
+  homekh(req, res) {
+    res.render('homekh');
   }
 
   // [GET] /home
@@ -23,40 +22,44 @@ class MainController {
     res.render('login');
   }
 
-  // [GET] /login
   login(req, res) {
-    QuanLy.findOne(
-      // { tendangnhap: req.body.tendangnhap, matkhau: req.body.matkhau },
-      { tendangnhap: req.body.tendangnhap },
-
-      function (err, user) {
-        if (!err) {
-          if (user == null) {
-            req.flash('error', 'Tên đăng nhập không đúng!');
-            res.redirect('/login/');
-          } else {
-            if (bcrypt.compareSync(req.body.matkhau, user.matkhau)) {
-              var sess = req.session; //initialize session variable
-              sess.isAuth = true;
-              sess.hoten = user.hoten;
-              sess.tendangnhap = user.tendangnhap;
-              sess.sodienthoai = user.sodienthoai;
-              if (sess.back) {
-                res.redirect(sess.back);
-              } else {
-                res.render('home', { hoten: req.session.hoten });
-              }
-            } else {
-              req.flash('error', 'Mật khẩu không đúng!');
-              res.redirect('/login/');
-            }
-          }
-        } else {
-          res.status(400).json({ error: 'ERROR!!!' });
-        }
-      }
-    );
+    res.render('home');
   }
+
+  // [GET] /login
+  // login(req, res) {
+  //   QuanLy.findOne(
+  //     // { tendangnhap: req.body.tendangnhap, matkhau: req.body.matkhau },
+  //     { tendangnhap: req.body.tendangnhap },
+
+  //     function (err, user) {
+  //       if (!err) {
+  //         if (user == null) {
+  //           req.flash('error', 'Tên đăng nhập không đúng!');
+  //           res.redirect('/login/');
+  //         } else {
+  //           if (bcrypt.compareSync(req.body.matkhau, user.matkhau)) {
+  //             var sess = req.session; //initialize session variable
+  //             sess.isAuth = true;
+  //             sess.hoten = user.hoten;
+  //             sess.tendangnhap = user.tendangnhap;
+  //             sess.sodienthoai = user.sodienthoai;
+  //             if (sess.back) {
+  //               res.redirect(sess.back);
+  //             } else {
+  //               res.render('home', { hoten: req.session.hoten });
+  //             }
+  //           } else {
+  //             req.flash('error', 'Mật khẩu không đúng!');
+  //             res.redirect('/login/');
+  //           }
+  //         }
+  //       } else {
+  //         res.status(400).json({ error: 'ERROR!!!' });
+  //       }
+  //     }
+  //   );
+  // }
 
   // [POST] /themquanly
   themquanly(req, res, next) {

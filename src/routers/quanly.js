@@ -3,10 +3,12 @@ const router = express.Router();
 const mainController = require('../app/controllers/MainController');
 let upload = require('../database/multer.config');
 
-router.get('/home', mainController.home);
+router.get('/home', mainController.homekh);
 router.get('/login', mainController.loginql);
 router.post('/login', mainController.login);
 router.post('/themquanly', mainController.themquanly);
+
+router.get('/quanly/home', mainController.home);
 
 router.get('/quanlybacsi', mainController.quanlybacsi);
 router.post('/quanlybacsi/thembacsi', mainController.thembacsi);
