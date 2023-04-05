@@ -1,0 +1,35 @@
+.home .main-home {
+  margin-top: 60px;
+  height: 1000px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.home .main-home .div-menu {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 180px;
+}
+
+.home .main-home .div-item {
+  height: 110px;
+  width: 250px;
+  box-shadow: 0 0 10px rgba(7, 140, 128, 0.7);
+  border-radius: 10px;
+  padding: 5px;
+}
+.home .main-home .div-item label {
+  color: #06a881;
+}
+.home .main-home .div-item .line {
+  height: 1px;
+  width: 240px;
+  background-color: #06a881;
+  margin-bottom: 5px;
+}
+.home .main-home .div-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

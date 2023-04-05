@@ -1,0 +1,50 @@
+<div class='navbar login'>
+  <div class='img_background_login'>
+    <img
+      src='https://cnm-lab3.s3.ap-southeast-1.amazonaws.com/hotrosinhvienIUH/bg_login.png'
+    />
+    <img
+      class='img'
+      src='https://cnm-lab3.s3.ap-southeast-1.amazonaws.com/hotrosinhvienIUH/favicon.png'
+    />
+    <div class='div_welcome'>
+      Chào mừng bạn đến với
+      <p>Dr.Health</p>
+    </div>
+    <h1>ĐĂNG NHẬP</h1>
+    <div class='div_input'>
+      <form action='/login' id='form-login' method='POST'>
+        <input
+          autocomplete='new-password'
+          class='input'
+          id='UserName'
+          name='tendangnhap'
+          placeholder='Nhập tên tài khoản'
+          required='required'
+          type='text'
+          value=''
+        />
+        <input
+          autocomplete='new-password'
+          class='input'
+          id='Password'
+          name='matkhau'
+          placeholder='Nhập mật khẩu'
+          required='required'
+          type='password'
+        />
+        <div class='Error'>
+          {{#if messages.error}}
+            <p style='color:red'>
+              {{messages.error}}
+            </p>
+          {{/if}}
+        </div>
+        <input type='submit' class='button btnDangNhap' value='ĐĂNG NHẬP' />
+
+      </form>
+
+    </div>
+
+  </div>
+</div>

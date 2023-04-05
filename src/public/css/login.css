@@ -1,0 +1,87 @@
+@charset "UTF-8";
+:root {
+  -text: #06a881;
+  -blue: #4da1e8;
+  -textbold: #333333;
+  -text: #667580;
+  -textblue: #1da1f2;
+  -line: #cccccc;
+  -textred: #ff0000;
+  -headertable: #f3f7f9;
+  -textmiddle: #003f65;
+  -textmiddle022: #0c6fbe;
+  -inputdadien: #e8f0fe;
+}
+.login {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  background-color: #003f65;
+  background-image: url('http://datkham.kcb.vn/background-login.a55dfdeefbadaa0db071.png');
+}
+.login .img_background_login {
+  position: relative;
+}
+.img {
+  /* height: 50px; */
+  position: absolute;
+  right: 200px;
+  top: 110px;
+}
+.div_welcome {
+  position: absolute;
+  left: 90px;
+  top: 80px;
+  color: #06a881;
+  font-weight: 500;
+  font-size: 22px;
+}
+.div_welcome p {
+  font-weight: 700;
+  margin-left: 60px;
+}
+.login h1 {
+  color: #06a881;
+  font-weight: 600;
+  position: absolute;
+  right: 110px;
+  top: 180px;
+}
+.login .div_input {
+  position: absolute;
+  right: -15px;
+  top: 280px;
+  flex-direction: column;
+  display: flex;
+  width: 45%;
+  justify-content: center;
+  align-items: center;
+}
+/* .login .Error, */
+.login #UserName,
+.login #Password {
+  width: 90%;
+  height: 43px;
+  margin-bottom: 30px;
+  border-radius: 6px;
+  border: 1px solid #078c80;
+  color: #06a881;
+  font-style: italic;
+  font-size: 14px;
+  padding-left: 15px;
+  outline: none;
+}
+.login .btnDangNhap {
+  width: 90%;
+  height: 48px;
+  background-color: #06a881;
+  border: none;
+  color: white;
+  font-size: 22px;
+  font-weight: 600;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+.login ::placeholder {
+  color: #078c80;
+}
