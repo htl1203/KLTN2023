@@ -19,7 +19,7 @@
   justify-content: center;
   align-self: center;
   align-items: center;
-  background-color: #296088;
+  background-color: #3871C1;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   position: fixed;
   z-index: 1;
@@ -88,14 +88,14 @@
   width: 100%;
   background-color: #fff;
   height: 38px;
-  color: #296088;
+  color: #3871C1;
   font-size: 12px;
   border: 1px solid #e6ecf0;
   padding: 0 15px;
   border-radius: 20px !important;
 }
 .headerkh .search-bar ::placeholder {
-  color: #296088;
+  color: #3871C1;
 }
 .headerkh .search-bar form input:focus {
   outline: none;
@@ -110,7 +110,7 @@
   border: 0;
 }
 .headerkh .search-bar form button i {
-  color: #296088;
+  color: #3871C1;
   font-size: 16px;
 }
 .headerkh .right-bar{
@@ -175,7 +175,7 @@
 }
 
 .model-header-ql .container-model i {
-  color: #296088;
+  color: #3871C1;
   font-size: 60px;
 }
 .model-header-ql .main-doi-mat-khau-header {
@@ -199,7 +199,7 @@
 }
 
 .menubar {
-  width: 245px;
+  width: 20.4%;
   height: 1000px;
   background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);

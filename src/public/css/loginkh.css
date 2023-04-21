@@ -12,63 +12,64 @@
   -textmiddle022: #0c6fbe;
   -inputdadien: #e8f0fe;
 }
-.login {
+.loginkhkh {
   display: flex;
   /* justify-content: center;
   align-self: center; */
-  background-color: #003f65; 
+  /* background-color: #003f65;  */
   background-image: url('http://datkham.kcb.vn/background-login.a55dfdeefbadaa0db071.png'); 
   height: 100%; 
   width:100%;
 }
-.login .img_background_login {
+.loginkh .img_background_login {
   position: relative;
 }
 
-.login  .bodyMainLogin{
+.loginkh .bodyMainLogin{
   display: flex; 
-  position: absolute;
+  /* position: absolute;
   top: 0px;
-  left: 0px;
+  left: 0px; */
   height: 100%;
   justify-content: center;
+  background-color: #DCDFE4;
 }
 
-.login .mainLogin{
+.loginkh .mainLogin{
   display: flex; 
-  height: 700px;
+  height: 650px;
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 80px;
   border-radius: 20px;
   background-color:white;
 }
 
-.login  .mainLoginKH{
+.loginkh .mainLoginKH{
   display: flex; 
   height: 90%;
   justify-content: center;
   width: 98%;
   padding-top: 10px;
 }
-.mainLoginKH .logo{
+.loginkh .mainLoginKH .logo{
   width: 100%;
   display: flex; 
   height: 180px;
   justify-content: center;
   margin-top: 10px;
 }
-.mainLoginKH .textLogin{
+.loginkh .mainLoginKH .textLogin{
   width: 100%;
   display: flex; 
   height: 100px;
   justify-content: center;
   align-items: center;
 }
-.login h1 {
+.loginkh h1 {
   color: #3871C1;
   font-weight: 600;
 }
-.login .div_input {
+.loginkh .div_input {
   /* flex-direction: column; */
   display: flex;
   width: 100%;
@@ -77,20 +78,20 @@
   height: 80%;
 }
 
-.login .div_input form{
+.loginkh .div_input form{
   flex-direction: column;
   display: flex;
   width: 90%;
   align-items: center;
   height: 100%;
 }
-.login .div_input .div_input_row{
+.loginkh .div_input .div_input_row{
   flex-direction: column;
   display: flex;
   width: 100%;
   margin-bottom: 20px;
 }
-.login .div_input .div_input_row #btnPassword{
+.loginkh .div_input .div_input_row #btnPassword{
   border: none;
   height: 43px;
   width: 50px;
@@ -102,14 +103,14 @@
   align-items: center;
 }
 
-.login .div_input .div_input_row label{
+.loginkh .div_input .div_input_row label{
   color: #3871C1;
   font-size: 18px;
   font-weight: 550;
 }
-/* .login .Error, */
-.login #UserName,
-.login #Password {
+/* .loginkh .Error, */
+.loginkh #UserName,
+.loginkh #Password {
   width: 100%;
   height: 43px;
   border-radius: 6px;
@@ -120,20 +121,20 @@
   padding-left: 15px;
   outline: none;
 }
-.login .div_btn{
+.loginkh .div_btn{
   width: 100%;
   flex-direction:row;
   display: flex;
   justify-content: space-between;
 }
-.login .div_btn a{
+.loginkh .div_btn a{
   text-decoration: none
 }
-.login .div_btn p{
+.loginkh .div_btn p{
   color: #3871C1;
   font-size: 16px;
 }
-.login .btnDangNhap {
+.loginkh .btnDangNhap {
   width: 100%;
   height: 48px;
   background-color: #3871C1;
@@ -144,7 +145,7 @@
   border-radius: 10px;
 }
 
-.login .btnDangNhapKH {
+.loginkh .btnDangNhapKH {
   width: 48%;
   height: 48px;
   background-color: #3871C1;
@@ -155,7 +156,7 @@
   border-radius: 10px;
 }
 
-.login .btnDangKy {
+.loginkh .btnDangKy {
   width: 48%;
   height: 48px;
   background-color: white;
@@ -165,24 +166,24 @@
   align-items: center;
   display: flex;
 }
-.login .btnDangKy p{
+.loginkh .btnDangKy p{
   margin-top: 15px;
   color: #3871C1;
   font-size: 22px;
   font-weight: 600;
 }
 
-.login .div_btn_line{
+.loginkh .div_btn_line{
   margin-top: 20px;
   width: 100%;
   flex-direction:row;
   display: flex;
   justify-content: space-between;
 }
-.login .div_btn_line p{
+.loginkh .div_btn_line p{
   color: #296088;
 }
-.login .div_btn_line .div_line_or{
+.loginkh .div_btn_line .div_line_or{
   width: 35%;
   height: 25px;
   flex-direction:row;
@@ -190,15 +191,15 @@
   justify-content: center;
   align-items: center;
 }
-.login .div_btn_line .div_line_or .line_or{
+.loginkh .div_btn_line .div_line_or .line_or{
   width: 100%;
   height: 2px;
   background-color: #3871C1;
 }
-.login ::placeholder {
+.loginkh ::placeholder {
   color: #3871C1;
 }
-.login .div_btn_social{
+.loginkh .div_btn_social{
   width: 100%;
   height: 43px;
   border-radius: 6px;
@@ -209,7 +210,7 @@
   align-items: center;
 }
 
-.login .div_btn_social a{
+.loginkh .div_btn_social a{
   width: 100%;
   height: 43px; 
   flex-direction:row;
@@ -218,25 +219,25 @@
   align-items: center;
   text-decoration: none
 }
-.login .div_btn_social a i{
+.loginkh .div_btn_social a i{
   color: #3871C1;
   font-size: 22px;
   margin-right: 10px;
   /* cursor: pointer; */
 }
-.login .div_btn_social a p{
+.loginkh .div_btn_social a p{
   color: #3871C1;
   font-size: 16px;
   margin-top: 15px;
 }
-.login .fa-google {
+.loginkh .fa-google {
   background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
-.login .fa-facebook-square {
+.loginkh .fa-facebook-square {
   color: blue;
   background-color: #fff;
 }

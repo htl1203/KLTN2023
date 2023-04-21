@@ -1,0 +1,42 @@
+
+.quanlykhachhangds {
+  background-color: #F7F7F8;
+}
+.quanlykhachhangds .home-header-main {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  margin-left: 20.4%;
+  height: 100%;
+}
+.quanlykhachhangds .main-home-nv {
+  display: flex;
+  margin-top: 60px;
+  width: 100%;
+  flex-direction: column;
+}
+.quanlykhachhangds .main-home-nv .title_chucnang{
+  display: flex;
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+}
+.quanlykhachhangds .main-home-nv .title_chucnang p{
+  font-size: 26px;
+  font-weight: 600;
+  color: #3871C1;
+}
+.quanlykhachhangds .main-home-nv .title_chucnang i{
+  font-size:26px;
+  margin-right: 5px;
+  color: #3871C1;
+  margin-top: 8px;
+}
+.quanlykhachhangds .main-home-nv .line {
+  height: 1px;
+  background-color: #cccccc;
+}  
+.quanlykhachhangds form thead {
+  background-color: #F4F7F9;
+  color: #3871C1;
+}  

@@ -1,0 +1,97 @@
+<div class='loginkh'>
+    <div>
+    {{>headerkh}}
+  </div>
+  <div class='img_background_login'>
+    {{!-- <img
+      src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/bg.png'
+      style='height: 100%; width:100%'
+    /> --}}
+
+    <div class='bodyMainLogin col-12'>
+      <div class='mainLogin col-6'>
+        <div class='row mainLoginKH'>
+          <div class='logo'>
+            <img
+              src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/logo_full.png'
+              alt='ảnh thẻ header'
+              style='height: 180px;width: 181px;'
+            />
+          </div>
+
+          <div class='textLogin'>
+            <h1>ĐĂNG NHẬP</h1>
+          </div>
+
+          <div class='div_input'>
+            <form action='/login' id='form-login' method='POST'>
+              <div class='div_input_row'>
+                <label>Số điện thoại</label>
+                <input
+                  autocomplete='new-password'
+                  class='input'
+                  id='UserName'
+                  name='username'
+                  placeholder='Nhập số điện thoại'
+                  required='required'
+                  type='text'
+                  value=''
+                />
+              </div>
+              <div class='div_input_row' style='position: relative;'>
+                <label>Mật khẩu</label>
+                <input
+                  autocomplete='new-password'
+                  class='input'
+                  id='Password'
+                  name='password'
+                  placeholder='Nhập mật khẩu'
+                  required='required'
+                  type='password'
+                />
+                <div class='' type='button' id='btnPassword'>
+                  <i
+                    id='iconEye'
+                    class='fas fa-eye-slash eye-password'
+                    style='font-size:22px;color: #296088;'
+                  ></i>
+                </div>
+              </div>
+
+              <div class='Error'>
+                {{#if messages.error}}
+                  <p style='color:red'>
+                    {{messages.error}}
+                  </p>
+                {{/if}}
+              </div>
+
+              <div class='div_btn'>
+                <a class='' href='/home'>
+                  <p>Nhớ đăng nhập</p>
+                </a>
+                <a class='' href='/home'>
+                  <p>Quên mật khẩu?</p>
+                </a>
+              </div>
+
+              <div class='div_btn'>
+                <input
+                  type='submit'
+                  class='button btnDangNhapKH'
+                  value='ĐĂNG NHẬP'
+                />
+                <a class='btnDangKy' href='/register'>
+                  <p>ĐĂNG KÝ</p>
+                </a>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

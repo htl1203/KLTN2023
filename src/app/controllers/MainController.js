@@ -1,8 +1,13 @@
-const QuanLy = require('../model/QuanLy');
-const ChuyenKhoa = require('../model/ChuyenKhoa');
-const BacSi = require('../model/BacSi');
-const DanhSachLichKham = require('../model/DanhSachLichKham');
-const BenhNhan = require('../model/BenhNhan');
+const Account = require('../model/Account');
+const Cart = require('../model/Cart');
+const Category = require('../model/Category');
+const Customer = require('../model/Customer');
+const Employee = require('../model/Employee');
+const Order = require('../model/Order');
+const OrderDetails = require('../model/OrderDetails');
+const Payment = require('../model/Payment');
+const Product = require('../model/Product');
+const Supplier = require('../model/Supplier');
 
 const readXlsxFile = require('read-excel-file/node');
 const bcrypt = require('bcryptjs');
@@ -10,11 +15,30 @@ const bcrypt = require('bcryptjs');
 class MainController {
   // [GET] /home
   home(req, res) {
-    res.render('home');
-  }
-
-  homekh(req, res) {
-    res.render('homekh');
+    if (req.session.isAuth) {
+      if (req.session.role == 2) {
+        res.render('home', {
+          accountId: req.session.accountId,
+          username: req.session.username,
+          role: req.session.role,
+          userId: req.session.userId,
+          avatar: req.session.avatar,
+          fullname: req.session.fullname,
+        });
+      } else {
+        res.render('homeadmin', {
+          accountId: req.session.accountId,
+          username: req.session.username,
+          role: req.session.role,
+          userId: req.session.userId,
+          avatar: req.session.avatar,
+          fullname: req.session.fullname,
+        });
+      }
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
   }
 
   // [GET] /home
@@ -23,456 +47,216 @@ class MainController {
   }
 
   login(req, res) {
-    res.render('home');
-  }
-
-  // [GET] /login
-  // login(req, res) {
-  //   QuanLy.findOne(
-  //     // { tendangnhap: req.body.tendangnhap, matkhau: req.body.matkhau },
-  //     { tendangnhap: req.body.tendangnhap },
-
-  //     function (err, user) {
-  //       if (!err) {
-  //         if (user == null) {
-  //           req.flash('error', 'Tên đăng nhập không đúng!');
-  //           res.redirect('/login/');
-  //         } else {
-  //           if (bcrypt.compareSync(req.body.matkhau, user.matkhau)) {
-  //             var sess = req.session; //initialize session variable
-  //             sess.isAuth = true;
-  //             sess.hoten = user.hoten;
-  //             sess.tendangnhap = user.tendangnhap;
-  //             sess.sodienthoai = user.sodienthoai;
-  //             if (sess.back) {
-  //               res.redirect(sess.back);
-  //             } else {
-  //               res.render('home', { hoten: req.session.hoten });
-  //             }
-  //           } else {
-  //             req.flash('error', 'Mật khẩu không đúng!');
-  //             res.redirect('/login/');
-  //           }
-  //         }
-  //       } else {
-  //         res.status(400).json({ error: 'ERROR!!!' });
-  //       }
-  //     }
-  //   );
-  // }
-
-  // [POST] /themquanly
-  themquanly(req, res, next) {
-    const body = { ...req.body };
-    const quanly = new QuanLy(req.body);
-    quanly
-      .save()
-      .then(() => res.json(quanly))
-      .catch(error => {});
-  }
-
-  // [GET] /quanlybacsi
-  quanlybacsi(req, res) {
-    if (req.session.isAuth) {
-      BacSi.find((err, data) => {
-        if (!err) {
-          res.render('quanlybacsi', { data: data, hoten: req.session.hoten });
-          console.log(data);
-        } else {
-          res.status(400).json({ error: 'ERROR!!!' });
-        }
-      }).lean();
-    } else {
-      req.session.back = '/quanlybacsi';
-      res.redirect('/login/');
-    }
-  }
-
-  // [GET] /quanlybacsi
-  thembacsi(req, res) {
-    const bacsi = new BacSi(req.body);
-    console.log('bacsi====them', bacsi);
-    if (req.session.isAuth) {
-      bacsi
-        .save()
-        .then(() => res.redirect('/quanlybacsi'))
-        .catch(error => {});
-    } else {
-      req.session.back = '/quanlybacsi';
-      res.redirect('/login/');
-    }
-  }
-
-  // [DELETE] /cources/:id
-  xoabacsi(req, res, next) {
-    if (req.session.isAuth) {
-      BacSi.delete({ mabacsi: Number(req.params.mabacsi) })
-        .then(() => {
-          res.redirect('/quanlybacsi');
-        })
-        .catch(err => next(err));
-    } else {
-      req.session.back = '/quanlybacsi';
-      res.redirect('/login/');
-    }
-  }
-
-  // [GET] /cources/:id/edit
-  loadchinhsuabacsi(req, res, next) {
-    if (req.session.isAuth) {
-      BacSi.findOne({ mabacsi: Number(req.params.mabacsi) }, (err, data) => {
-        if (!err) {
-          res.render('chinhsuacbacsi', {
-            bacsi: data,
-            hoten: req.session.hoten,
-          });
-        } else {
-          res.status(400).json({ error: 'ERROR!!!' });
-        }
-      }).lean();
-    } else {
-      req.session.back = '/quanlybacsi';
-      res.redirect('/login/');
-    }
-  }
-
-  // [PUT] /cources/:id
-  chinhsuabacsi(req, res, next) {
-    console.log('req.body', req.body);
-    BacSi.updateOne({ mabacsi: Number(req.params.mabacsi) }, req.body)
-      .then(() => {
-        res.redirect('/quanlybacsi');
-      })
-      .catch(err => next(err));
-  }
-
-  // [PUT] /cources/:id
-  xemchitietbacsi(req, res, next) {
-    if (req.session.isAuth) {
-      BacSi.findOne({ mabacsi: Number(req.params.mabacsi) }, (err, data) => {
-        if (!err) {
-          res.render('chitietbacsi', {
-            data: data,
-            hoten: req.session.hoten,
-          });
-        } else {
-          res.status(400).json({ error: 'ERROR!!!' });
-        }
-      }).lean();
-    } else {
-      req.session.back = '/quanlybacsi';
-      res.redirect('/login/');
-    }
-  }
-
-  // hien thi thong tin khoa
-  loadchuyenkhoa(req, res) {
-    ChuyenKhoa.find((err, data) => {
+    console.log('=========body', req.body);
+    Account.findOne({ username: req.body.username }, function (err, user) {
       if (!err) {
-        res.send(data);
+        if (user == null) {
+          req.flash('error', 'Tên đăng nhập không đúng!');
+          res.redirect('/quanly/login/');
+        } else {
+          if (bcrypt.compareSync(req.body.password, user.password)) {
+            var sess = req.session;
+            Employee.findOne(
+              { idAccount: user.idAccount, status: 1 },
+              (err, userInfo) => {
+                if (!err) {
+                  if (userInfo) {
+                    sess.isAuth = true;
+                    sess.role = user.role;
+                    sess.username = user.username;
+                    sess.accountId = user.id;
+                    sess.userId = userInfo.idUser;
+                    sess.avatar = userInfo.avatar;
+                    sess.fullname = userInfo.name;
+                    if (sess.back) {
+                      res.redirect(sess.back);
+                    } else {
+                      if (req.session.role == 2) {
+                        res.render('home', {
+                          accountId: req.session.accountId,
+                          username: req.session.username,
+                          role: req.session.role,
+                          userId: req.session.userId,
+                          avatar: req.session.avatar,
+                          fullname: req.session.fullname,
+                        });
+                      } else {
+                        res.render('homeadmin', {
+                          accountId: req.session.accountId,
+                          username: req.session.username,
+                          role: req.session.role,
+                          userId: req.session.userId,
+                          avatar: req.session.avatar,
+                          fullname: req.session.fullname,
+                        });
+                      }
+                    }
+                  } else {
+                    req.flash('error', 'Tài khoản chưa được kích hoạt!'); //nếu bắt user ko đúng sẽ trả dòng này
+                    res.redirect('/quanly/login/');
+                  }
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
+          } else {
+            req.flash('error', 'Mật khẩu không đúng!');
+            res.redirect('/quanly/login/');
+          }
+        }
       } else {
         res.status(400).json({ error: 'ERROR!!!' });
       }
     });
   }
 
-  // [GET] /quanlychuyenkhoa
-  quanlychuyenkhoa(req, res) {
+  //------DƯỢC SĨ
+  quanlykhachhangds(req, res) {
     if (req.session.isAuth) {
-      ChuyenKhoa.find((err, data) => {
-        if (!err) {
-          res.render('quanlychuyenkhoa', {
-            data: data,
-            hoten: req.session.hoten,
-          });
-          console.log(data);
-        } else {
-          res.status(400).json({ error: 'ERROR!!!' });
-        }
-      }).lean();
+      res.render('quanlykhachhangds', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
     } else {
-      req.session.back = '/quanlychuyenkhoa';
-      res.redirect('/login/');
-    }
-  }
-  themchuyenkhoa(req, res) {
-    const chuyenKhoa = new ChuyenKhoa(req.body);
-    if (req.session.isAuth) {
-      chuyenKhoa
-        .save()
-        .then(() => res.redirect('/quanlychuyenkhoa'))
-        .catch(error => {});
-    } else {
-      req.session.back = '/quanlychuyenkhoa';
-      res.redirect('/login/');
+      req.session.back = '/quanly/quanlykhachhang';
+      res.redirect('/quanly/login/');
     }
   }
 
-  // [DELETE] /cources/:id
-  xoachuyenkhoa(req, res, next) {
+  quanlydonhangds(req, res) {
     if (req.session.isAuth) {
-      ChuyenKhoa.delete({ machuyenkhoa: req.params.machuyenkhoa })
-        .then(() => {
-          res.redirect('/quanlychuyenkhoa');
-        })
-        .catch(err => next(err));
+      res.render('quanlydonhangds', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
     } else {
-      req.session.back = '/dangkylichranh';
-      res.redirect('/login/');
+      req.session.back = '/quanly/quanlydonhang';
+      res.redirect('/quanly/login/');
     }
   }
 
-  // [GET] /cources/:id/edit
-  loadchinhsuachuyenkhoa(req, res, next) {
+  thongkeds(req, res) {
     if (req.session.isAuth) {
-      ChuyenKhoa.findOne(
-        { machuyenkhoa: req.params.machuyenkhoa },
-        (err, data) => {
-          if (!err) {
-            res.render('chinhsuachuyenkhoa', {
-              chuyenkhoa: data,
-              hoten: req.session.hoten,
-            });
-          } else {
-            res.status(400).json({ error: 'ERROR!!!' });
-          }
-        }
-      ).lean();
+      res.render('thongkeds', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
     } else {
-      req.session.back = '/quanlychuyenkhoa';
-      res.redirect('/login/');
+      req.session.back = '/quanly/thongke';
+      res.redirect('/quanly/login/');
+    }
+  }
+  //------ADMIN
+  adminquanlythuoc(req, res) {
+    if (req.session.isAuth) {
+      res.render('adminquanlythuoc', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
+    } else {
+      req.session.back = '/quanly/quanlythuoc';
+      res.redirect('/quanly/login/');
     }
   }
 
-  // [PUT] /cources/:id
-  chinhsuachuyenkhoa(req, res, next) {
-    console.log('req.body', req.body);
-    ChuyenKhoa.updateOne({ machuyenkhoa: req.params.machuyenkhoa }, req.body)
-      .then(() => {
-        res.redirect('/quanlychuyenkhoa');
-      })
-      .catch(err => next(err));
-  }
-
-  // [GET] /thongke
-  thongke(req, res) {
+  adminquanlynhanvien(req, res) {
     if (req.session.isAuth) {
-      BacSi.find((err, data) => {
-        if (!err) {
-          res.render('thongke', { data: data, hoten: req.session.hoten });
-          console.log(data);
-        } else {
-          res.status(400).json({ error: 'ERROR!!!' });
-        }
-      }).lean();
+      res.render('adminquanlynhanvien', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
     } else {
-      req.session.back = '/thongke';
-      res.redirect('/login/');
+      req.session.back = '/quanly/quanlynhanvien';
+      res.redirect('/quanly/login/');
     }
   }
 
-  // [GET] /dangkylichranh:mabasi
-  dangkylichranh(req, res) {
+  adminquanlykhohang(req, res) {
     if (req.session.isAuth) {
-      BacSi.findOne({ mabacsi: req.params.mabacsi }, (err, data) => {
-        if (!err) {
-          DanhSachLichKham.find(
-            { mabacsi: req.params.mabacsi },
-            (err, lichs) => {
-              if (!err) {
-                res.render('dangkylichranh', {
-                  data: data,
-                  hoten: req.session.hoten,
-                  lichs: lichs,
-                });
-              } else {
-                res.status(400).json({ error: 'ERROR!!!' });
-              }
-            }
-          ).lean();
-        } else {
-          res.status(400).json({ error: 'ERROR!!!' });
-        }
-      }).lean();
+      res.render('adminquanlykhohang', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
     } else {
-      req.session.back = '/dangkylichranh';
-      res.redirect('/login/');
+      req.session.back = '/quanly/quanlykhohang';
+      res.redirect('/quanly/login/');
     }
   }
 
-  themlichkham(req, res, next) {
-    const mabacsi = req.body.mabacsi;
-    console.log(req.body);
-    const lichkham = new DanhSachLichKham(req.body);
-    lichkham
-      .save()
-      .then(() => res.redirect(`/dangkylichranh/${mabacsi}`))
-      .catch(error => {});
-  }
-
-  uploadFile(req, res) {
+  adminquanlydoanhthu(req, res) {
     if (req.session.isAuth) {
-      try {
-        let filePath = __basedir + '/uploads/' + req.file.filename;
-
-        console.log('filePath', filePath);
-
-        readXlsxFile(filePath).then(rows => {
-          // `rows` is an array of rows
-          // each row being an array of cells.
-          console.log(rows);
-
-          // Remove Header ROW
-          rows.shift();
-
-          const bacsis = [];
-
-          let length = rows.length;
-
-          for (let i = 0; i < length; i++) {
-            let bacsi = {
-              hoten: rows[i][0],
-              hochamhocvi: rows[i][1],
-              gioitinh: rows[i][2],
-              ngaysinh: rows[i][3],
-              email: rows[i][4],
-              sodienthoai: rows[i][5],
-              chuyenkhoa: rows[i][6],
-              chucvu: rows[i][7],
-              kinhnghiem: rows[i][8],
-              trangthaikham: rows[i][9],
-              dongia: rows[i][10],
-              diachiphongkham: rows[i][11],
-              gioithieu: rows[i][12],
-            };
-
-            bacsis.push(bacsi);
-          }
-
-          BacSi.bulkCreate(bacsis).then(() => {
-            const result = {
-              status: 'ok',
-              filename: req.file.originalname,
-              message: 'Thêm thành công sinh viên từ file excel: ',
-            };
-
-            res.json(result);
-          });
-        });
-      } catch (error) {
-        const result = {
-          status: 'fail',
-          filename: req.file.originalname,
-          message: 'Upload Error! message = ' + error.message,
-        };
-        res.json(result);
-      }
+      res.render('adminquanlydoanhthu', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
     } else {
-      req.session.back = '/quanlybacsi';
-      res.redirect('/login/');
+      req.session.back = '/quanly/quanlydoanhthu';
+      res.redirect('/quanly/login/');
     }
   }
 
-  // [GET] /quanlybacsi
-  quanlybenhnhan(req, res) {
+  adminquanlynhapkho(req, res) {
     if (req.session.isAuth) {
-      BenhNhan.find((err, data) => {
-        if (!err) {
-          res.render('quanlybenhnhan', {
-            data: data,
-            hoten: req.session.hoten,
-          });
-          console.log(data);
-        } else {
-          res.status(400).json({ error: 'ERROR!!!' });
-        }
-      }).lean();
+      res.render('adminquanlynhapkho', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
     } else {
-      req.session.back = '/quanlybenhnhan';
-      res.redirect('/login/');
+      req.session.back = '/quanly/quanlynhapkho';
+      res.redirect('/quanly/login/');
     }
   }
 
-  // [PUT] /cources/:id
-  xemchitietbenhnhan(req, res, next) {
-    if (req.session.isAuth) {
-      BenhNhan.findOne(
-        { mabenhnhan: Number(req.params.mabenhnhan) },
-        (err, data) => {
-          if (!err) {
-            res.render('chitietbenhnhan', {
-              data: data,
-              hoten: req.session.hoten,
-            });
-          } else {
-            res.status(400).json({ error: 'ERROR!!!' });
-          }
-        }
-      ).lean();
-    } else {
-      req.session.back = '/quanlybenhnhan';
-      res.redirect('/login/');
-    }
+  //===========KHÁCH HÀNG===============
+
+  homekh(req, res) {
+    res.render('homekh');
   }
 
-  // [GET] /quanlybacsi
-  thembenhnhan(req, res) {
-    const benhnhan = new BenhNhan(req.body);
-    if (req.session.isAuth) {
-      benhnhan
-        .save()
-        .then(() => res.redirect('/quanlybenhnhan'))
-        .catch(error => {});
-    } else {
-      req.session.back = '/quanlybenhnhan';
-      res.redirect('/login/');
-    }
+  // [GET] /home
+  loginqlkh(req, res) {
+    res.render('loginkh');
   }
 
-  // [DELETE] /cources/:id
-  xoabenhnhan(req, res, next) {
-    if (req.session.isAuth) {
-      BenhNhan.delete({ mabenhnhan: Number(req.params.mabenhnhan) })
-        .then(() => {
-          res.redirect('/quanlybenhnhan');
-        })
-        .catch(err => next(err));
-    } else {
-      req.session.back = '/quanlybenhnhan';
-      res.redirect('/login/');
-    }
+  loginkh(req, res) {
+    res.render('homekh');
   }
 
-  // [GET] /cources/:id/edit
-  loadchinhsuabenhnhan(req, res, next) {
-    if (req.session.isAuth) {
-      BenhNhan.findOne(
-        { mabenhnhan: Number(req.params.mabenhnhan) },
-        (err, data) => {
-          if (!err) {
-            res.render('chinhsuacbenhnhan', {
-              bacsi: data,
-              hoten: req.session.hoten,
-            });
-          } else {
-            res.status(400).json({ error: 'ERROR!!!' });
-          }
-        }
-      ).lean();
-    } else {
-      req.session.back = '/quanlybenhnhan';
-      res.redirect('/login/');
-    }
-  }
-
-  // [PUT] /cources/:id
-  chinhsuabenhnhan(req, res, next) {
-    console.log('req.body', req.body);
-    BenhNhan.updateOne({ mabenhnhan: Number(req.params.mabenhnhan) }, req.body)
-      .then(() => {
-        res.redirect('/quanlybenhnhan');
-      })
-      .catch(err => next(err));
+  register(req, res) {
+    res.render('register');
   }
 }
 module.exports = new MainController();

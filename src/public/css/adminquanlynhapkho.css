@@ -1,21 +1,19 @@
-.home {
+.adminquanlynhapkho {
   background-color: #F7F7F8;
 }
-.home .home-header-main {
+.adminquanlynhapkho .home-header-main {
   display: flex;
   width: 80%;
   flex-direction: column;
   margin-left: 20.4%;
   height: 100%;
 }
-.home .main-home-nv {
+.adminquanlynhapkho .main-home{
   display: flex;
   margin-top: 60px;
   width: 100%;
-
 }
-
-.home .main-home-nv .title_chucnang{
+.adminquanlynhapkho .main-home .title_chucnang{
   display: flex;
   height: 100px;
   width: 100%;

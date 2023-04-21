@@ -1,0 +1,62 @@
+<div class="quanlydonhangds">
+{{!-- Nhân viên --}}
+            {{>menubarnv}}
+
+         <div class="home-header-main">
+                {{>header}}
+            <div class="main-home-nv ">
+                <div class="title_chucnang">
+                    <i class='fa fa-newspaper-o'></i>
+                    <p>Quản lý đơn hàng</p>
+                </div>
+                <div class="line" ></div>
+                <div id="menu1" class="container tab-pane active div-table-list"><br />
+                    <form action="">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <table class="table table-bordered" id="table_id">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Mã đơn hàng</th>
+                                            <th>Mã khách hàng</th>
+                                            <th>Tên khách hàng</th>
+                                            <th>Tổng số sản phẩm</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Phương thức thanh toán</th>
+                                            <th>Loại</th>
+                                            <th>Trạng thái</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            {{#each array}}
+                                        <tr>
+                                            <td>{{sum @index 1}}</td>
+                                            <td>{{this.idUserTempCV}}</td>
+                                            <td>{{this.name}}</td>
+                                            <td>{{this.dateOfBirth}}</td>
+                                            <td>{{this.gender}}</td>
+                                            <td>{{this.cccd}}</td>
+                                                <td>{{this.dateOfIssue}}</td>
+                                            <td>{{this.issuedBy}}</td>
+                                            <td>{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
+                                            <td>
+                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Xóa</a>
+                                                
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+        </div>
+
+ </div>
+        
+        

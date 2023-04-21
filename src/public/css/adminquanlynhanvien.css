@@ -1,0 +1,43 @@
+.adminquanlynhanvien {
+  background-color: #F7F7F8;
+}
+.adminquanlynhanvien .home-header-main {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  margin-left: 20.4%;
+  height: 100%;
+}
+.adminquanlynhanvien .main-home{
+  display: flex;
+  margin-top: 60px;
+  width: 100%;
+  flex-direction: column;
+}
+
+.adminquanlynhanvien .main-home .title_chucnang{
+  display: flex;
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+}
+.adminquanlynhanvien .main-home .title_chucnang p{
+  font-size: 26px;
+  font-weight: 600;
+  color: #3871C1;
+}
+.adminquanlynhanvien .main-home .title_chucnang i{
+  font-size:26px;
+  margin-right: 5px;
+  color: #3871C1;
+  margin-top: 8px;
+}
+.adminquanlynhanvien .main-home .line {
+  height: 1px;
+  background-color: #cccccc;
+  width: 100%;
+}  
+.adminquanlynhanvien form thead {
+  background-color: #F4F7F9;
+  color: #3871C1;
+}  

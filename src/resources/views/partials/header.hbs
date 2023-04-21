@@ -1,5 +1,5 @@
-<div class='navbar navbar-expand-lg header'>
-  <div class='row container-header'>
+<div class='header'>
+  <div class='container-header'>
     <div class='search-bar'>
       <form action=''>
         <input
@@ -15,57 +15,42 @@
           ></i></button>
       </form>
     </div>
-    <div class='collapse navbar-collapse' id='navbarSupportedContent'>
-      <div class='header-left'>
-
-        {{#if messages.error}}
-          <p style='color:red'>
-            {{messages.error}}
-          </p>
-        {{/if}}
-
-        {{#if messages.success}}
-          <p style='color:green'>
-            {{messages.success}}
-          </p>
-        {{/if}}
-        <ul class='navbar-nav mr-auto nav-header'>
-          <li class='nav-item active' style='margin-right: 40px;'>
-            <a class='nav-link' href='/home'>
-              <p> <i class='fas fa-home'></i>Trang chủ</p>
-              <span class='sr-only'>(current)</span>
-            </a>
-          </li>
-          <li class='nav-item dropdown row'>
-
-            <img
-              src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/logo_full.png'
-              alt='ảnh thẻ header'
-              style='height: 28px;width: 28px;border-radius: 28px; margin-bottom: 10px;align-self: center;
+    <div class='header-left' id='navbarSupportedContent'>
+      <ul class='navbar-nav mr-auto nav-header'>
+        <li
+          class='nav-item dropdown row'
+          style='display: flex;  flex-direction: row;'
+        >
+          <img
+            src={{avatar}}
+            alt='ảnh thẻ header'
+            style='height: 35px;width: 35px;border-radius: 28px;align-self: center;margin-right: 5px;
                 '
-            />
+          />
 
+          <a
+            class='nav-link dropdown-toggle'
+            href='#'
+            id='navbarDropdown'
+            role='button'
+            data-toggle='dropdown'
+            aria-haspopup='true'
+            aria-expanded='false'
+          >
+            {{fullname}}
+          </a>
+          <div class='dropdown-menu'>
+            <button class='dropdown-item js-doi-mat-khau-ql'>Đổi mật khẩu</button>
+            {{! <a class="dropdown-item" href="#">Đổi mật khẩu</a> }}
+            <div class='dropdown-divider'></div>
             <a
-              class='nav-link dropdown-toggle'
-              href='#'
-              id='navbarDropdown'
-              role='button'
-              data-toggle='dropdown'
-              aria-haspopup='true'
-              aria-expanded='false'
-              style='margin-right: 30px;'
-            >
-              {{hoten}}
-            </a>
-            <div class='dropdown-menu'>
-              <button class='dropdown-item js-doi-mat-khau-ql'>Đổi mật khẩu</button>
-              {{! <a class="dropdown-item" href="#">Đổi mật khẩu</a> }}
-              <div class='dropdown-divider'></div>
-              <a class='dropdown-item' href='/login'>Đăng xuất</a>
-            </div>
-          </li>
-        </ul>
-      </div>
+              class='dropdown-item'
+              href='/quanly/login'
+              style='color: red;'
+            >Đăng xuất</a>
+          </div>
+        </li>
+      </ul>
     </div>
 
     {{! Model }}

@@ -1,0 +1,148 @@
+<div class='register'>
+  <div>
+    {{>headerkh}}
+  </div>
+  <div class='img_background_login'>
+    <img
+      src='https://cnm-lab3.s3.ap-southeast-1.amazonaws.com/hotrosinhvienIUH/bg_login.png'
+    />
+    <img
+      class='img'
+      src='https://cnm-lab3.s3.ap-southeast-1.amazonaws.com/hotrosinhvienIUH/favicon.png'
+    />
+    <div class="mainLogin col-6">
+      <div class="row mainLoginKH">
+        <div class='logo'>
+          <img
+            src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/logo_full.png'
+            alt='ảnh thẻ header'
+            style='height: 150px;width: 151px;'
+          />
+        </div>
+        <div class='textLogin'>
+          <h1>ĐĂNG KÝ TÀI KHOẢN</h1>
+        </div>
+        
+        <div class='div_input'>
+          <form action='/register' id='form-login' method='POST' >
+            <div class='div_input_row'>
+                <input  type="hidden"  name="role" value=1
+                                                class="form-control" >
+              <label>Số điện thoại</label>
+              <input
+                autocomplete='new-password'
+                class='input'
+                id='UserName'
+                name='username'
+                placeholder='Nhập tên tài khoản'
+                required='required'
+                type='text'
+                value=''
+              />
+            </div>
+
+            <div class='div_input_row' style="position: relative;">
+              <label>Mật khẩu</label>
+              <input
+                autocomplete='new-password'
+                class='input'
+                id='Password'
+                name='password'
+                placeholder='Nhập mật khẩu'
+                required='required'
+                type='password'
+              />
+              <div class="" type="button" id="btnPassword">
+                <i id="iconEye" class="fas fa-eye-slash eye-password" style='font-size:22px;color: #296088;'></i>
+              </div>
+            </div>
+
+              <div class='div_input_row' style="position: relative;">
+              <label>Nhập lại mật khẩu</label>
+              <input
+                autocomplete='new-password'
+                class='input'
+                id='RePassword'
+                name='repassword'
+                placeholder='Nhập lại mật khẩu'
+                required='required'
+                type='password'
+              />
+               <div class="" type="button" id="btnRePassword">
+                <i id="iconEyeRe" class="fas fa-eye-slash eye-password" style='font-size:22px;color: #296088;'></i>
+              </div>
+            </div>
+          
+           
+            <div class='Error'>
+              {{#if messages.error}}
+                <p style='color:red'>
+                  {{messages.error}}
+                </p>
+              {{/if}}
+            </div>
+
+            <div class="div_btn" style="margin-top: 10px;">
+              <input type='submit' class='button btnDangNhap' value='ĐĂNG KÝ' />
+            </div>
+
+            <div class="div_btn_login">
+              <label>Bạn đã có tài khoản BabyCare? </label>
+              <a class='' href='/login'>
+                <p> Đăng nhập</p>
+              </a>
+            </div>
+           
+          </form>
+        </div>
+      </div>
+    
+    </div>
+   
+
+  </div>
+</div>
+
+<script>
+  // step 1
+  const ipnElement = document.querySelector('#Password')
+  const btnElement = document.querySelector('#btnPassword')
+  const iconEye = document.querySelector('#iconEye')
+
+  const ipnElementRe = document.querySelector('#RePassword')
+  const btnElementRe = document.querySelector('#btnRePassword')
+  const iconEyeRe = document.querySelector('#iconEyeRe')
+
+  // step 2
+  btnElement.addEventListener('click', function() {
+    // step 3
+    const currentType = ipnElement.getAttribute('type')
+    // step 4
+    ipnElement.setAttribute(
+      'type',
+      currentType === 'password' ? 'text' : 'password'
+    )
+
+    if(currentType ==="password"){
+      iconEye.classList.replace("fa-eye-slash", "fa-eye");
+    }else{
+      iconEye.classList.replace("fa-eye", "fa-eye-slash");
+    }
+  })
+
+   btnElementRe.addEventListener('click', function() {
+    // step 3
+    const currentTypeRe = ipnElementRe.getAttribute('type')
+    // step 4
+    ipnElementRe.setAttribute(
+      'type',
+      currentTypeRe === 'password' ? 'text' : 'password'
+    )
+
+    if(currentTypeRe ==="password"){
+      iconEyeRe.classList.replace("fa-eye-slash", "fa-eye");
+    }else{
+      iconEyeRe.classList.replace("fa-eye", "fa-eye-slash");
+    }
+  })
+</script>
