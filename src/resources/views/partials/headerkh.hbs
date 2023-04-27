@@ -1,100 +1,105 @@
 <div class='navbar-expand-lg headerkh'>
-  <div class='row container-header'>
-    <div class='col-4 left-bar row'>
-      <div class='col-3 divHinhAnh'>
+  <div class='container-header'>
+    <div class='header_first'>
+      <a class='hotline'>Hotline Đặt hàng (miễn phí): 19006821</a>
+      <div class='information'>
+        <a class=''>Cẩm nang mua sắm</a>
+        <div class='line'></div>
+        <a class=''>Sức khoẻ</a>
+        <div class='line'></div>
+        <a class=''>Hệ thống nhà thuốc</a>
+        <div class='line'></div>
+        <a class='language'>
+          <img
+            src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/quocki.jpeg'
+            alt='ảnh thẻ header'
+            style='height: 20px;width: 20px; background: white;border-radius:30px;'
+          />
+          <a class=''>Tiếng Việt</a>
+        </a>
+        <div class='line'></div>
+        <div class='right-bar' id='navbarSupportedContent'>
+          {{#if role}}
+            <li class='nav-item dropdown row'>
+              <img
+                src={{avatar}}
+                alt='ảnh thẻ header'
+                style='height: 20px;width: 20px;border-radius: 28px; margin-top:5px;margin-right:-10px'
+              />
+
+              <a
+                class='nav-link dropdown-toggle'
+                href='#'
+                id='navbarDropdown'
+                role='button'
+                data-toggle='dropdown'
+                aria-haspopup='true'
+                aria-expanded='false'
+              >
+                {{username}}
+              </a>
+              <div class='dropdown-menu'>
+                <button class='dropdown-item js-doi-mat-khau-ql'>Đổi mật khẩu</button>
+                {{! <a class="dropdown-item" href="#">Đổi mật khẩu</a> }}
+                <div class='dropdown-divider'></div>
+                <a class='dropdown-item' href='/login'>Đăng xuất</a>
+              </div>
+            </li>
+          {{else}}
+            <a class='login' href='/login' style=''>
+              Đăng nhập
+            </a>
+          {{/if}}
+
+        </div>
+      </div>
+    </div>
+    <div class='header_middle row'>
+      <a class='logo' href='/home' style='text-decoration: none;'>
         <img
           src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/logo_full.png'
           alt='ảnh thẻ header'
-          style='height: 55px;width: 56px; background: white;border-radius:10px; padding:5px'
+          style='height: 55px;width: 56px; background: white;border-radius:10px; margin-right:5px; padding:5px'
         />
-      </div>
-      <div class='row btnTinTuc col-9'>
-        <div class='btnTinTucMain'></div>
+        LenPharmacy
+      </a>
+
+      <div class='row col-8 search-bar'>
+        <form action=''>
+          <input
+            type='text'
+            id='searchHeader'
+            name='searchHeader'
+            placeholder='Tìm kiếm trên LenPharmacy'
+            required=''
+          />
+          <button type='submit'><i
+              class='fa fa-search'
+              aria-hidden='true'
+            ></i></button>
+        </form>
 
       </div>
+
+      <div class='row cart'>
+        <a class='nav-link active' href='/quanly/home'>
+          <b>Giỏ hàng</b>
+          <i class='fa fa-cart-plus'></i>
+        </a>
+      </div>
+
     </div>
-
-    <div class='row col-5 search-bar'>
-      <div class='div-search-bar'>
+    <div class='header_last'>
+      <div></div>
+      <div class='row col-8 search-bar'>
+        <a class=''>Mất ngủ</a>
+        <div class='line'></div>
+        <a class=''>Đau đầu</a>
+        <div class='line'></div>
+        <a class=''>Sát khuẩn</a>
       </div>
-      <form action=''>
-        <input
-          type='text'
-          id='searchHeader'
-          name='searchHeader'
-          placeholder='Tìm kiếm bài viết...'
-          required=''
-        />
-        <button type='submit'><i
-            class='fa fa-search'
-            aria-hidden='true'
-          ></i></button>
-      </form>
+      <div></div>
 
-    </div>
-    <div
-      class='col-3 collapse navbar-collapse right-bar'
-      id='navbarSupportedContent'
-    >
-      <div class='header-left'>
-
-        <ul class='row navbar-nav mr-auto nav-header'>
-          <div class='btnTinTucMain'></div>
-          <li class='nav-item active' style='margin-right: 15px;'>
-            <a class='nav-link' href='/dangtin'>
-              <p> <i class='fa fa-pencil'></i></p>
-              <span class='sr-only'>(current)</span>
-            </a>
-          </li>
-          <li class='nav-item active' style='margin-right: 15px;'>
-            <a class='nav-link' href='/thongtincanhan'>
-              <p> <i class='fa fa-bell-o'></i></p>
-              <span class='sr-only'>(current)</span>
-            </a>
-          </li>
-          {{! <li class='nav-item active'>
-            <a class='nav-link' href='/register'>
-              <p> Đăng ký</p>
-              <span class='sr-only'>(current)</span>
-            </a>
-          </li> }}
-          <li class='nav-item active'>
-            <a class='nav-link' href='/login'>
-              {{! <p> Đăng nhập</p> }}
-              <p> {{username}}</p>
-              <span class='sr-only'>(current)</span>
-            </a>
-          </li>
-          {{!-- <li class='nav-item dropdown row'>
-
-            <img
-              src='https://rubee.com.vn/wp-content/uploads/2021/05/Logo-IUH.jpg'
-              alt='ảnh thẻ header'
-              style='height: 28px;width: 28px;border-radius: 28px; margin-bottom: 10px;align-self: center;
-                '
-            />
-
-            <a
-              class='nav-link dropdown-toggle'
-              href='#'
-              id='navbarDropdown'
-              role='button'
-              data-toggle='dropdown'
-              aria-haspopup='true'
-              aria-expanded='false'
-              style='margin-right: 30px;'
-            >
-              {{hoten}}
-            </a>
-            <div class='dropdown-menu'>
-              <button class='dropdown-item js-doi-mat-khau-ql'>Đổi mật khẩu</button>
-              {{! <a class="dropdown-item" href="#">Đổi mật khẩu</a> }}
-              <div class='dropdown-divider'></div>
-              <a class='dropdown-item' href='/login'>Đăng xuất</a>
-            </div>
-          </li> --}}
-        </ul>
-      </div>
     </div>
 
     {{! Model }}

@@ -17,23 +17,39 @@ class MainController {
   home(req, res) {
     if (req.session.isAuth) {
       if (req.session.role == 2) {
-        res.render('home', {
-          accountId: req.session.accountId,
-          username: req.session.username,
-          role: req.session.role,
-          userId: req.session.userId,
-          avatar: req.session.avatar,
-          fullname: req.session.fullname,
-        });
+        Product.find((err, array) => {
+          if (!err) {
+            console.log('========array', array);
+            res.render('home', {
+              array: array,
+              accountId: req.session.accountId,
+              username: req.session.username,
+              role: req.session.role,
+              userId: req.session.userId,
+              avatar: req.session.avatar,
+              fullname: req.session.fullname,
+            });
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }).lean();
       } else {
-        res.render('homeadmin', {
-          accountId: req.session.accountId,
-          username: req.session.username,
-          role: req.session.role,
-          userId: req.session.userId,
-          avatar: req.session.avatar,
-          fullname: req.session.fullname,
-        });
+        Product.find((err, array) => {
+          if (!err) {
+            console.log('========array', array);
+            res.render('homeadmin', {
+              array: array,
+              accountId: req.session.accountId,
+              username: req.session.username,
+              role: req.session.role,
+              userId: req.session.userId,
+              avatar: req.session.avatar,
+              fullname: req.session.fullname,
+            });
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }).lean();
       }
     } else {
       req.session.back = '/quanly/home';
@@ -72,23 +88,39 @@ class MainController {
                       res.redirect(sess.back);
                     } else {
                       if (req.session.role == 2) {
-                        res.render('home', {
-                          accountId: req.session.accountId,
-                          username: req.session.username,
-                          role: req.session.role,
-                          userId: req.session.userId,
-                          avatar: req.session.avatar,
-                          fullname: req.session.fullname,
-                        });
+                        Product.find((err, array) => {
+                          if (!err) {
+                            console.log('========array', array);
+                            res.render('home', {
+                              array: array,
+                              accountId: req.session.accountId,
+                              username: req.session.username,
+                              role: req.session.role,
+                              userId: req.session.userId,
+                              avatar: req.session.avatar,
+                              fullname: req.session.fullname,
+                            });
+                          } else {
+                            res.status(400).json({ error: 'ERROR!!!' });
+                          }
+                        }).lean();
                       } else {
-                        res.render('homeadmin', {
-                          accountId: req.session.accountId,
-                          username: req.session.username,
-                          role: req.session.role,
-                          userId: req.session.userId,
-                          avatar: req.session.avatar,
-                          fullname: req.session.fullname,
-                        });
+                        Product.find((err, array) => {
+                          if (!err) {
+                            console.log('========array', array);
+                            res.render('homeadmin', {
+                              array: array,
+                              accountId: req.session.accountId,
+                              username: req.session.username,
+                              role: req.session.role,
+                              userId: req.session.userId,
+                              avatar: req.session.avatar,
+                              fullname: req.session.fullname,
+                            });
+                          } else {
+                            res.status(400).json({ error: 'ERROR!!!' });
+                          }
+                        }).lean();
                       }
                     }
                   } else {
@@ -243,7 +275,46 @@ class MainController {
   //===========KHÁCH HÀNG===============
 
   homekh(req, res) {
-    res.render('homekh');
+    if (req.session.isAuth) {
+      if (req.session.role == 1) {
+        Category.find((err, danhmuc) => {
+          if (!err) {
+            if (danhmuc) {
+              Product.find((err, array) => {
+                if (!err) {
+                  console.log('========array', array);
+                  res.render('homekh', {
+                    danhmuc: danhmuc,
+                    array: array,
+                    accountId: req.session.accountId,
+                    username: req.session.username,
+                    role: req.session.role,
+                    userId: req.session.userId,
+                    avatar: req.session.avatar,
+                    fullname: req.session.fullname,
+                  });
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }).lean();
+            }
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }).lean();
+      }
+    } else {
+      Category.find((err, danhmuc) => {
+        if (!err) {
+          console.log('========array', danhmuc);
+          res.render('homekh', {
+            danhmuc: danhmuc,
+          });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
+    }
   }
 
   // [GET] /home
@@ -252,7 +323,75 @@ class MainController {
   }
 
   loginkh(req, res) {
-    res.render('homekh');
+    Account.findOne({ username: req.body.username }, function (err, user) {
+      if (!err) {
+        if (user == null) {
+          req.flash('error', 'Tên đăng nhập không đúng!');
+          res.redirect('/login/');
+        } else {
+          if (bcrypt.compareSync(req.body.password, user.password)) {
+            var sess = req.session;
+            Customer.findOne(
+              { idAccount: user.idAccount, status: 1 },
+              (err, userInfo) => {
+                if (!err) {
+                  if (userInfo) {
+                    sess.isAuth = true;
+                    sess.role = user.role;
+                    sess.username = user.username;
+                    sess.accountId = user.id;
+                    sess.userId = userInfo.idUser;
+                    sess.avatar = userInfo.avatar;
+                    sess.fullname = userInfo.name;
+                    if (sess.back) {
+                      res.redirect(sess.back);
+                    } else {
+                      if (req.session.role == 1) {
+                        Category.find((err, danhmuc) => {
+                          if (!err) {
+                            if (danhmuc) {
+                              Product.find((err, array) => {
+                                if (!err) {
+                                  console.log('========array', array);
+                                  res.render('homekh', {
+                                    danhmuc: danhmuc,
+                                    array: array,
+                                    accountId: req.session.accountId,
+                                    username: req.session.username,
+                                    role: req.session.role,
+                                    userId: req.session.userId,
+                                    avatar: req.session.avatar,
+                                    fullname: req.session.fullname,
+                                  });
+                                } else {
+                                  res.status(400).json({ error: 'ERROR!!!' });
+                                }
+                              }).lean();
+                            }
+                          } else {
+                            res.status(400).json({ error: 'ERROR!!!' });
+                          }
+                        }).lean();
+                      }
+                    }
+                  } else {
+                    req.flash('error', 'Tài khoản chưa được kích hoạt!'); //nếu bắt user ko đúng sẽ trả dòng này
+                    res.redirect('/login/');
+                  }
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
+          } else {
+            req.flash('error', 'Mật khẩu không đúng!');
+            res.redirect('/login/');
+          }
+        }
+      } else {
+        res.status(400).json({ error: 'ERROR!!!' });
+      }
+    });
   }
 
   register(req, res) {

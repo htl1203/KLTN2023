@@ -5,7 +5,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const Schema = mongoose.Schema;
 
-const Category = new Schema(
+const Categorys = new Schema(
   {
     idCategory: { type: String, maxLength: 255 },
     name: { type: String, maxLength: 255 },
@@ -20,6 +20,6 @@ const Category = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
-Category.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
+Categorys.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 
-module.exports = mongoose.model('Category', Category);
+module.exports = mongoose.model('Categorys', Categorys);

@@ -5,6 +5,10 @@ const route = require('./routers');
 var session = require('express-session');
 var flash = require('express-flash');
 const db = require('./config/db');
+const {
+  allowInsecurePrototypeAccess,
+} = require('@handlebars/allow-prototype-access');
+const Handlebars = require('handlebars');
 
 const path = require('path');
 
@@ -29,10 +33,38 @@ app.engine(
     extname: '.hbs',
     helpers: {
       sum: (a, b) => a + b,
-      // ngay: datee => new Intl.DateTimeFormat('en-AU').format(datee),
+      changeNgay: datee => new Intl.DateTimeFormat('en-AU').format(datee),
       // noidung: thongtinMH =>
       //   mahoa.AES.encrypt(String(thongtinMH), 'diep123').toString(),
+      ifCond: (v1, operator, v2, options) => {
+        switch (operator) {
+          case '==':
+            return v1 == v2 ? options.fn(this) : options.inverse(this);
+          case '===':
+            return v1 === v2 ? options.fn(this) : options.inverse(this);
+          case '!=':
+            return v1 != v2 ? options.fn(this) : options.inverse(this);
+          case '!==':
+            return v1 !== v2 ? options.fn(this) : options.inverse(this);
+          case '<':
+            return v1 < v2 ? options.fn(this) : options.inverse(this);
+          case '<=':
+            return v1 <= v2 ? options.fn(this) : options.inverse(this);
+          case '>':
+            return v1 > v2 ? options.fn(this) : options.inverse(this);
+          case '>=':
+            return v1 >= v2 ? options.fn(this) : options.inverse(this);
+          case '&&':
+            return v1 && v2 ? options.fn(this) : options.inverse(this);
+          case '||':
+            return v1 || v2 ? options.fn(this) : options.inverse(this);
+          default:
+            return options.inverse(this);
+        }
+      },
+      handlebars: allowInsecurePrototypeAccess(Handlebars),
     },
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
   })
 );
 app.set('view engine', 'hbs');
