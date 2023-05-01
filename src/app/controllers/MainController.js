@@ -284,8 +284,6 @@ class MainController {
             if (danhmuc) {
               Product.find((err, array) => {
                 if (!err) {
-                  console.log('=========req.session.idUser', req.session);
-
                   Cart.find(
                     {
                       idCustomer: req.session.userId,
@@ -299,7 +297,6 @@ class MainController {
                         } else {
                           numberCart = 0;
                         }
-                        console.log('=========numberCart', numberCart);
                         res.render('homekh', {
                           numberCart: numberCart,
                           danhmuc: danhmuc,
@@ -533,10 +530,8 @@ class MainController {
 
   // [POST] /themgiohang
   themgiohangkh(req, res, next) {
-    console.log('========session', req.session);
     req.body.idCustomer = req.session.userId;
     const cart = new Cart(req.body);
-    console.log('========cart', req.body);
     if (req.session.isAuth) {
       Cart.findOne(
         { idProduct: req.body.idProduct, idCustomer: req.body.idCustomer },
