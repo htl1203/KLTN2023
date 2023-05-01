@@ -1,0 +1,333 @@
+.giohangkh{
+  background-color: #F5F5FA;
+  /* height: 100%; */
+}
+.giohangkh .main-home {
+  /* height: 130%; */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #F5F5FA;
+}
+
+.giohangkh .main-home .main{
+  /* height: 1500px; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.giohangkh .main .map{
+  height: 60px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: #F5F5FA;
+  padding-left:30px ;
+  align-items: center;
+  color: #B9C0CC;
+}
+
+.giohangkh .main .map .dot{
+  margin: 0 10px;
+}
+
+
+.giohangkh .main .main-body{
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  align-self: center;
+  margin-bottom: 30px;
+}
+
+.giohangkh .main-body .main_left{
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+}
+.giohangkh .main-body .main_left .title{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.giohangkh .main-body .main_left .title span{
+  color: #112950;
+  font-size: 24px;
+  font-weight: 700;
+}
+.giohangkh .main-body .main_left .title a{
+  color: #0F62F9;
+  font-size: 18px;
+  font-weight: 400;
+}
+.giohangkh .main-body .main_left .header_list{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  align-items: center;
+  border-bottom: 1px solid #D9D9D9;
+
+}
+.giohangkh .main-body .main_left .header_list .sanpham{
+  width: 40%;
+  font-weight: 500;
+}
+.giohangkh .main-body .main_left .header_list .dongia{
+  width: 17%;
+  display: flex;
+  justify-content: center;
+
+  
+}
+.giohangkh .main-body .main_left .header_list .soluong{
+  width: 20%;
+  display: flex;
+  justify-content: center;
+}
+.giohangkh .main-body .main_left .header_list .thanhtien{
+  width: 17%;
+  display: flex;
+  justify-content: center;
+}
+
+.giohangkh .main-body .main_left .item_list{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 80px;
+  align-items: center;
+
+}
+.giohangkh .main-body .main_left .item_list .anh{
+  width: 15%;
+  font-weight: 500;
+}
+.giohangkh .main-body .main_left .item_list .ten{
+  width: 25%;
+  font-weight: 500;
+}
+.giohangkh .main-body .main_left .item_list .dongia{
+  width: 17%;
+  display: flex;
+  justify-content: center;
+  color: #0F62F9;
+}
+.giohangkh .main-body .main_left .item_list .soluong{
+  width: 20%;
+  display: flex;
+  justify-content: center;
+}
+.giohangkh .main-body .main_left .item_list .thanhtien{
+  width: 17%;
+  display: flex;
+  justify-content: center;
+  color: #0F62F9;
+  font-weight: 700;
+}
+
+
+
+.giohangkh .main-body .main_right{
+  width: 29%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+  align-self: start;
+  padding: 20px;
+}
+
+.giohangkh .main-body .main_right .name{
+  color: #112950;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.giohangkh .main-body .main_right .tamtinh{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.giohangkh .main-body .main_right .sum{
+  color: #0F62F9;
+  font-size: 18px;
+  font-weight: 700;
+}
+.giohangkh .main-body .main_right .div_btn{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.giohangkh .main_right .div_btn .btnMuaThem{ 
+  height: 50px;
+  width: 120px;
+  background-color: #F2F6FE;
+  border-radius: 10px;
+  border: 1px solid #0F62F9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #0F62F9;
+  font-weight: 500;
+  font-size: 16px;
+  font-style: italic;
+
+}
+
+.giohangkh .main_right .div_btn .btnDatHang{ 
+  height: 50px;
+  width: 200px;
+  background-color: #FEAA48;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 800;
+  font-size: 16px;
+  font-style: italic;
+}
+
+
+
+
+
+
+
+
+/* FOOTER */
+.giohangkh .main-home .footer {
+  /* height: 30%; */
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+  justify-content: center;
+}
+
+.giohangkh .footer .item_footer{
+  display: flex;
+  height: 100%;
+  width: 20%;
+  padding:10px 0px 10px 30px;
+  /* align-items: center; */
+  flex-direction: column;
+}
+
+.giohangkh .footer .item_footer .title{
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.giohangkh .footer .item_footer .item{
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #878790;
+}
+
+.giohangkh .footer .item_footer .item{
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #878790;
+}
+
+.giohangkh .footer .item_footer .thanhtoan{
+ margin-bottom: 30px;
+}
+
+.giohangkh .footer .item_footer .ketnoi{
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+ }
+
+ .giohangkh .footer_address{
+  width: 100%;
+  background-color: white;
+  border-top: 1px solid #d9d9d9;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+ }
+
+ .giohangkh .footer_address .title{
+  margin-bottom: 10px;
+ }
+
+ .giohangkh .footer_address span{
+  color: #878790;
+  font-weight: 400;
+  font-size: 14px;
+ }
+
+ .giohangkh  .buttons_added {
+  opacity:1;
+  display:inline-block;
+  display:-ms-inline-flexbox;
+  display:inline-flex;
+  white-space:nowrap;
+  vertical-align:top;
+}
+.giohangkh  .is-form {
+  overflow:hidden;
+  position:relative;
+  background-color:#f9f9f9;
+  height:2.2rem;
+  width:1.9rem;
+  padding:0;
+  text-shadow:1px 1px 1px #fff;
+  border:1px solid #ddd;
+}
+.giohangkh  .is-form:focus,.input-text:focus {
+  outline:none;
+}
+.giohangkh  .is-form.minus {
+  border-radius:4px 0 0 4px;
+}
+.giohangkh  .is-form.plus {
+  border-radius:0 4px 4px 0;
+}
+.giohangkh  .input-qty {
+  background-color:#fff;
+  height:2.2rem;
+  text-align:center;
+  font-size:1rem;
+  display:inline-block;
+  vertical-align:top;
+  margin:0;
+  border-top:1px solid #ddd;
+  border-bottom:1px solid #ddd;
+  border-left:0;
+  border-right:0;
+  padding:5px;
+  width:2.5rem;
+}
+.giohangkh  .input-qty::-webkit-outer-spin-button,.input-qty::-webkit-inner-spin-button {
+  -webkit-appearance:none;
+  margin:0;
+}

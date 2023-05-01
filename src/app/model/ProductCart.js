@@ -6,9 +6,9 @@ const bcrypt = require('bcryptjs');
 
 const Schema = mongoose.Schema;
 
-const Product = new Schema(
+const ProductCart = new Schema(
   {
-    idProduct: { type: Number },
+    idProductCart: { type: Number },
     name: { type: String, maxLength: 255 },
     idCategory: { type: String, maxLength: 255 },
     idSupplier: { type: String, maxLength: 255 },
@@ -36,7 +36,14 @@ const Product = new Schema(
     status: { type: Number },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
+    idCart: { type: Number },
+    qualityCart: { type: Number },
+    idCustomer: { type: Number },
+    orderDate: { type: Date },
+    statusCart: { type: Number },
+    sumPrice: { type: Number },
   },
+
   {
     timestamps: true,
   }
@@ -44,7 +51,7 @@ const Product = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
-Product.plugin(AutoIncrement, { inc_field: 'idProduct' });
-Product.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
+ProductCart.plugin(AutoIncrement, { inc_field: 'idProductCart' });
+ProductCart.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 
-module.exports = mongoose.model('Product', Product);
+module.exports = mongoose.model('ProductCart', ProductCart);

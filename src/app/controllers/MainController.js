@@ -8,6 +8,7 @@ const OrderDetails = require('../model/OrderDetails');
 const Payment = require('../model/Payment');
 const Product = require('../model/Product');
 const Supplier = require('../model/Supplier');
+const ProductCart = require('../model/ProductCart');
 
 const readXlsxFile = require('read-excel-file/node');
 const bcrypt = require('bcryptjs');
@@ -275,6 +276,7 @@ class MainController {
   //===========KHÁCH HÀNG===============
 
   homekh(req, res) {
+    var numberCart = 0;
     if (req.session.isAuth) {
       if (req.session.role == 1) {
         Category.find((err, danhmuc) => {
@@ -282,17 +284,38 @@ class MainController {
             if (danhmuc) {
               Product.find((err, array) => {
                 if (!err) {
-                  console.log('========array', array);
-                  res.render('homekh', {
-                    danhmuc: danhmuc,
-                    array: array,
-                    accountId: req.session.accountId,
-                    username: req.session.username,
-                    role: req.session.role,
-                    userId: req.session.userId,
-                    avatar: req.session.avatar,
-                    fullname: req.session.fullname,
-                  });
+                  console.log('=========req.session.idUser', req.session);
+
+                  Cart.find(
+                    {
+                      idCustomer: req.session.userId,
+                    },
+                    (err, listCart) => {
+                      if (!err) {
+                        if (listCart) {
+                          for (var i = 0; i < listCart.length; i++) {
+                            numberCart += listCart[i].quality;
+                          }
+                        } else {
+                          numberCart = 0;
+                        }
+                        console.log('=========numberCart', numberCart);
+                        res.render('homekh', {
+                          numberCart: numberCart,
+                          danhmuc: danhmuc,
+                          array: array,
+                          accountId: req.session.accountId,
+                          username: req.session.username,
+                          role: req.session.role,
+                          userId: req.session.userId,
+                          avatar: req.session.avatar,
+                          fullname: req.session.fullname,
+                        });
+                      } else {
+                        res.status(400).json({ error: 'ERROR!!!' });
+                      }
+                    }
+                  ).lean();
                 } else {
                   res.status(400).json({ error: 'ERROR!!!' });
                 }
@@ -306,10 +329,18 @@ class MainController {
     } else {
       Category.find((err, danhmuc) => {
         if (!err) {
-          console.log('========array', danhmuc);
-          res.render('homekh', {
-            danhmuc: danhmuc,
-          });
+          if (danhmuc) {
+            Product.find((err, array) => {
+              if (!err) {
+                res.render('homekh', {
+                  danhmuc: danhmuc,
+                  array: array,
+                });
+              } else {
+                res.status(400).json({ error: 'ERROR!!!' });
+              }
+            }).lean();
+          }
         } else {
           res.status(400).json({ error: 'ERROR!!!' });
         }
@@ -323,6 +354,7 @@ class MainController {
   }
 
   loginkh(req, res) {
+    var numberCart = 0;
     Account.findOne({ username: req.body.username }, function (err, user) {
       if (!err) {
         if (user == null) {
@@ -340,7 +372,7 @@ class MainController {
                     sess.role = user.role;
                     sess.username = user.username;
                     sess.accountId = user.id;
-                    sess.userId = userInfo.idUser;
+                    sess.userId = userInfo.idCustomer;
                     sess.avatar = userInfo.avatar;
                     sess.fullname = userInfo.name;
                     if (sess.back) {
@@ -352,17 +384,41 @@ class MainController {
                             if (danhmuc) {
                               Product.find((err, array) => {
                                 if (!err) {
-                                  console.log('========array', array);
-                                  res.render('homekh', {
-                                    danhmuc: danhmuc,
-                                    array: array,
-                                    accountId: req.session.accountId,
-                                    username: req.session.username,
-                                    role: req.session.role,
-                                    userId: req.session.userId,
-                                    avatar: req.session.avatar,
-                                    fullname: req.session.fullname,
-                                  });
+                                  Cart.find(
+                                    {
+                                      idCustomer: req.session.userId,
+                                    },
+                                    (err, listCart) => {
+                                      if (!err) {
+                                        if (listCart) {
+                                          for (
+                                            var i = 0;
+                                            i < listCart.length;
+                                            i++
+                                          ) {
+                                            numberCart += listCart[i].quality;
+                                          }
+                                        } else {
+                                          numberCart = 0;
+                                        }
+                                        res.render('homekh', {
+                                          numberCart: numberCart,
+                                          danhmuc: danhmuc,
+                                          array: array,
+                                          accountId: req.session.accountId,
+                                          username: req.session.username,
+                                          role: req.session.role,
+                                          userId: req.session.userId,
+                                          avatar: req.session.avatar,
+                                          fullname: req.session.fullname,
+                                        });
+                                      } else {
+                                        res
+                                          .status(400)
+                                          .json({ error: 'ERROR!!!' });
+                                      }
+                                    }
+                                  ).lean();
                                 } else {
                                   res.status(400).json({ error: 'ERROR!!!' });
                                 }
@@ -396,6 +452,214 @@ class MainController {
 
   register(req, res) {
     res.render('register');
+  }
+
+  // [GET] /chitietsanpham/:idProduct
+  chitietsanphamkh(req, res, next) {
+    var numberCart = 0;
+    if (req.session.isAuth) {
+      Product.findOne(
+        { idProduct: Number(req.params.idProduct) },
+        (err, data) => {
+          if (!err) {
+            Category.findOne(
+              { idCategory: data.idCategory },
+              (err, category) => {
+                if (!err) {
+                  Cart.find(
+                    {
+                      idCustomer: req.session.userId,
+                    },
+                    (err, listCart) => {
+                      if (!err) {
+                        if (listCart) {
+                          for (var i = 0; i < listCart.length; i++) {
+                            numberCart += listCart[i].quality;
+                          }
+                        } else {
+                          numberCart = 0;
+                        }
+                        res.render('chitietsanphamkh', {
+                          numberCart: numberCart,
+                          data: data,
+                          category: category,
+                          accountId: req.session.accountId,
+                          username: req.session.username,
+                          role: req.session.role,
+                          userId: req.session.userId,
+                          avatar: req.session.avatar,
+                          fullname: req.session.fullname,
+                        });
+                      } else {
+                        res.status(400).json({ error: 'ERROR!!!' });
+                      }
+                    }
+                  ).lean();
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+    } else {
+      Product.findOne(
+        { idProduct: Number(req.params.idProduct) },
+        (err, data) => {
+          if (!err) {
+            Category.findOne(
+              { idCategory: data.idCategory },
+              (err, category) => {
+                if (!err) {
+                  res.render('chitietsanphamkh', {
+                    data: data,
+                    category: category,
+                  });
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+    }
+  }
+
+  // [POST] /themgiohang
+  themgiohangkh(req, res, next) {
+    console.log('========session', req.session);
+    req.body.idCustomer = req.session.userId;
+    const cart = new Cart(req.body);
+    console.log('========cart', req.body);
+    if (req.session.isAuth) {
+      Cart.findOne(
+        { idProduct: req.body.idProduct, idCustomer: req.body.idCustomer },
+        (err, isCart) => {
+          if (!err) {
+            if (isCart) {
+              Cart.updateOne(
+                { idCart: isCart.idCart },
+                { quality: isCart.quality + 1 }
+              )
+                .then(() => {
+                  req.flash('success', 'Thêm vào giỏ hàng thành công!');
+                  res.redirect('/home');
+                })
+                .catch(error => {});
+            } else {
+              cart
+                .save()
+                .then(() => {
+                  req.flash('success', 'Thêm vào giỏ hàng thành công!');
+                  res.redirect('/home');
+                })
+                .catch(error => {});
+            }
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+    } else {
+      req.session.back = '/home';
+      res.redirect('/login/');
+    }
+  }
+
+  // [GET] /giohang
+  giohangkh(req, res, next) {
+    var sumPrice = 0;
+    const array = [];
+    const listCartNew = [];
+    var numberCart = 0;
+    if (req.session.isAuth) {
+      Cart.find(
+        {
+          idCustomer: req.session.userId,
+        },
+        (err, listCart) => {
+          if (!err) {
+            if (listCart) {
+              for (var i = 0; i < listCart.length; i++) {
+                numberCart += listCart[i].quality;
+                const productCart = new ProductCart();
+                productCart.idProductCart = listCart[i].idProduct;
+                productCart.idCart = listCart[i].idCart;
+                productCart.qualityCart = listCart[i].quality;
+                productCart.idCustomer = listCart[i].idCustomer;
+                productCart.orderDate = listCart[i].orderDate;
+                productCart.statusCart = listCart[i].status;
+
+                Product.findOne(
+                  { idProduct: listCart[i].idProduct },
+                  (err, pro) => {
+                    if (!err) {
+                      listCartNew.push(pro);
+                      productCart.name = pro.name;
+                      productCart.idCategory = pro.idCategory;
+                      productCart.idSupplier = pro.idSupplier;
+                      productCart.dateAdded = pro.dateAdded;
+                      productCart.manufacturingDate = pro.manufacturingDate;
+                      productCart.expiryDate = pro.expiryDate;
+                      productCart.imageList = pro.imageList;
+                      productCart.importPrice = pro.importPrice;
+                      productCart.salePrice = pro.salePrice;
+                      productCart.format = pro.format;
+                      productCart.packingForm = pro.packingForm;
+                      productCart.uses = pro.uses;
+                      productCart.component = pro.component;
+                      productCart.specified = pro.specified;
+                      productCart.antiDefinition = pro.antiDefinition;
+                      productCart.dosage = pro.dosage;
+                      productCart.sideEffects = pro.sideEffects;
+                      productCart.careful = pro.careful;
+                      productCart.preserve = pro.preserve;
+                      productCart.trademark = pro.trademark;
+                      productCart.origin = pro.origin;
+                      productCart.quality = pro.quality;
+                      productCart.retailQuantity = pro.retailQuantity;
+                      productCart.quantityPerBox = pro.quantityPerBox;
+                      productCart.status = pro.status;
+                      sumPrice += pro.salePrice * productCart.qualityCart;
+                      array.push(productCart);
+
+                      if (listCartNew.length == listCart.length) {
+                        res.render('giohangkh', {
+                          numberCart: numberCart,
+                          array: array,
+                          sumPrice: sumPrice,
+                          accountId: req.session.accountId,
+                          username: req.session.username,
+                          role: req.session.role,
+                          userId: req.session.userId,
+                          avatar: req.session.avatar,
+                          fullname: req.session.fullname,
+                        });
+                      }
+                    } else {
+                      res.status(400).json({ error: 'ERROR!!!' });
+                    }
+                  }
+                ).lean();
+              }
+            } else {
+              numberCart = 0;
+            }
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+    } else {
+      req.session.back = '/home';
+      res.redirect('/login/');
+    }
   }
 }
 module.exports = new MainController();

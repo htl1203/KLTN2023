@@ -82,9 +82,16 @@
       </div>
 
       <div class='row cart'>
-        <a class='nav-link active' href='/quanly/home'>
-          <b>Giỏ hàng</b>
-          <i class='fa fa-cart-plus'></i>
+        <a class='nav-link active' href='/giohang'>
+          <b>Giỏ hàng </b>
+          <i class='fa fa-cart-plus iconCart'>
+            {{#if numberCart}}
+              <div class='numberCart'>
+                <span>{{numberCart}}</span>
+              </div>
+            {{/if}}
+
+          </i>
         </a>
       </div>
 

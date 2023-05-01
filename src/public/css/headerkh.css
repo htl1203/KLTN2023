@@ -190,9 +190,27 @@
   color: #ffffff;
 }
 
-.headerkh  .header_middle .cart i{
+.headerkh  .header_middle .cart .iconCart{
   color: #ffffff;
   font-size: 20px;
+  position: relative;
+}
+
+.headerkh  .header_middle .cart .numberCart{
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  position:absolute;
+  top:-10px;
+  right: -10px;
+  background-color: red;
+  border-radius: 20px;
+  border: 1px solid white;
+  height: 20px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 

@@ -23,5 +23,8 @@ router.get('/home', mainController.homekh);
 router.get('/login', mainController.loginqlkh);
 router.post('/login', mainController.loginkh);
 router.get('/register', mainController.register);
+router.get('/chitietsanpham/:idProduct', mainController.chitietsanphamkh);
+router.post('/themgiohang', mainController.themgiohangkh);
+router.get('/giohang', mainController.giohangkh);
 
 module.exports = router;
