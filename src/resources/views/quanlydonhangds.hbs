@@ -19,12 +19,10 @@
                                         <tr>
                                             <th>STT</th>
                                             <th>Mã đơn hàng</th>
-                                            <th>Mã khách hàng</th>
                                             <th>Tên khách hàng</th>
                                             <th>Tổng số sản phẩm</th>
                                             <th>Tổng tiền</th>
                                             <th>Phương thức thanh toán</th>
-                                            <th>Loại</th>
                                             <th>Trạng thái</th>
                                             <th></th>
                                         </tr>
@@ -33,16 +31,14 @@
                                             {{#each array}}
                                         <tr>
                                             <td>{{sum @index 1}}</td>
-                                            <td>{{this.idUserTempCV}}</td>
-                                            <td>{{this.name}}</td>
-                                            <td>{{this.dateOfBirth}}</td>
-                                            <td>{{this.gender}}</td>
-                                            <td>{{this.cccd}}</td>
-                                                <td>{{this.dateOfIssue}}</td>
-                                            <td>{{this.issuedBy}}</td>
-                                            <td>{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
+                                            <td>{{this.idOrderDetail}}</td>
+                                            <td>Khách lẻ</td>
+                                            <td>{{this.totalQuality}}</td>
+                                            <td style="color: #3871C1;">{{{changeNumber this.totalMoney}}}</td>
+                                            <td>{{this.paymentType}}</td>
+                                            <td style="color: green;">Đã thanh toán</td>
                                             <td>
-                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Xóa</a>
+                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-info">Xem chi tiết</a>
                                                 
                                             </td>
                                         </tr>

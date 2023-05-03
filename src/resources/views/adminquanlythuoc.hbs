@@ -1,28 +1,31 @@
-<div class="adminquanlynhanvien">
+<div class="adminquanlythuoc">
 {{!-- Admin --}}
             {{>menubar}}
         <div class="home-header-main">
                 {{>header}}
             <div class="main-home">
                 <div class="title_chucnang">
-                    <i class='fa fa-drivers-license-o'></i>
-                    <p>Quản lý nhân viên</p>
+                    <i class='fa fa-calendar'></i>
+                    <p>Quản lý thuốc</p>
                 </div>
                 <div class="line" ></div>
                 <div id="menu1" class="container tab-pane active div-table-list"><br />
                     <form action="">
                         <div class="card mb-4">
                             <div class="card-body">
-                                <table class="table table-bordered" id="table_id">
+                               <table class="table table-bordered" id="table_id">
                                     <thead>
                                         <tr>
                                             <th>STT</th>
-                                            <th>Mã nhân viên</th>
-                                            <th>Tên nhân viên</th>
-                                            <th>Ngày sinh</th>
-                                            <th>Giới tính</th>
-                                            <th>SĐT</th>
-                                            <th>Email</th>
+                                            <th>Mã sản phẩm</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Thuộc danh mục</th>
+                                            <th>Đinh dạng</th>
+                                            <th>Tổng số đã nhập</th>
+                                            <th>Tổng số đã bán</th>
+                                            <th>Tổng số tồn kho</th>
+                                            <th>Ngày sản xuất</th>
+                                            <th>Hạn sử dụng</th>
                                             <th>Trạng thái</th>
                                             <th></th>
                                         </tr>
@@ -31,13 +34,16 @@
                                             {{#each array}}
                                         <tr>
                                             <td>{{sum @index 1}}</td>
-                                            <td>{{this.idEmployee}}</td>
+                                            <td>{{this.idProduct}}</td>
                                             <td>{{this.name}}</td>
-                                            <td>{{this.dateOfBirth}}</td>
-                                            <td>{{this.gender}}</td>
-                                            <td>{{this.phoneNumber}}</td>
-                                            <td>{{this.email}}</td>
-                                            <td>{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
+                                            <td>{{this.idCategory}}</td>
+                                            <td>{{this.packingForm}}</td>
+                                            <td>{{this.quality}}</td>
+                                            <td style="color: red;">{{this.sold}}</td>
+                                            <td style="color: green;">{{{differenceTwoNumber this.quality  this.sold}}}</td>
+                                            <td>{{this.manufacturingDate}}</td>
+                                            <td>{{this.expiryDate}}</td>
+                                            <td style="color: green;">{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
                                             <td>
                                                 <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Xóa</a>
                                                 

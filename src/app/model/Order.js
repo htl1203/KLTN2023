@@ -12,6 +12,7 @@ const Order = new Schema(
     idEmployee: { type: String, maxLength: 255 },
     idProduct: { type: Number },
     quality: { type: Number },
+    salePrice: { type: Number },
     orderDate: { type: Date, default: Date.now },
     status: { type: Number },
     createdAt: { type: Date, default: Date.now },

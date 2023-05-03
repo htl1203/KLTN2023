@@ -8,11 +8,15 @@ router.get('/quanly/login', mainController.loginql);
 router.post('/quanly/login', mainController.login);
 
 //------DƯỢC SĨ
+router.get('/quanly/taodonhang', mainController.taodonhangds);
+router.post('/quanly/taodonhang', mainController.laydonhangds);
+router.get('/quanly/thanhtoan', mainController.thanhtoands);
 router.get('/quanly/quanlykhachhang', mainController.quanlykhachhangds);
 router.get('/quanly/quanlydonhang', mainController.quanlydonhangds);
 router.get('/quanly/thongke', mainController.thongkeds);
 
 //------ADMIN
+router.get('/quanly/quanlythuoc', mainController.adminquanlythuoc);
 router.get('/quanly/quanlynhanvien', mainController.adminquanlynhanvien);
 router.get('/quanly/quanlykhohang', mainController.adminquanlykhohang);
 router.get('/quanly/quanlydoanhthu', mainController.adminquanlydoanhthu);

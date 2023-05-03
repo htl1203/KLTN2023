@@ -9,7 +9,7 @@ const Schema = mongoose.Schema;
 const OrderDetails = new Schema(
   {
     idOrderDetail: { type: Number },
-    idOrder: { type: Number },
+    idOrder: { type: Array },
     totalMoney: { type: Number },
     totalQuality: { type: Number },
     paymentType: { type: String, maxLength: 255 },

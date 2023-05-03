@@ -5,58 +5,109 @@
                 {{>header}}
             <div class="main-home">
                 <div class="title_chucnang">
-                    <i class='fa fa-calendar'></i>
-                    <p>Quản lý thuốc</p>
+                   <i class='nav-icon fas fa-tachometer-alt'></i>
+                    <p>Dashboard</p>
                 </div>
                 <div class="line" ></div>
-                <div id="menu1" class="container tab-pane active div-table-list"><br />
-                    <form action="">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <table class="table table-bordered" id="table_id">
-                                    <thead>
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>Mã sản phẩm</th>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Thuộc danh mục</th>
-                                            <th>Tổng số đã nhập</th>
-                                            <th>Tổng số đã bán</th>
-                                            <th>Tổng số tồn kho</th>
-                                            <th>Ngày sản xuất</th>
-                                            <th>Hạn sử dụng</th>
-                                            <th>Trạng thái</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                            {{#each array}}
-                                        <tr>
-                                            <td>{{sum @index 1}}</td>
-                                            <td>{{this.idProduct}}</td>
-                                            <td>{{this.name}}</td>
-                                            <td>{{this.idCategory}}</td>
-                                            <td>{{this.quality}}</td>
-                                            <td>{{this.quality}}</td>
-                                            <td>{{this.quality}}</td>
-                                            <td>{{this.manufacturingDate}}</td>
-                                            <td>{{this.expiryDate}}</td>
-                                            <td>{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
-                                            <td>
-                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Xóa</a>
-                                                
-                                            </td>
-                                        </tr>
-                                        {{/each}}
-                                    </tbody>
-                                </table>
+               <div class="container"><br />
+                   <div class="item_thongke">
+                        <div class="item" style="background-color: #17A2B8;">
+                            <div class="item_body"  style="height: 100px;">
+                                <div class="item_body_soluong">
+                                    <span class="soluong">150</span>
+                                    <span class="name">Đơn hàng mới</span>
+                                </div>
+                                <i class="fa fa-shopping-bag" aria-hidden="true" style="color: #148A9D;"></i>
                             </div>
+                             <a class="item_footer" style="background-color: #1591A5;">
+                                <span>Xem chi tiết  <i class='fas fa-arrow-circle-right'></i></span>
+                            </a>
                         </div>
-                    </form>
+                        <div class="item" style="background-color: #28A745;">
+                            <div class="item_body"  style="height: 100px;">
+                                <div class="item_body_soluong">
+                                    <span class="soluong">150</span>
+                                    <span class="name">Số lượng sản phẩm</span>
+                                </div>
+                                <i class="fa fa-signal" aria-hidden="true" style="color: #228E3B;"></i>
+                            </div>
+                             <a class="item_footer" style="background-color: #24963E;">
+                                <span>Xem chi tiết  <i class='fas fa-arrow-circle-right'></i></span>
+                            </a>
+                        </div>
+                        <div class="item" style="background-color: #FFC107;">
+                            <div class="item_body"  style="height: 100px;">
+                                <div class="item_body_soluong">
+                                    <span class="soluong">150</span>
+                                    <span class="name">Khách hàng mới</span>
+                                </div>
+                                <i class="fa fa-user" aria-hidden="true" style="color: #D9A406;"></i>
+                            </div>
+                             <a class="item_footer" style="background-color: #E5AD06;">
+                                <span>Xem chi tiết  <i class='fas fa-arrow-circle-right'></i></span>
+                            </a>
+                        </div>
+                        <div class="item" style="background-color: #DC3545;">
+                            <div class="item_body"  style="height: 100px;">
+                                <div class="item_body_soluong">
+                                    <span class="soluong">150</span>
+                                    <span class="name">Thống kê doanh thu</span>
+                                </div>
+                                <i class="fa fa-pie-chart" aria-hidden="true" style="color: #BB2D3B;"></i>
+                            </div>
+                             <a class="item_footer" style="background-color: #C6303E;">
+                                <span>Xem chi tiết  <i class='fas fa-arrow-circle-right'></i></span>
+                            </a>
+                        </div>
+                        
+                   </div>
+
+                   <div class="sale_calender">
+                        <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                         <div id="calendar">
+                            <div id="calendar_header">
+                                <i class="icon-chevron-left"></i>          
+                                <h1></h1>
+                                <i class="icon-chevron-right"></i>         
+                            </div>
+                            <div id="calendar_weekdays"></div>
+                            <div id="calendar_content"></div>
+                        </div>
+                     
+
+
+                   </div>
+
                 </div>
                
             </div>
         </div>
  </div>
-        
+    
+<script>
+    $(function(){function c(){p();var e=h();var r=0;var u=false;l.empty();while(!u){if(s[r]==e[0].weekday){u=true}else{l.append('<div class="blank"></div>');r++}}for(var c=0;c<42-r;c++){if(c>=e.length){l.append('<div class="blank"></div>')}else{var v=e[c].day;var m=g(new Date(t,n-1,v))?'<div class="today">':"<div>";l.append(m+""+v+"</div>")}}var y=o[n-1];a.css("background-color",y).find("h1").text(i[n-1]+" "+t);f.find("div").css("color",y);l.find(".today").css("background-color",y);d()}function h(){var e=[];for(var r=1;r<v(t,n)+1;r++){e.push({day:r,weekday:s[m(t,n,r)]})}return e}function p(){f.empty();for(var e=0;e<7;e++){f.append("<div>"+s[e].substring(0,3)+"</div>")}}function d(){var t;var n=$("#calendar").css("width",e+"px");n.find(t="#calendar_weekdays, #calendar_content").css("width",e+"px").find("div").css({width:e/7+"px",height:e/7+"px","line-height":e/7+"px"});n.find("#calendar_header").css({height:e*(1/7)+"px"}).find('i[class^="icon-chevron"]').css("line-height",e*(1/7)+"px")}function v(e,t){return(new Date(e,t,0)).getDate()}function m(e,t,n){return(new Date(e,t-1,n)).getDay()}function g(e){return y(new Date)==y(e)}function y(e){return e.getFullYear()+"/"+(e.getMonth()+1)+"/"+e.getDate()}function b(){var e=new Date;t=e.getFullYear();n=e.getMonth()+1}var e=480;var t=2013;var n=9;var r=[];var i=["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];var s=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];var o=["#16a085","#1abc9c","#c0392b","#27ae60","#FF6860","#f39c12","#f1c40f","#e67e22","#2ecc71","#e74c3c","#d35400","#2c3e50"];var u=$("#calendar");var a=u.find("#calendar_header");var f=u.find("#calendar_weekdays");var l=u.find("#calendar_content");b();c();a.find('i[class^="icon-chevron"]').on("click",function(){var e=$(this);var r=function(e){n=e=="next"?n+1:n-1;if(n<1){n=12;t--}else if(n>12){n=1;t++}c()};if(e.attr("class").indexOf("left")!=-1){r("previous")}else{r("next")}})})
+</script>
+<script>
+var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+var yValues = [55, 49, 44, 24, 15];
+var barColors = ["red", "green","blue","orange","brown"];
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "World Wine Production 2018"
+    }
+  }
+});
+</script>
         

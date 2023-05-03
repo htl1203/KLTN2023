@@ -31,6 +31,7 @@ const Product = new Schema(
     trademark: { type: String, maxLength: 255 },
     origin: { type: String, maxLength: 255 },
     quality: { type: Number },
+    sold: { type: Number },
     retailQuantity: { type: Number },
     quantityPerBox: { type: Number },
     status: { type: Number },

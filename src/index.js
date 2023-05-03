@@ -43,7 +43,7 @@ app.engine(
           for (i = 0; i < Math.floor(diemTL.length / 3); i++) {
             if (mod == 0 && i == 0)
               output += diemTL.substring(mod + 3 * i, mod + 3 * i + 3);
-            else output += '.' + diemTL.substring(mod + 3 * i, mod + 3 * i + 3);
+            else output += ',' + diemTL.substring(mod + 3 * i, mod + 3 * i + 3);
           }
           return output;
         } else return diemTL;
@@ -56,7 +56,7 @@ app.engine(
           for (i = 0; i < Math.floor(number.length / 3); i++) {
             if (mod == 0 && i == 0)
               output += number.substring(mod + 3 * i, mod + 3 * i + 3);
-            else output += '.' + number.substring(mod + 3 * i, mod + 3 * i + 3);
+            else output += ',' + number.substring(mod + 3 * i, mod + 3 * i + 3);
           }
           return output;
         } else return number;
@@ -71,7 +71,22 @@ app.engine(
           for (i = 0; i < Math.floor(sum.length / 3); i++) {
             if (mod == 0 && i == 0)
               output += sum.substring(mod + 3 * i, mod + 3 * i + 3);
-            else output += '.' + sum.substring(mod + 3 * i, mod + 3 * i + 3);
+            else output += ',' + sum.substring(mod + 3 * i, mod + 3 * i + 3);
+          }
+          return output;
+        } else return sum;
+      },
+      differenceTwoNumber: (number1, number2) => {
+        var sum = 0;
+        sum = number1 - number2;
+        sum = '' + sum;
+        if (sum.length > 3) {
+          var mod = sum.length % 3;
+          var output = mod > 0 ? sum.substring(0, mod) : '';
+          for (i = 0; i < Math.floor(sum.length / 3); i++) {
+            if (mod == 0 && i == 0)
+              output += sum.substring(mod + 3 * i, mod + 3 * i + 3);
+            else output += ',' + sum.substring(mod + 3 * i, mod + 3 * i + 3);
           }
           return output;
         } else return sum;
