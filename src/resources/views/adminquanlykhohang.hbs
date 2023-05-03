@@ -20,6 +20,7 @@
                                             <th>Mã sản phẩm</th>
                                             <th>Tên sản phẩm</th>
                                             <th>Thuộc danh mục</th>
+                                            <th>Đinh dạng</th>
                                             <th>Tổng số đã nhập</th>
                                             <th>Tổng số đã bán</th>
                                             <th>Tổng số tồn kho</th>
@@ -33,16 +34,18 @@
                                             {{#each array}}
                                         <tr>
                                             <td>{{sum @index 1}}</td>
-                                            <td>{{this.idUserTempCV}}</td>
+                                            <td>{{this.idProduct}}</td>
                                             <td>{{this.name}}</td>
-                                            <td>{{this.dateOfBirth}}</td>
-                                            <td>{{this.gender}}</td>
-                                            <td>{{this.cccd}}</td>
-                                                <td>{{this.dateOfIssue}}</td>
-                                            <td>{{this.issuedBy}}</td>
-                                            <td>{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
+                                            <td>{{this.idCategory}}</td>
+                                            <td>{{this.packingForm}}</td>
+                                            <td>{{this.quality}}</td>
+                                            <td style="color: red;">{{this.sold}}</td>
+                                            <td style="color: green;">{{{differenceTwoNumber this.quality  this.sold}}}</td>
+                                            <td>{{this.manufacturingDate}}</td>
+                                            <td>{{this.expiryDate}}</td>
+                                            <td style="color: green;">{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
                                             <td>
-                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Xóa</a>
+                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Huỷ thuốc</a>
                                                 
                                             </td>
                                         </tr>

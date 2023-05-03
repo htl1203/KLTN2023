@@ -21,6 +21,10 @@ router.get('/quanly/quanlynhanvien', mainController.adminquanlynhanvien);
 router.get('/quanly/quanlykhohang', mainController.adminquanlykhohang);
 router.get('/quanly/quanlydoanhthu', mainController.adminquanlydoanhthu);
 router.get('/quanly/quanlynhapkho', mainController.adminquanlynhapkho);
+router.get('/quanly/loadsanpham', mainController.loadsanpham);
+router.get('/quanly/loadmotsanpham/:idProduct', mainController.loadmotsanpham);
+router.get('/quanly/themnhapkho', mainController.adminthemnhapkho);
+router.post('/quanly/nhapkho', mainController.adminnhapkho);
 
 //===========KHÁCH HÀNG===============
 router.get('/home', mainController.homekh);

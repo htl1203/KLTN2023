@@ -1,0 +1,64 @@
+.adminthemnhapkho {
+  background-color: #F7F7F8;
+}
+.adminthemnhapkho .home-header-main {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  margin-left: 20.4%;
+  height: 100%;
+}
+.adminthemnhapkho .main-home{
+  display: flex;
+  margin-top: 60px;
+  width: 100%;
+  flex-direction: column;
+}
+.adminthemnhapkho .main-home .title_chucnang{
+  display: flex;
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+}
+.adminthemnhapkho .main-home .title_chucnang p{
+  font-size: 26px;
+  font-weight: 600;
+  color: #3871C1;
+}
+.adminthemnhapkho .main-home .title_chucnang i{
+  font-size:26px;
+  margin-right: 5px;
+  color: #3871C1;
+  margin-top: 8px;
+}
+.adminthemnhapkho .main-home .line {
+  height: 1px;
+  background-color: #cccccc;
+  width: 100%;
+} 
+
+.adminthemnhapkho .main-home .main_body {
+  display: flex;
+  width: 100%;
+  padding: 10px 30px;
+} 
+
+.adminthemnhapkho .main-home .body_nhapkho {
+  display: flex;
+  width: 100%;
+  padding: 10px 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 5px #E6E6E6;
+
+} 
+
+.adminthemnhapkho .main-home .body_nhapkho label{
+  font-size: 14px;
+} 
+
+.adminthemnhapkho .main-home .body_nhapkho select,
+.adminthemnhapkho .main-home .body_nhapkho input{
+  height: 35px;
+  font-size: 14px;
+} 

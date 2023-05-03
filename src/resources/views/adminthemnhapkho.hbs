@@ -1,0 +1,185 @@
+<div class="adminthemnhapkho">
+{{!-- Admin --}}
+            {{>menubar}}
+        <div class="home-header-main">
+                {{>header}}
+            <div class="main-home">
+                <div class="title_chucnang">
+                    <i class='fa fa-shopping-basket'></i>
+                    <p>Quản lý nhập kho</p>
+                </div>
+                <div class="line" ></div>
+                <div class="main_body">
+                    <div class="body_nhapkho">
+                        <form action="/quanly/nhapkho" method="POST">
+                            <div class="row">
+                                <div class="col-lg-9">
+                                    <div class="form-group">
+                                        <label for="sel1">Tên sản phẩm: </label>
+                                        <select onchange="productChanged(this)" class="form-control" id="ChonSanPham" name="name">
+                                            
+                                        </select>
+                                      
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label for="sel1">Mã sản phẩm :</label>
+                                          <input  type="text" value="" name="idProduct" id="idProduct"
+                                            class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Thuộc danh mục :</label>
+                                          <input  type="text" value="" name="idCategory" id="idCategory"
+                                            class="form-control" readonly>
+                                    </div>
+                                </div>
+
+                                 <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Loại hàng hoá :</label>
+                                        <input  type="text" value="" name="format" id="formatID"
+                                                class="form-control" readonly>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Quy cách đóng gói:</label>
+                                        <input  type="text" value="" name="packingForm" id="packingForm"
+                                                class="form-control" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Hãng sản xuất: </label>
+                                        <input type="text"  name="trademark" id="trademark"  value="" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Xuất xứ: </label>
+                                        <input  type="text" name="origin" id="origin" value=""
+                                            class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Giá bán cũ: </label>
+                                        <input  type="tel" name="salePrice" id="salePrice" value=""
+                                            class="form-control"  readonly>
+                                    </div>
+                                </div>
+                                    <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Số lượng nhập: </label>
+                                        <input  type="text" name="qualityImport" value=""
+                                            class="form-control" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Giá nhập:</label>
+                                        <input  type="text" name="priceImport" value=""
+                                            class="form-control" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Giá bán:</label>
+                                      <input  type="text" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">VAT: </label>
+                                        <input  type="text"  name="vat" value=""
+                                            class="form-control" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Ngày sản xuất: </label>
+                                        <input  type="date"  name="manufacturingDate" value=""
+                                            class="form-control" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Ngày hết hạn: </label>
+                                        <input  type="date"  name="expiryDate" value=""
+                                            class="form-control" placeholder="0">
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="row" style="margin-top: 20px;">
+                                <div class="col-lg-12" style="display: flex; justify-content: center;">
+                                    <button type="submit" onclick="ThemKhoaVien(this);" 
+                                        class="btn btn-primary">THÊM NHẬP KHO</button>
+                                </div>
+                    
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+ </div>
+        
+        
+        
+<script>
+    $(document).ready(function () {
+        // hiển thị thông tin về các khoa
+        function loadSanPham() {
+            $.ajax({
+                url: '/quanly/loadsanpham',
+                type: 'get',
+                dataType: 'json'
+            }).done(function (result) {
+                if (result.length > 0) {
+                    for (let i = 0; i < result.length; i++) {
+
+                        let themChuyenKhoa = `
+                            <option value = "`+ result[i].idProduct + `">` + result[i].name + `</option>`;
+                        $('#ChonSanPham').append(themChuyenKhoa);
+                    }
+                }
+               
+
+            });
+        }
+        loadSanPham();
+    });
+</script>
+
+<script>
+    
+    function productChanged(obj)
+        {
+            let link = '/quanly/loadmotsanpham/'+obj.value;
+            $.ajax({
+            url: link,
+            type: 'get',
+            dataType: 'json'
+            }).done(function (result) {
+                if (result) {
+                    document.getElementById('formatID').value = result.format ;
+                    document.getElementById('idCategory').value = result.idCategory ;
+                   document.getElementById('idProduct').value = result.idProduct ;
+                   document.getElementById('packingForm').value = result.packingForm ;
+                   document.getElementById('trademark').value = result.trademark ;
+                   document.getElementById('origin').value = result.origin ;
+                   document.getElementById('salePrice').value = result.salePrice ;
+                }
+                
+
+            });
+           
+        }
+</script>

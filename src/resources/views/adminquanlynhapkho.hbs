@@ -8,9 +8,153 @@
                     <i class='fa fa-shopping-basket'></i>
                     <p>Quản lý nhập kho</p>
                 </div>
-               
+                <div class="line" ></div>
+                <div class="main_body">
+                     <form action="/quanly/nhapkho" method="POST">
+                    <div class="body_nhapkho">
+                        <div class="header_nhapkho">
+                            <p>PHIẾU NHẬP KHO</p>
+                            <a class="btn" href="/quanly/themnhapkho"><i class="fa fa-plus" aria-hidden="true"></i>THÊM NHẬP KHO</a>
+
+                        </div>
+                       
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Nhà cung cấp: </label>
+                                        <input  type="text" name="qualityImport" value=""
+                                            class="form-control" placeholder="0">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Mã hoá đơn:</label>
+                                        <input  type="text" name="priceImport" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Ngày nhập:</label>
+                                      <input  type="date" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                   
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                                        <label class="col-lg-4" for="sel1" style="font-weight: 600;font-size: 22px; margin-right:10px; margin-top:5px">Tổng tiền: </label>
+                                        <input   type="text"  name="vat" value=""
+                                            class="form-control" placeholder="0.00" readonly>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                    
+                    </div>
+                     <div id="menu1" class="container tab-pane active div-table-list"><br />
+                        <div class="card mb-4">
+                            <div class="card-body">
+                               <table class="table table-bordered" id="table_id">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Mã sản phẩm</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Tổng số đã nhập</th>
+                                            <th>Giá nhập</th>
+                                            <th>Giá bán</th>
+                                            <th>Thành tiền</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            {{#each array}}
+                                        <tr>
+                                            <td>{{sum @index 1}}</td>
+                                            <td>{{this.idProduct}}</td>
+                                            <td>{{this.name}}</td>
+                                            <td>{{this.idCategory}}</td>
+                                            <td>{{this.packingForm}}</td>
+                                            <td>{{this.quality}}</td>
+                                            <td style="color: green;">{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
+                                            <td>
+                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Xóa</a>
+                                                
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                                <div class="div_btnLuu">
+                                    <input
+                                        type='submit'
+                                        class='button btnLuu'
+                                        value='LƯU'
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                </div>
             </div>
         </div>
  </div>
         
         
+        
+<script>
+    $(document).ready(function () {
+        // hiển thị thông tin về các khoa
+        function loadSanPham() {
+            $.ajax({
+                url: '/quanly/loadsanpham',
+                type: 'get',
+                dataType: 'json'
+            }).done(function (result) {
+                if (result.length > 0) {
+                    for (let i = 0; i < result.length; i++) {
+
+                        let themChuyenKhoa = `
+                            <option value = "`+ result[i].idProduct + `">` + result[i].name + `</option>`;
+                        $('#ChonSanPham').append(themChuyenKhoa);
+                    }
+                }
+               
+
+            });
+        }
+        loadSanPham();
+    });
+</script>
+
+<script>
+    
+    function productChanged(obj)
+        {
+            let link = '/quanly/loadmotsanpham/'+obj.value;
+            $.ajax({
+            url: link,
+            type: 'get',
+            dataType: 'json'
+            }).done(function (result) {
+                if (result) {
+                    document.getElementById('formatID').value = result.format ;
+                    document.getElementById('idCategory').value = result.idCategory ;
+                   document.getElementById('idProduct').value = result.idProduct ;
+                   document.getElementById('packingForm').value = result.packingForm ;
+                   document.getElementById('trademark').value = result.trademark ;
+                   document.getElementById('origin').value = result.origin ;
+                   document.getElementById('salePrice').value = result.salePrice ;
+                }
+                
+
+            });
+           
+        }
+</script>

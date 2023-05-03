@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 
 const Schema = mongoose.Schema;
 
-const Product = new Schema(
+const ProductTemp = new Schema(
   {
     idProduct: { type: Number },
     name: { type: String, maxLength: 255 },
@@ -38,6 +38,7 @@ const Product = new Schema(
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   },
+
   {
     timestamps: true,
   }
@@ -45,7 +46,6 @@ const Product = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
-Product.plugin(AutoIncrement, { inc_field: 'idProduct' });
-Product.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
+ProductCart.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 
-module.exports = mongoose.model('Product', Product);
+module.exports = mongoose.model('ProductCart', ProductCart);

@@ -9,6 +9,7 @@ const Payment = require('../model/Payment');
 const Product = require('../model/Product');
 const Supplier = require('../model/Supplier');
 const ProductCart = require('../model/ProductCart');
+const ProductTemp = require('../model/ProductTemp');
 
 const readXlsxFile = require('read-excel-file/node');
 const bcrypt = require('bcryptjs');
@@ -164,7 +165,7 @@ class MainController {
                 var h = dateNow.getHours();
                 var m = dateNow.getMinutes();
                 if (h <= 9) h = '0' + h;
-                if (m <= 9) h = '0' + m;
+                if (m <= 9) m = '0' + m;
                 res.render('taodonhang', {
                   dateNow: dateNow,
                   h: h,
@@ -431,14 +432,21 @@ class MainController {
 
   adminquanlykhohang(req, res) {
     if (req.session.isAuth) {
-      res.render('adminquanlykhohang', {
-        accountId: req.session.accountId,
-        username: req.session.username,
-        role: req.session.role,
-        userId: req.session.userId,
-        avatar: req.session.avatar,
-        fullname: req.session.fullname,
-      });
+      Product.find((err, array) => {
+        if (!err) {
+          res.render('adminquanlykhohang', {
+            array: array,
+            accountId: req.session.accountId,
+            username: req.session.username,
+            role: req.session.role,
+            userId: req.session.userId,
+            avatar: req.session.avatar,
+            fullname: req.session.fullname,
+          });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
     } else {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
@@ -471,6 +479,74 @@ class MainController {
         avatar: req.session.avatar,
         fullname: req.session.fullname,
       });
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+  loadsanpham(req, res) {
+    if (req.session.isAuth) {
+      Product.find((err, data) => {
+        if (!err) {
+          res.send(data);
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      });
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  loadmotsanpham(req, res) {
+    if (req.session.isAuth) {
+      Product.findOne(
+        { idProduct: Number(req.params.idProduct) },
+        (err, data) => {
+          if (!err) {
+            res.send(data);
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      );
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  adminthemnhapkho(req, res) {
+    if (req.session.isAuth) {
+      res.render('adminthemnhapkho', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  adminnhapkho(req, res) {
+    if (req.session.isAuth) {
+      console.log('=========Product111', req.body);
+      // Product.updateOne(
+      //   { idProduct: Number(req.params.idProduct) },
+      //   (err, data) => {
+      //     if (!err) {
+      //       console.log('=========Product', data);
+      //       res.send(data);
+      //     } else {
+      //       res.status(400).json({ error: 'ERROR!!!' });
+      //     }
+      //   }
+      // );
     } else {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
