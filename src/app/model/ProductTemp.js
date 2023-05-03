@@ -46,6 +46,6 @@ const ProductTemp = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
-ProductCart.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
+ProductTemp.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 
-module.exports = mongoose.model('ProductCart', ProductCart);
+module.exports = mongoose.model('ProductTemp', ProductTemp);
