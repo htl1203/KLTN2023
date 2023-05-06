@@ -5,7 +5,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const Schema = mongoose.Schema;
 
-const Categorys = new Schema(
+const Receipt = new Schema(
   {
     idReceipt: { type: Number },
     time: { type: Date, default: Date.now },
@@ -23,6 +23,7 @@ const Categorys = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
-Categorys.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
+Receipt.plugin(AutoIncrement, { inc_field: 'idReceipt' });
+Receipt.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 
-module.exports = mongoose.model('Categorys', Categorys);
+module.exports = mongoose.model('Receipt', Receipt);

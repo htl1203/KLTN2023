@@ -10,7 +10,7 @@
                 </div>
                 <div class="line" ></div>
                 <div class="main_body">
-                     <form action="/quanly/nhapkho" method="POST">
+                     <form action="/quanly/luunhapkho" method="POST">
                     <div class="body_nhapkho">
                         <div class="header_nhapkho">
                             <p>PHIẾU NHẬP KHO</p>
@@ -22,14 +22,17 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Nhà cung cấp: </label>
-                                        <input  type="text" name="qualityImport" value=""
-                                            class="form-control" placeholder="0">
+                                         <select class="form-control" id="nameSupplier" name="nameSupplier">
+                                                <option value={{supplier.name}}>{{supplier.name}}</option>
+                                        </select>
+                                        <input  type="hidden" name="idSupplier" value={{supplier.idSupplier}}
+                                            class="form-control" >
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Mã hoá đơn:</label>
-                                        <input  type="text" name="priceImport" value=""
+                                        <input  type="text" name="idInvoice" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>
@@ -46,8 +49,12 @@
                                 <div class="col-lg-6">
                                     <div class="form-group" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
                                         <label class="col-lg-4" for="sel1" style="font-weight: 600;font-size: 22px; margin-right:10px; margin-top:5px">Tổng tiền: </label>
-                                        <input   type="text"  name="vat" value=""
-                                            class="form-control" placeholder="0.00" readonly>
+                                        <input   type="text"  name="total" value={{changeNumber sumAll}}
+                                            class="form-control" readonly>
+                                        <input   type="hidden"  name="totalMoney" value={{ sumAll}}
+                                            class="form-control" >
+                                        <input   type="hidden"  name="status" value=1
+                                            class="form-control" >
                                     </div>
                                 </div>
                                 
@@ -77,10 +84,10 @@
                                             <td>{{sum @index 1}}</td>
                                             <td>{{this.idProduct}}</td>
                                             <td>{{this.name}}</td>
-                                            <td>{{this.idCategory}}</td>
-                                            <td>{{this.packingForm}}</td>
                                             <td>{{this.quality}}</td>
-                                            <td style="color: green;">{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
+                                            <td>{{changeNumber this.importPrice}}</td>
+                                            <td>{{changeNumber this.salePrice}}</td>
+                                            <td> {{{sumCart this.quality this.importPrice}}}</td>
                                             <td>
                                                 <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Xóa</a>
                                                 

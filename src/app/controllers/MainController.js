@@ -9,7 +9,8 @@ const Payment = require('../model/Payment');
 const Product = require('../model/Product');
 const Supplier = require('../model/Supplier');
 const ProductCart = require('../model/ProductCart');
-const ProductTemp = require('../model/ProductTemp');
+const ProductTemp = require('../model/ProductTemps');
+const Receipt = require('../model/Receipt');
 
 const readXlsxFile = require('read-excel-file/node');
 const bcrypt = require('bcryptjs');
@@ -470,15 +471,39 @@ class MainController {
   }
 
   adminquanlynhapkho(req, res) {
+    var sum = 0;
     if (req.session.isAuth) {
-      res.render('adminquanlynhapkho', {
-        accountId: req.session.accountId,
-        username: req.session.username,
-        role: req.session.role,
-        userId: req.session.userId,
-        avatar: req.session.avatar,
-        fullname: req.session.fullname,
-      });
+      Supplier.find((err, supplier) => {
+        if (!err) {
+          // console.log('=========Supplier', supplier[0].name);
+          // var supplier = '' + supplier[0].name;
+          ProductTemp.find((err, array) => {
+            if (!err) {
+              if (array) {
+                for (var i = 0; i < array.length; i++) {
+                  sum += array[i].importPrice * array[i].quality;
+                  console.log('=========sum', sum);
+                }
+                res.render('adminquanlynhapkho', {
+                  array: array,
+                  supplier: supplier[0],
+                  sumAll: sum,
+                  accountId: req.session.accountId,
+                  username: req.session.username,
+                  role: req.session.role,
+                  userId: req.session.userId,
+                  avatar: req.session.avatar,
+                  fullname: req.session.fullname,
+                });
+              }
+            } else {
+              res.status(400).json({ error: 'ERROR!!!' });
+            }
+          }).lean();
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
     } else {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
@@ -533,20 +558,147 @@ class MainController {
     }
   }
 
+  adminluunhapkho(req, res) {
+    var receipt = new Receipt(req.body);
+    console.log('=========body receipt', receipt);
+    if (req.session.isAuth) {
+      receipt
+        .save()
+        .then(() => {
+          Receipt.findOne(
+            {
+              idInvoice: Number(req.body.idInvoice),
+              totalMoney: Number(req.body.totalMoney),
+            },
+            (err, data) => {
+              if (!err) {
+                if (data) {
+                  var idNew = data.idReceipt;
+                  console.log('=========body idNew', idNew);
+                  ProductTemp.find((err, array) => {
+                    if (!err) {
+                      if (array) {
+                        for (var i = 0; i < array.length; i++) {
+                          const proNew = new Product();
+                          proNew.idProduct = array[i].idProduct;
+                          proNew.name = array[i].name;
+                          proNew.idCategory = array[i].idCategory;
+                          proNew.idReceipt = idNew;
+                          proNew.manufacturingDate = array[i].manufacturingDate;
+                          proNew.expiryDate = array[i].expiryDate;
+                          proNew.imageList = array[i].imageList;
+                          proNew.importPrice = array[i].priceImport;
+                          proNew.salePrice = array[i].priceSaleNew;
+                          proNew.format = array[i].format;
+                          proNew.packingForm = array[i].packingForm;
+                          proNew.uses = array[i].uses;
+                          proNew.component = array[i].component;
+                          proNew.specified = array[i].specified;
+                          proNew.antiDefinition = array[i].antiDefinition;
+                          proNew.dosage = array[i].dosage;
+                          proNew.sideEffects = array[i].sideEffects;
+                          proNew.careful = array[i].careful;
+                          proNew.preserve = array[i].preserve;
+                          proNew.trademark = array[i].trademark;
+                          proNew.origin = array[i].origin;
+                          proNew.quality = array[i].qualityImport;
+                          proNew.sold = array[i].sold;
+                          proNew.retailQuantity = array[i].retailQuantity;
+                          proNew.quantityPerBox = array[i].quantityPerBox;
+                          proNew.retailQuantityPack =
+                            array[i].retailQuantityPack;
+                          proNew.status = array[i].status;
+
+                          proNew
+                            .save()
+                            .then(() => {
+                              if (i == array.length) {
+                                ProductTemp.find((err, temp) => {
+                                  for (var i = 0; i < temp.length; i++) {
+                                    ProductTemp.delete({
+                                      idProductTemp: temp[i].idProductTemp,
+                                    })
+                                      .then(() => {
+                                        if (i == temp.length) {
+                                          res.redirect('/quanly/quanlykhohang');
+                                        }
+                                      })
+                                      .catch(err => {});
+                                  }
+                                }).lean();
+                              }
+                            })
+                            .catch(error => {
+                              console.log('=========error', error);
+                            });
+                        }
+                      }
+                    } else {
+                      res.status(400).json({ error: 'ERROR!!!' });
+                    }
+                  }).lean();
+                }
+              } else {
+                res.status(400).json({ error: 'ERROR!!!' });
+              }
+            }
+          );
+        })
+        .catch(error => {});
+      // console.log('=========body 553', req.body);
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
   adminnhapkho(req, res) {
     if (req.session.isAuth) {
-      console.log('=========Product111', req.body);
-      // Product.updateOne(
-      //   { idProduct: Number(req.params.idProduct) },
-      //   (err, data) => {
-      //     if (!err) {
-      //       console.log('=========Product', data);
-      //       res.send(data);
-      //     } else {
-      //       res.status(400).json({ error: 'ERROR!!!' });
-      //     }
-      //   }
-      // );
+      const proNew = new ProductTemp();
+      Product.findOne({ idProduct: Number(req.body.idProduct) }, (err, pro) => {
+        if (!err) {
+          proNew.idProduct = pro.idProduct;
+          proNew.name = pro.name;
+          proNew.idCategory = pro.idCategory;
+          proNew.idReceipt = '';
+          proNew.manufacturingDate = req.body.manufacturingDate;
+          proNew.expiryDate = req.body.expiryDate;
+          proNew.imageList = pro.imageList;
+          proNew.importPrice = Number(req.body.priceImport);
+          proNew.salePrice = Number(req.body.priceSaleNew);
+          proNew.format = pro.format;
+          proNew.packingForm = pro.packingForm;
+          proNew.uses = pro.uses;
+          proNew.component = pro.component;
+          proNew.specified = pro.specified;
+          proNew.antiDefinition = pro.antiDefinition;
+          proNew.dosage = pro.dosage;
+          proNew.sideEffects = pro.sideEffects;
+          proNew.careful = pro.careful;
+          proNew.preserve = pro.preserve;
+          proNew.trademark = pro.trademark;
+          proNew.origin = pro.origin;
+          proNew.quality = Number(req.body.qualityImport);
+          proNew.sold = 0;
+          proNew.retailQuantity = Number(
+            req.body.qualityImport * pro.quantityPerBox
+          );
+          proNew.quantityPerBox = pro.quantityPerBox;
+          proNew.retailQuantityPack = pro.retailQuantityPack;
+          proNew.status = pro.status;
+
+          proNew
+            .save()
+            .then(() => {
+              res.redirect('/quanly/quanlynhapkho');
+            })
+            .catch(error => {
+              console.log('=========error', error);
+            });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      });
     } else {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
@@ -898,8 +1050,10 @@ class MainController {
                       productCart.trademark = pro.trademark;
                       productCart.origin = pro.origin;
                       productCart.quality = pro.quality;
+                      productCart.sold = pro.sold;
                       productCart.retailQuantity = pro.retailQuantity;
                       productCart.quantityPerBox = pro.quantityPerBox;
+                      productCart.retailQuantityPack = pro.retailQuantityPack;
                       productCart.status = pro.status;
                       sumPrice += pro.salePrice * productCart.qualityCart;
                       array.push(productCart);
