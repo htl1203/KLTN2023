@@ -19,7 +19,7 @@ router.get('/quanly/thongke', mainController.thongkeds);
 router.get('/quanly/quanlythuoc', mainController.adminquanlythuoc);
 router.get('/quanly/quanlynhanvien', mainController.adminquanlynhanvien);
 router.get('/quanly/quanlykhohang', mainController.adminquanlykhohang);
-router.get('/quanly/quanlydoanhthu', mainController.adminquanlydoanhthu);
+router.get('/quanly/quanlydoanhthu/:type', mainController.adminquanlydoanhthu);
 router.get('/quanly/quanlynhapkho', mainController.adminquanlynhapkho);
 router.get('/quanly/loadsanpham', mainController.loadsanpham);
 router.get('/quanly/loadmotsanpham/:idProduct', mainController.loadmotsanpham);

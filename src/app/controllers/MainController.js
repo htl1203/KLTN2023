@@ -26,6 +26,7 @@ class MainController {
           if (!err) {
             res.render('home', {
               array: array,
+              sumProduct: array.length,
               accountId: req.session.accountId,
               username: req.session.username,
               role: req.session.role,
@@ -52,6 +53,7 @@ class MainController {
             res.render('homeadmin', {
               countExpired: countExpired,
               array: array,
+              sumProduct: array.length,
               accountId: req.session.accountId,
               username: req.session.username,
               role: req.session.role,
@@ -105,6 +107,7 @@ class MainController {
                           if (!err) {
                             res.render('home', {
                               array: array,
+                              sumProduct: array.length,
                               accountId: req.session.accountId,
                               username: req.session.username,
                               role: req.session.role,
@@ -135,6 +138,7 @@ class MainController {
                             res.render('homeadmin', {
                               countExpired: countExpired,
                               array: array,
+                              sumProduct: array.length,
                               accountId: req.session.accountId,
                               username: req.session.username,
                               role: req.session.role,
@@ -573,28 +577,75 @@ class MainController {
   }
 
   adminquanlydoanhthu(req, res) {
+    var type = Number(req.params.type);
     var countExpired = 0;
+    var sumMoney = 0;
+    var dateNow = new Date();
+    var ngay = dateNow.getDate();
+    var thang = dateNow.getMonth() + 1;
+    var nam = dateNow.getFullYear();
+    var array = [];
     if (req.session.isAuth) {
-      Product.find((err, listPro) => {
+      OrderDetails.find((err, orders) => {
         if (!err) {
-          for (var i = 0; i < listPro.length; i++) {
-            var date1 = new Date(); // current date
-            var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
-            var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
-            var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
-            if (Number(timeDiffInSecond) <= 15) {
-              countExpired = countExpired + 1;
+          for (var i = 0; i < orders.length; i++) {
+            var dateOrder = new Date(orders[i].time);
+
+            if (type == 1) {
+              if (
+                dateOrder.getFullYear() == nam &&
+                dateOrder.getMonth() + 1 == thang &&
+                dateOrder.getDate() == ngay
+              ) {
+                sumMoney += orders[i].totalMoney;
+                array.push(orders[i]);
+              }
+            } else if (type == 2) {
+              if (
+                dateOrder.getFullYear() == nam &&
+                dateOrder.getMonth() + 1 == thang
+              ) {
+                sumMoney += orders[i].totalMoney;
+                array.push(orders[i]);
+              }
+            } else if (type == 3) {
+              sumMoney += orders[i].totalMoney;
+              array.push(orders[i]);
+            }
+
+            if (i == orders.length - 1) {
+              Product.find((err, listPro) => {
+                if (!err) {
+                  for (var i = 0; i < listPro.length; i++) {
+                    var date1 = new Date(); // current date
+                    var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
+                    var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+                    var timeDiffInSecond = Math.ceil(
+                      timeDiff / (24 * 3600 * 1000)
+                    );
+                    if (Number(timeDiffInSecond) <= 15) {
+                      countExpired = countExpired + 1;
+                    }
+                  }
+                  res.render('adminquanlydoanhthu', {
+                    countExpired: countExpired,
+                    array: array,
+                    type: type,
+                    sumMoney: sumMoney,
+                    thang: thang,
+                    accountId: req.session.accountId,
+                    username: req.session.username,
+                    role: req.session.role,
+                    userId: req.session.userId,
+                    avatar: req.session.avatar,
+                    fullname: req.session.fullname,
+                  });
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }).lean();
             }
           }
-          res.render('adminquanlydoanhthu', {
-            countExpired: countExpired,
-            accountId: req.session.accountId,
-            username: req.session.username,
-            role: req.session.role,
-            userId: req.session.userId,
-            avatar: req.session.avatar,
-            fullname: req.session.fullname,
-          });
         } else {
           res.status(400).json({ error: 'ERROR!!!' });
         }

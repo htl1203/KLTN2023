@@ -37,8 +37,47 @@
   background-color: #cccccc;
   width: 100%;
 }  
+
+.adminquanlydoanhthu .main-home .btn_doanhthu {
+  display: flex;
+  flex-direction: row;
+  margin: 20px 0 0 20px;
+  align-items: center;
+  
+}  
+
+.adminquanlydoanhthu .main-home .btn_doanhthu span{
+  font-size: 18px;
+  font-weight: 700;
+  color:#4B4B4B;
+  margin-right: 10px;
+  
+} 
+
+.adminquanlydoanhthu .main-home .btn_doanhthu a{
+  font-size: 18px;
+  font-weight: 700;
+  color: #3871C1;
+  border: 1px solid #cccccc;
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  text-decoration: none;
+} 
+.adminquanlydoanhthu .main-home .btn_doanhthu .active{
+  color: white;
+  background-color: #3871C1;
+} 
+
 .adminquanlydoanhthu #menu1 form {
   background-color: white;
+}  
+
+.adminquanlydoanhthu #menu1 form .tong_danhthu{
+  align-self: flex-end;
+  font-weight: 700;
+  font-size: 20px;
+  color: red;
 }  
 
 .adminquanlydoanhthu #menu1 .card-header a{

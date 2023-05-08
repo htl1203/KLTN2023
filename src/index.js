@@ -38,6 +38,14 @@ app.engine(
         var date = new moment(datee, 'MM/DD/YYYY');
         return new Intl.DateTimeFormat('en-AU').format(date);
       },
+      getTime: datee => {
+        var h = datee.getHours();
+        var m = datee.getMinutes();
+        if (h <= 9) h = '0' + h;
+        if (m <= 9) m = '0' + m;
+        var time = '' + h + ':' + m;
+        return time;
+      },
       changeDiemTichLuy: diemTL => {
         diemTL = diemTL / 1000;
         diemTL = '' + diemTL;

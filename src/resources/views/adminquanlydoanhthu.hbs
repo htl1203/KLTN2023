@@ -9,47 +9,44 @@
                     <p>Quản lý doanh thu</p>
                 </div>
                 <div class="line" ></div>
+                <div class="btn_doanhthu">
+                    <span >Chọn loại thống kê doanh thu: </span>
+                    <a href="/quanly/quanlydoanhthu/1" {{#ifCond type '==' 1}}  class="active"{{/ifCond}}>Hôm nay</a>
+                    <a href="/quanly/quanlydoanhthu/2" {{#ifCond type '=='2}}  class="active"{{/ifCond}}>Tháng {{thang}}</a>
+                    <a href="/quanly/quanlydoanhthu/3"{{#ifCond type '==' 3}}  class="active"{{/ifCond}}>Tất cả</a>
+                </div>
                 <div id="menu1" class="container tab-pane active div-table-list"><br />
                     <form action="">
                         <div class="card mb-4">
-                            <div class="card-header" style="color: #296088;font-weight: 600;">
+                            <div class="card-header" style="color: #296088;font-weight: 600;display: flex;flex-direction: row; justify-content: space-between;">
                                 Bảng hiển thị danh sách bình luận
-                                <a>Ngày</a>
-                                <a>Tất cả</a>
+                                <div class="tong_danhthu">
+                                    Tổng: <span style="font-style: italic;">{{{changeNumber sumMoney}}} đ</span>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <table class="table table-bordered" id="table_id">
                                     <thead>
                                         <tr>
                                             <th>STT</th>
-                                            <th>Mã sản phẩm</th>
-                                            <th>Tên sản phẩm</th>
-                                            <th>Thuộc danh mục</th>
-                                            <th>Tổng số đã nhập</th>
-                                            <th>Tổng số đã bán</th>
-                                            <th>Tổng số tồn kho</th>
-                                            <th>Ngày sản xuất</th>
-                                            <th>Hạn sử dụng</th>
+                                            <th>Mã hoá đơn</th>
+                                            <th>Tổng sản phẩm bán</th>
+                                            <th>Tổng tiền (đ)</th>
+                                            <th>Phương thức thanh toán</th>
+                                            <th>Ngày giờ thanh toán</th>
                                             <th>Trạng thái</th>
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                             {{#each array}}
                                         <tr>
                                             <td>{{sum @index 1}}</td>
-                                            <td>{{this.idUserTempCV}}</td>
-                                            <td>{{this.name}}</td>
-                                            <td>{{this.dateOfBirth}}</td>
-                                            <td>{{this.gender}}</td>
-                                            <td>{{this.cccd}}</td>
-                                                <td>{{this.dateOfIssue}}</td>
-                                            <td>{{this.issuedBy}}</td>
-                                            <td>{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
-                                            <td>
-                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Xóa</a>
-                                                
-                                            </td>
+                                            <td>{{this.idOrderDetail}}</td>
+                                            <td>{{this.totalQuality}}</td>
+                                            <td style="color: #3871C1; font-weight: 600;font-style: italic;">{{{changeNumber this.totalMoney}}}</td>
+                                            <td>{{this.paymentType}}</td>
+                                            <td>{{{getTime this.time}}} {{{changeNgay this.time}}}</td>
+                                            <td style="color:green;">{{#ifCond this.status '==' 1}} Đã thanh toán{{/ifCond}}</td>
                                         </tr>
                                         {{/each}}
                                     </tbody>
