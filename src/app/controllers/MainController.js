@@ -11,13 +11,15 @@ const Supplier = require('../model/Supplier');
 const ProductCart = require('../model/ProductCart');
 const ProductTemp = require('../model/ProductTemps');
 const Receipt = require('../model/Receipt');
+const ProductNoti = require('../model/ProductNoti');
 
 const readXlsxFile = require('read-excel-file/node');
 const bcrypt = require('bcryptjs');
-
+var moment = require('moment');
 class MainController {
   // [GET] /home
   home(req, res) {
+    var countExpired = 0;
     if (req.session.isAuth) {
       if (req.session.role == 2) {
         Product.find((err, array) => {
@@ -38,7 +40,17 @@ class MainController {
       } else {
         Product.find((err, array) => {
           if (!err) {
+            for (var i = 0; i < array.length; i++) {
+              var date1 = new Date(); // current date
+              var date2 = new Date(array[i].expiryDate); // mm/dd/yyyy format
+              var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+              var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
+              if (Number(timeDiffInSecond) <= 15) {
+                countExpired = countExpired + 1;
+              }
+            }
             res.render('homeadmin', {
+              countExpired: countExpired,
               array: array,
               accountId: req.session.accountId,
               username: req.session.username,
@@ -64,7 +76,7 @@ class MainController {
   }
 
   login(req, res) {
-    console.log('=========body', req.body);
+    var countExpired = 0;
     Account.findOne({ username: req.body.username }, function (err, user) {
       if (!err) {
         if (user == null) {
@@ -104,10 +116,24 @@ class MainController {
                             res.status(400).json({ error: 'ERROR!!!' });
                           }
                         }).lean();
-                      } else {
+                      } else if (req.session.role == 3) {
                         Product.find((err, array) => {
                           if (!err) {
+                            for (var i = 0; i < array.length; i++) {
+                              var date1 = new Date(); // current date
+                              var date2 = new Date(array[i].expiryDate); // mm/dd/yyyy format
+                              var timeDiff = Math.abs(
+                                date2.getTime() - date1.getTime()
+                              ); // in miliseconds
+                              var timeDiffInSecond = Math.ceil(
+                                timeDiff / (24 * 3600 * 1000)
+                              );
+                              if (Number(timeDiffInSecond) <= 15) {
+                                countExpired = countExpired + 1;
+                              }
+                            }
                             res.render('homeadmin', {
+                              countExpired: countExpired,
                               array: array,
                               accountId: req.session.accountId,
                               username: req.session.username,
@@ -386,10 +412,21 @@ class MainController {
   }
   //------ADMIN
   adminquanlythuoc(req, res) {
+    var countExpired = 0;
     if (req.session.isAuth) {
       Product.find((err, array) => {
         if (!err) {
+          for (var i = 0; i < array.length; i++) {
+            var date1 = new Date(); // current date
+            var date2 = new Date(array[i].expiryDate); // mm/dd/yyyy format
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+            var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
+            if (Number(timeDiffInSecond) <= 15) {
+              countExpired = countExpired + 1;
+            }
+          }
           res.render('adminquanlythuoc', {
+            countExpired: countExpired,
             array: array,
             accountId: req.session.accountId,
             username: req.session.username,
@@ -409,18 +446,35 @@ class MainController {
   }
 
   adminquanlynhanvien(req, res) {
+    var countExpired = 0;
     if (req.session.isAuth) {
       Employee.find((err, array) => {
         if (!err) {
-          res.render('adminquanlynhanvien', {
-            array: array,
-            accountId: req.session.accountId,
-            username: req.session.username,
-            role: req.session.role,
-            userId: req.session.userId,
-            avatar: req.session.avatar,
-            fullname: req.session.fullname,
-          });
+          Product.find((err, listPro) => {
+            if (!err) {
+              for (var i = 0; i < listPro.length; i++) {
+                var date1 = new Date(); // current date
+                var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
+                var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+                var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
+                if (Number(timeDiffInSecond) <= 15) {
+                  countExpired = countExpired + 1;
+                }
+              }
+              res.render('adminquanlynhanvien', {
+                countExpired: countExpired,
+                array: array,
+                accountId: req.session.accountId,
+                username: req.session.username,
+                role: req.session.role,
+                userId: req.session.userId,
+                avatar: req.session.avatar,
+                fullname: req.session.fullname,
+              });
+            } else {
+              res.status(400).json({ error: 'ERROR!!!' });
+            }
+          }).lean();
         } else {
           res.status(400).json({ error: 'ERROR!!!' });
         }
@@ -432,11 +486,55 @@ class MainController {
   }
 
   adminquanlykhohang(req, res) {
+    const array = [];
+    var countExpired = 0;
     if (req.session.isAuth) {
-      Product.find((err, array) => {
+      Product.find((err, listPro) => {
         if (!err) {
+          for (var i = 0; i < listPro.length; i++) {
+            const proNew = new ProductNoti();
+            var date1 = new Date(); // current date
+            var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+            var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
+            if (Number(timeDiffInSecond) <= 15) {
+              countExpired = countExpired + 1;
+            }
+            if (date2.getTime() - date1.getTime() < 0) {
+              proNew.idProductNoti = listPro[i].idProduct;
+              proNew.name = listPro[i].name;
+              proNew.idCategory = listPro[i].idCategory;
+              proNew.idReceipt = listPro[i].idReceipt;
+              proNew.manufacturingDate = listPro[i].manufacturingDate;
+              proNew.expiryDate = listPro[i].expiryDate;
+              proNew.imageList = listPro[i].imageList;
+              proNew.importPrice = listPro[i].importPrice;
+              proNew.salePrice = listPro[i].salePrice;
+              proNew.format = listPro[i].format;
+              proNew.packingForm = listPro[i].packingForm;
+              proNew.uses = listPro[i].uses;
+              proNew.component = listPro[i].component;
+              proNew.specified = listPro[i].specified;
+              proNew.antiDefinition = listPro[i].antiDefinition;
+              proNew.dosage = listPro[i].dosage;
+              proNew.sideEffects = listPro[i].sideEffects;
+              proNew.careful = listPro[i].careful;
+              proNew.preserve = listPro[i].preserve;
+              proNew.trademark = listPro[i].trademark;
+              proNew.origin = listPro[i].origin;
+              proNew.quality = listPro[i].quality;
+              proNew.sold = listPro[i].sold;
+              proNew.retailQuantity = listPro[i].retailQuantity;
+              proNew.quantityPerBox = listPro[i].quantityPerBox;
+              proNew.retailQuantityPack = listPro[i].retailQuantityPack;
+              proNew.status = listPro[i].status;
+              proNew.countProExpired = timeDiffInSecond;
+              array.push(proNew);
+            }
+          }
           res.render('adminquanlykhohang', {
             array: array,
+            countExpired: countExpired,
             accountId: req.session.accountId,
             username: req.session.username,
             role: req.session.role,
@@ -454,16 +552,53 @@ class MainController {
     }
   }
 
-  adminquanlydoanhthu(req, res) {
+  adminhuythuoc(req, res) {
+    const array = [];
     if (req.session.isAuth) {
-      res.render('adminquanlydoanhthu', {
-        accountId: req.session.accountId,
-        username: req.session.username,
-        role: req.session.role,
-        userId: req.session.userId,
-        avatar: req.session.avatar,
-        fullname: req.session.fullname,
-      });
+      Product.delete({
+        idProduct: req.body.idProduct,
+        idReceipt: req.body.idReceipt,
+      })
+        .then(() => {
+          req.flash('success', 'Huỷ thuốc thành công!');
+          res.redirect('/quanly/quanlykhohang');
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  adminquanlydoanhthu(req, res) {
+    var countExpired = 0;
+    if (req.session.isAuth) {
+      Product.find((err, listPro) => {
+        if (!err) {
+          for (var i = 0; i < listPro.length; i++) {
+            var date1 = new Date(); // current date
+            var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+            var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
+            if (Number(timeDiffInSecond) <= 15) {
+              countExpired = countExpired + 1;
+            }
+          }
+          res.render('adminquanlydoanhthu', {
+            countExpired: countExpired,
+            accountId: req.session.accountId,
+            username: req.session.username,
+            role: req.session.role,
+            userId: req.session.userId,
+            avatar: req.session.avatar,
+            fullname: req.session.fullname,
+          });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
     } else {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
@@ -471,12 +606,11 @@ class MainController {
   }
 
   adminquanlynhapkho(req, res) {
+    var countExpired = 0;
     var sum = 0;
     if (req.session.isAuth) {
       Supplier.find((err, supplier) => {
         if (!err) {
-          // console.log('=========Supplier', supplier[0].name);
-          // var supplier = '' + supplier[0].name;
           ProductTemp.find((err, array) => {
             if (!err) {
               if (array) {
@@ -484,17 +618,37 @@ class MainController {
                   sum += array[i].importPrice * array[i].quality;
                   console.log('=========sum', sum);
                 }
-                res.render('adminquanlynhapkho', {
-                  array: array,
-                  supplier: supplier[0],
-                  sumAll: sum,
-                  accountId: req.session.accountId,
-                  username: req.session.username,
-                  role: req.session.role,
-                  userId: req.session.userId,
-                  avatar: req.session.avatar,
-                  fullname: req.session.fullname,
-                });
+                Product.find((err, listPro) => {
+                  if (!err) {
+                    for (var i = 0; i < listPro.length; i++) {
+                      var date1 = new Date(); // current date
+                      var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
+                      var timeDiff = Math.abs(
+                        date2.getTime() - date1.getTime()
+                      ); // in miliseconds
+                      var timeDiffInSecond = Math.ceil(
+                        timeDiff / (24 * 3600 * 1000)
+                      );
+                      if (Number(timeDiffInSecond) <= 15) {
+                        countExpired = countExpired + 1;
+                      }
+                    }
+                    res.render('adminquanlynhapkho', {
+                      countExpired: countExpired,
+                      array: array,
+                      supplier: supplier[0],
+                      sumAll: sum,
+                      accountId: req.session.accountId,
+                      username: req.session.username,
+                      role: req.session.role,
+                      userId: req.session.userId,
+                      avatar: req.session.avatar,
+                      fullname: req.session.fullname,
+                    });
+                  } else {
+                    res.status(400).json({ error: 'ERROR!!!' });
+                  }
+                }).lean();
               }
             } else {
               res.status(400).json({ error: 'ERROR!!!' });
@@ -543,15 +697,32 @@ class MainController {
   }
 
   adminthemnhapkho(req, res) {
+    var countExpired = 0;
     if (req.session.isAuth) {
-      res.render('adminthemnhapkho', {
-        accountId: req.session.accountId,
-        username: req.session.username,
-        role: req.session.role,
-        userId: req.session.userId,
-        avatar: req.session.avatar,
-        fullname: req.session.fullname,
-      });
+      Product.find((err, listPro) => {
+        if (!err) {
+          for (var i = 0; i < listPro.length; i++) {
+            var date1 = new Date(); // current date
+            var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+            var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
+            if (Number(timeDiffInSecond) <= 15) {
+              countExpired = countExpired + 1;
+            }
+          }
+          res.render('adminthemnhapkho', {
+            countExpired: countExpired,
+            accountId: req.session.accountId,
+            username: req.session.username,
+            role: req.session.role,
+            userId: req.session.userId,
+            avatar: req.session.avatar,
+            fullname: req.session.fullname,
+          });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
     } else {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
@@ -601,7 +772,7 @@ class MainController {
                           proNew.preserve = array[i].preserve;
                           proNew.trademark = array[i].trademark;
                           proNew.origin = array[i].origin;
-                          proNew.quality = array[i].qualityImport;
+                          proNew.quality = array[i].quality;
                           proNew.sold = array[i].sold;
                           proNew.retailQuantity = array[i].retailQuantity;
                           proNew.quantityPerBox = array[i].quantityPerBox;
@@ -620,7 +791,7 @@ class MainController {
                                     })
                                       .then(() => {
                                         if (i == temp.length) {
-                                          res.redirect('/quanly/quanlykhohang');
+                                          res.redirect('/quanly/quanlythuoc');
                                         }
                                       })
                                       .catch(err => {});
@@ -655,14 +826,17 @@ class MainController {
   adminnhapkho(req, res) {
     if (req.session.isAuth) {
       const proNew = new ProductTemp();
+      let shortDate_1 = new Date(req.body.manufacturingDate);
+      let manufacturingDate = Intl.DateTimeFormat('en-AU').format(shortDate_1);
+      let expiryDate = moment(req.body.expiryDate).format('MM/DD/YYYY');
       Product.findOne({ idProduct: Number(req.body.idProduct) }, (err, pro) => {
         if (!err) {
           proNew.idProduct = pro.idProduct;
           proNew.name = pro.name;
           proNew.idCategory = pro.idCategory;
           proNew.idReceipt = '';
-          proNew.manufacturingDate = req.body.manufacturingDate;
-          proNew.expiryDate = req.body.expiryDate;
+          proNew.manufacturingDate = manufacturingDate;
+          proNew.expiryDate = expiryDate;
           proNew.imageList = pro.imageList;
           proNew.importPrice = Number(req.body.priceImport);
           proNew.salePrice = Number(req.body.priceSaleNew);
@@ -705,6 +879,76 @@ class MainController {
     }
   }
 
+  adminthongbao(req, res) {
+    const array = [];
+    var countExpired = 0;
+    if (req.session.isAuth) {
+      Product.find((err, listPro) => {
+        if (!err) {
+          for (var i = 0; i < listPro.length; i++) {
+            const proNew = new ProductNoti();
+            var date1 = new Date(); // current date
+            var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+            var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
+            if (Number(timeDiffInSecond) <= 15) {
+              countExpired = countExpired + 1;
+              proNew.idProductNoti = listPro[i].idProduct;
+              proNew.name = listPro[i].name;
+              proNew.idCategory = listPro[i].idCategory;
+              proNew.idReceipt = listPro[i].idReceipt;
+              proNew.manufacturingDate = listPro[i].manufacturingDate;
+              proNew.expiryDate = listPro[i].expiryDate;
+              proNew.imageList = listPro[i].imageList;
+              proNew.importPrice = listPro[i].importPrice;
+              proNew.salePrice = listPro[i].salePrice;
+              proNew.format = listPro[i].format;
+              proNew.packingForm = listPro[i].packingForm;
+              proNew.uses = listPro[i].uses;
+              proNew.component = listPro[i].component;
+              proNew.specified = listPro[i].specified;
+              proNew.antiDefinition = listPro[i].antiDefinition;
+              proNew.dosage = listPro[i].dosage;
+              proNew.sideEffects = listPro[i].sideEffects;
+              proNew.careful = listPro[i].careful;
+              proNew.preserve = listPro[i].preserve;
+              proNew.trademark = listPro[i].trademark;
+              proNew.origin = listPro[i].origin;
+              proNew.quality = listPro[i].quality;
+              proNew.sold = listPro[i].sold;
+              proNew.retailQuantity = listPro[i].retailQuantity;
+              proNew.quantityPerBox = listPro[i].quantityPerBox;
+              proNew.retailQuantityPack = listPro[i].retailQuantityPack;
+              proNew.status = listPro[i].status;
+              if (date2.getTime() - date1.getTime() < 0) {
+                proNew.countProExpired = -timeDiffInSecond;
+              } else {
+                proNew.countProExpired = timeDiffInSecond;
+              }
+
+              array.push(proNew);
+            }
+          }
+          res.render('adminthongbao', {
+            array: array,
+            countExpired: countExpired,
+            accountId: req.session.accountId,
+            username: req.session.username,
+            role: req.session.role,
+            userId: req.session.userId,
+            avatar: req.session.avatar,
+            fullname: req.session.fullname,
+          });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
   //===========KHÁCH HÀNG===============
 
   homekh(req, res) {
@@ -729,17 +973,19 @@ class MainController {
                         } else {
                           numberCart = 0;
                         }
-                        res.render('homekh', {
-                          numberCart: numberCart,
-                          danhmuc: danhmuc,
-                          array: array,
-                          accountId: req.session.accountId,
-                          username: req.session.username,
-                          role: req.session.role,
-                          userId: req.session.userId,
-                          avatar: req.session.avatar,
-                          fullname: req.session.fullname,
-                        });
+                        if (req.session.role == 1) {
+                          res.render('homekh', {
+                            numberCart: numberCart,
+                            danhmuc: danhmuc,
+                            array: array,
+                            accountId: req.session.accountId,
+                            username: req.session.username,
+                            role: req.session.role,
+                            userId: req.session.userId,
+                            avatar: req.session.avatar,
+                            fullname: req.session.fullname,
+                          });
+                        }
                       } else {
                         res.status(400).json({ error: 'ERROR!!!' });
                       }
@@ -830,17 +1076,19 @@ class MainController {
                                         } else {
                                           numberCart = 0;
                                         }
-                                        res.render('homekh', {
-                                          numberCart: numberCart,
-                                          danhmuc: danhmuc,
-                                          array: array,
-                                          accountId: req.session.accountId,
-                                          username: req.session.username,
-                                          role: req.session.role,
-                                          userId: req.session.userId,
-                                          avatar: req.session.avatar,
-                                          fullname: req.session.fullname,
-                                        });
+                                        if (req.session.role == 1) {
+                                          res.render('homekh', {
+                                            numberCart: numberCart,
+                                            danhmuc: danhmuc,
+                                            array: array,
+                                            accountId: req.session.accountId,
+                                            username: req.session.username,
+                                            role: req.session.role,
+                                            userId: req.session.userId,
+                                            avatar: req.session.avatar,
+                                            fullname: req.session.fullname,
+                                          });
+                                        }
                                       } else {
                                         res
                                           .status(400)

@@ -1,0 +1,63 @@
+<div class="adminthongbao">
+{{!-- Admin --}}
+            {{>menubar}}
+        <div class="home-header-main">
+                {{>header}}
+            <div class="main-home">
+                <div class="title_chucnang">
+                    <i class='fa fa-bell' aria-hidden='true'></i>
+                    <p>Thông báo thuốc sắp hết hạn và hết hạn</p>
+                </div>
+                <div class="line" ></div>
+                <div class="main_body">
+                    {{!-- <div class="body_nhapkho"> --}}
+                        <div id="menu1" class="container tab-pane active div-table-list"><br />
+                            <form action="">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                     <table class="table table-bordered" id="table_id">
+                                        <thead style="background-color: #3871C1; color:white; font-size: 14px;">
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Mã sản phẩm</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Thuộc phiếu nhập</th>
+                                                <th>Ngày sản xuất</th>
+                                                <th>Hạn sử dụng</th>
+                                                <th>Tổng số tồn kho</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                {{#each array}}
+                                            <tr>
+                                                <td>{{sum @index 1}}</td>
+                                                <td>{{this.idProductNoti}}</td>
+                                                <td style="color: #3871C1;font-weight: 700;">{{this.name}}</td>
+                                                <td>{{this.idReceipt}}</td>
+                                                <td>{{this.manufacturingDate}}</td>
+                                                <td style="color: red;font-weight: 600;">{{{changeTimeMonment this.expiryDate}}}</td>
+                                                <td style="color: green;">{{{differenceTwoNumber this.quality  this.sold}}}</td>
+                                                <td style="color: red;font-weight: 700;">{{#ifCond this.countProExpired '<' 0}} Đã hết hạn {{else}} <span style="color: orange;"> Sắp hết hạn</span>   {{/ifCond}}</td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                        {{!-- {{#each array}}
+                        <div class="item_thongbao">
+                            <span class="nameMain"> Tên thuốc: <span style="font-style: italic;font-weight: 400;color:  #3871C1;">{{this.name}} - {{this.idProductNoti}}</span></span>
+                            <span class="name">Thuộc phiếu nhập kho: <span style="font-style: italic;font-weight: 400;color:  #4B4B4B;">{{this.idReceipt}}</span></span>
+                            <span class="name">Ngày sản xuất: <span style="font-style: italic;font-weight: 400;color:  #4B4B4B;">{{this.manufacturingDate}}</span></span>
+                            <span class="name">Hạn sử dụng: <span style="font-style: italic;font-weight: 400;color:  #4B4B4B;">{{this.expiryDate}}</span></span>
+                            <span class="name">Trạng thái: <span style="font-style: italic;font-weight: 400;color:  #4B4B4B;">{{this.countProExpired}}</span></span>
+                        </div>
+                       {{/each}} --}}
+                    {{!-- </div> --}}
+                </div>
+            </div>
+        </div>
+ </div>

@@ -19,13 +19,9 @@
                                             <th>STT</th>
                                             <th>Mã sản phẩm</th>
                                             <th>Tên sản phẩm</th>
-                                            <th>Thuộc danh mục</th>
-                                            <th>Đinh dạng</th>
-                                            <th>Tổng số đã nhập</th>
-                                            <th>Tổng số đã bán</th>
-                                            <th>Tổng số tồn kho</th>
-                                            <th>Ngày sản xuất</th>
+                                            <th>Thuộc phiếu nhập</th>
                                             <th>Hạn sử dụng</th>
+                                            <th>Tổng số tồn kho</th>
                                             <th>Trạng thái</th>
                                             <th></th>
                                         </tr>
@@ -34,18 +30,20 @@
                                             {{#each array}}
                                         <tr>
                                             <td>{{sum @index 1}}</td>
-                                            <td>{{this.idProduct}}</td>
-                                            <td>{{this.name}}</td>
-                                            <td>{{this.idCategory}}</td>
-                                            <td>{{this.packingForm}}</td>
-                                            <td>{{this.quality}}</td>
-                                            <td style="color: red;">{{this.sold}}</td>
+                                            <td>{{this.idProductNoti}}</td>
+                                            <td style="color: #3871C1;font-weight: 700;">{{this.name}}</td>
+                                            <td>{{this.idReceipt}}</td>
+                                            <td style="color: red;font-weight: 600;">{{{changeTimeMonment this.expiryDate}}}</td>
                                             <td style="color: green;">{{{differenceTwoNumber this.quality  this.sold}}}</td>
-                                            <td>{{this.manufacturingDate}}</td>
-                                            <td>{{this.expiryDate}}</td>
-                                            <td style="color: green;">{{#ifCond this.status '==' 0}} Tạm ngưng  {{else}} Hoạt động  {{/ifCond}}</td>
+                                            <td style="color: red;font-weight: 700;"> Đã hết hạn</td>
                                             <td>
-                                                <a href="/admin/xoachuyenvien/{{this.idUserTempCV}}" onclick="return confirm ('Xoá chuyên viên {{this.name}} ?')" class="btn btn-danger">Huỷ thuốc</a>
+                                                <form action="/quanly/huythuoc" method="POST">
+                                                    <input  type="hidden" name="idProduct" value={{this.idProductNoti}}
+                                                        class="form-control" >
+                                                      <input  type="hidden" name="idReceipt" value={{this.idReceipt}}
+                                                        class="form-control" >
+                                                    <input type="submit" value="Huỷ thuốc" onclick="return confirm ('Huỷ thuốc {{this.name}} ?')" class="btn btn-danger" />
+                                                </form>
                                                 
                                             </td>
                                         </tr>
@@ -56,9 +54,75 @@
                         </div>
                     </form>
                 </div>
+                <div class='Error'>
+                    {{#if messages.success}}
+                        <input id="change-success" value="success" type="hidden" >
+                        </input>
+                    {{/if}}
+                </div>
                
             </div>
         </div>
  </div>
         
         
+
+<script>
+const actualBtn = document.getElementById('actual-btn');
+const fileChosen = document.getElementById('file-chosen');
+
+actualBtn.addEventListener('change', function(){
+  fileChosen.textContent = this.files[0].name;
+ let themType = `<input type='submit' class='btnDoiAnh' value='Lưu' />`;
+ $('#div_btn_save_avatar').append(themType);
+})
+
+</script>
+
+<script>
+$(document).ready(function () { myFunction(); });
+function myFunction() {
+    if(document.getElementById("change-success").value){
+        customAlert.alert('Huỷ thuốc thành công!' )
+    }
+    
+} 
+function CustomAlert(){
+  this.alert = function(message,title){
+    document.body.innerHTML = document.body.innerHTML + '<div id="dialogoverlay"></div><div id="dialogbox" class="slit-in-vertical"><div><div id="dialogboxhead"></div><div id="dialogboxbody"></div><div id="dialogboxfoot"></div></div></div>';
+
+    let dialogoverlay = document.getElementById('dialogoverlay');
+    let dialogbox = document.getElementById('dialogbox');
+    
+    let winH = window.innerHeight;
+    dialogoverlay.style.height = winH+"px";
+    
+    dialogbox.style.top = "100px";
+
+    dialogoverlay.style.display = "block";
+    dialogbox.style.display = "block";
+    
+    document.getElementById('dialogboxhead').style.display = 'block';
+
+    if(typeof title === 'undefined') {
+      document.getElementById('dialogboxhead').style.display = 'none';
+    } else {
+      document.getElementById('dialogboxhead').innerHTML = '<i class="fa fa-exclamation-circle" aria-hidden="true"></i> '+ title;
+    }
+    document.getElementById('dialogboxbody').innerHTML = message;
+    {{!-- document.getElementById('dialogboxfoot').innerHTML = '<button class="pure-material-button-contained active" onclick="customAlert.ok()">OK</button>'; --}}
+  }
+  
+  this.ok = function(){
+    document.getElementById('dialogbox').style.display = "none";
+    document.getElementById('dialogoverlay').style.display = "none";
+  }
+
+  setTimeout(function() {  
+    document.getElementById('dialogbox').style.display = "none";
+    document.getElementById('dialogoverlay').style.display = "none";
+    }, 2000);
+}
+
+let customAlert = new CustomAlert();
+</script>

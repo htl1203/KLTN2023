@@ -9,7 +9,7 @@ const {
   allowInsecurePrototypeAccess,
 } = require('@handlebars/allow-prototype-access');
 const Handlebars = require('handlebars');
-
+var moment = require('moment');
 const path = require('path');
 
 db.connect();
@@ -34,6 +34,10 @@ app.engine(
     helpers: {
       sum: (a, b) => a + b,
       changeNgay: datee => new Intl.DateTimeFormat('en-AU').format(datee),
+      changeTimeMonment: datee => {
+        var date = new moment(datee, 'MM/DD/YYYY');
+        return new Intl.DateTimeFormat('en-AU').format(date);
+      },
       changeDiemTichLuy: diemTL => {
         diemTL = diemTL / 1000;
         diemTL = '' + diemTL;
