@@ -15,6 +15,8 @@ router.get('/quanly/quanlykhachhang', mainController.quanlykhachhangds);
 router.get('/quanly/quanlydonhang', mainController.quanlydonhangds);
 router.get('/quanly/thongke', mainController.thongkeds);
 router.get('/quanly/xemthongtincanhan', mainController.xemthongtincanhands);
+router.get('/quanly/doimatkhau', mainController.loaddoimatkhau);
+router.post('/quanly/doimatkhau/:accountId', mainController.doimatkhau);
 
 //------ADMIN
 router.get('/quanly/quanlythuoc', mainController.adminquanlythuoc);

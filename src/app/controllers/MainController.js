@@ -95,7 +95,7 @@ class MainController {
                     sess.isAuth = true;
                     sess.role = user.role;
                     sess.username = user.username;
-                    sess.accountId = user.id;
+                    sess.accountId = user.idAccount;
                     sess.userId = userInfo.idEmployee;
                     sess.avatar = userInfo.avatar;
                     sess.fullname = userInfo.name;
@@ -438,6 +438,79 @@ class MainController {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
     }
+  }
+
+  loaddoimatkhau(req, res) {
+    if (req.session.isAuth) {
+      res.render('doimatkhau', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  doimatkhau(req, res) {
+    Account.findOne(
+      { idAccount: Number(req.params.accountId) },
+      function (err, acc) {
+        if (!err) {
+          if (acc) {
+            if (bcrypt.compareSync(req.body.oldpassword, acc.password)) {
+              if (req.body.newpassword.length < 8) {
+                req.flash('error', 'Mật khẩu phải từ 8 ký tự!');
+                res.redirect('/quanly/doimatkhau');
+              } else {
+                if (req.body.newpassword == req.body.renewpassword) {
+                  bcrypt.hash(req.body.newpassword, 10, function (error, hash) {
+                    if (error) {
+                      return next(error);
+                    } else {
+                      if (hash) {
+                        console.log('=========hash', hash);
+                        req.body.newpassword = hash;
+                        console.log('=========hash', req.body.newpassword);
+
+                        if (req.session.isAuth) {
+                          Account.updateOne(
+                            { idAccount: Number(req.params.accountId) },
+                            { password: hash }
+                          )
+                            .then(() => {
+                              req.flash('success', 'Thành công!');
+                              res.redirect('/quanly/home');
+                            })
+                            .catch(err => {
+                              console.log('=========err', err);
+                            });
+                        } else {
+                          req.session.back = '/home';
+                          res.redirect('/quanly/login/');
+                        }
+                      }
+                    }
+                  });
+                } else {
+                  req.flash('error', 'Mật khẩu nhập lại không trùng!');
+                  res.redirect('/quanly/doimatkhau');
+                }
+              }
+            } else {
+              req.flash('error', 'Mật khẩu cũ không đúng!');
+              res.redirect('/quanly/doimatkhau');
+            }
+          }
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }
+    );
   }
 
   //------ADMIN
@@ -1123,7 +1196,7 @@ class MainController {
                     sess.isAuth = true;
                     sess.role = user.role;
                     sess.username = user.username;
-                    sess.accountId = user.id;
+                    sess.accountId = user.idAccount;
                     sess.userId = userInfo.idCustomer;
                     sess.avatar = userInfo.avatar;
                     sess.fullname = userInfo.name;
