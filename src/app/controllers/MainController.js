@@ -414,6 +414,32 @@ class MainController {
       res.redirect('/quanly/login/');
     }
   }
+
+  xemthongtincanhands(req, res) {
+    console.log('req.session.userId', req.session.userId);
+    if (req.session.isAuth) {
+      Employee.findOne({ idEmployee: req.session.userId }, (err, array) => {
+        if (!err) {
+          console.log('array', array);
+          res.render('xemthongtincanhands', {
+            array: array,
+            accountId: req.session.accountId,
+            username: req.session.username,
+            role: req.session.role,
+            userId: req.session.userId,
+            avatar: req.session.avatar,
+            fullname: req.session.fullname,
+          });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
   //------ADMIN
   adminquanlythuoc(req, res) {
     var countExpired = 0;

@@ -1,6 +1,9 @@
 .home {
   background-color: #F7F7F8;
 }
+.home a{
+  text-decoration: none;
+}
 .home .home-header-main {
   display: flex;
   width: 80%;
@@ -100,6 +103,8 @@
   align-items: center;
   flex-direction: row;
   font-size: 14px;
+  text-decoration: none;
+  color: white;
 }
 
 .home .sale_calender {

@@ -14,6 +14,7 @@ router.get('/quanly/thanhtoan', mainController.thanhtoands);
 router.get('/quanly/quanlykhachhang', mainController.quanlykhachhangds);
 router.get('/quanly/quanlydonhang', mainController.quanlydonhangds);
 router.get('/quanly/thongke', mainController.thongkeds);
+router.get('/quanly/xemthongtincanhan', mainController.xemthongtincanhands);
 
 //------ADMIN
 router.get('/quanly/quanlythuoc', mainController.adminquanlythuoc);

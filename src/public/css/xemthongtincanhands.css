@@ -1,0 +1,109 @@
+
+.xemthongtincanhands {
+  background-color: #F7F7F8;
+}
+.xemthongtincanhands .home-header-main {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  margin-left: 20.4%;
+  height: 100%;
+}
+.xemthongtincanhands .main-home-nv {
+  display: flex;
+  margin-top: 60px;
+  width: 100%;
+  flex-direction: column;
+}
+.xemthongtincanhands .main-home-nv .title_chucnang{
+  display: flex;
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+}
+.xemthongtincanhands .main-home-nv .title_chucnang p{
+  font-size: 26px;
+  font-weight: 600;
+  color: #3871C1;
+}
+.xemthongtincanhands .main-home-nv .title_chucnang i{
+  font-size:26px;
+  margin-right: 5px;
+  color: #3871C1;
+  margin-top: 8px;
+}
+.xemthongtincanhands .main-home-nv .line {
+  height: 1px;
+  background-color: #cccccc;
+}  
+.xemthongtincanhands .main-home  {
+  display: flex;
+  width: 100%;
+  padding: 10px 30px;
+} 
+
+.xemthongtincanhands .main-home  .main_body{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 5px #E6E6E6;
+
+} 
+
+.xemthongtincanhands  .main_body .header_thongtin{
+  display: flex;
+  width: 100%;
+  height: 20%;
+  position: relative;
+} 
+
+.xemthongtincanhands  .main_body .div_info{
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #3871C1;
+  font-size: 26px;
+  font-weight: 700;
+} 
+
+.xemthongtincanhands  .main_body .div_info > span{
+  color: #3871C1 !important;
+  font-size: 26px;
+  font-weight: 700!important;
+} 
+
+.xemthongtincanhands  .main_body  .avatar_info{
+  height: 200px;
+  width: 200px;
+  border: 1px solid #3871C1;
+  border-radius: 100px;
+  margin-bottom: 5px;
+} 
+
+.xemthongtincanhands  .main_body .body_thongtin{
+  display: flex;
+  width: 100%;
+  padding: 30px 20px;
+  align-items: center;
+} 
+
+.xemthongtincanhands  .main_body .body_thongtin span{
+  color: #4B4B4B;
+  margin-bottom: 10px;
+} 
+
+.xemthongtincanhands  .main_body .body_thongtin .item_left{
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+} 
+
+.xemthongtincanhands  .main_body .body_thongtin .item_right{
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+} 
