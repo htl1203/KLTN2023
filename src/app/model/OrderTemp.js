@@ -6,11 +6,14 @@ const bcrypt = require('bcryptjs');
 
 const Schema = mongoose.Schema;
 
-const Orders = new Schema(
+const OrderTemp = new Schema(
   {
-    idOrder: { type: Number },
+    idOrderTemp: { type: Number },
     idEmployee: { type: String, maxLength: 255 },
     idProduct: { type: Number },
+    nameProduct: { type: String, maxLength: 255 },
+    imageProduct: { type: String, maxLength: 255 },
+    packingForm: { type: String, maxLength: 255 },
     quality: { type: Number },
     salePrice: { type: Number },
     orderDate: { type: Date, default: Date.now },
@@ -25,7 +28,7 @@ const Orders = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
-Orders.plugin(AutoIncrement, { inc_field: 'idOrder' });
-Orders.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
+OrderTemp.plugin(AutoIncrement, { inc_field: 'idOrderTemp' });
+OrderTemp.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 
-module.exports = mongoose.model('Orders', Orders);
+module.exports = mongoose.model('OrderTemp', OrderTemp);

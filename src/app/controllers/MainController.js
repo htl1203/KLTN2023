@@ -12,6 +12,7 @@ const ProductCart = require('../model/ProductCart');
 const ProductTemp = require('../model/ProductTemps');
 const Receipt = require('../model/Receipt');
 const ProductNoti = require('../model/ProductNoti');
+const OrderTemp = require('../model/OrderTemp');
 
 const readXlsxFile = require('read-excel-file/node');
 const bcrypt = require('bcryptjs');
@@ -174,17 +175,43 @@ class MainController {
 
   //------DƯỢC SĨ
   taodonhangds(req, res) {
+    const arrayNew = [];
     var sumPrice = 0;
+    var sumQuality = 0;
     if (req.session.isAuth) {
       Order.find(
         {
           idEmployee: req.session.userId,
+          status: 1,
         },
         (err, listOrder) => {
           if (listOrder) {
+            sumQuality = listOrder.length;
             for (var i = 0; i < listOrder.length; i++) {
               sumPrice += listOrder[i].salePrice * listOrder[i].quality;
+
               console.log('=========sumPrice', sumPrice);
+              const orderTemp = new OrderTemp();
+              orderTemp.idOrderTemp = listOrder[i].idOrder;
+              orderTemp.idEmployee = listOrder[i].idEmployee;
+              orderTemp.idProduct = listOrder[i].idProduct;
+              orderTemp.quality = listOrder[i].quality;
+              orderTemp.salePrice = listOrder[i].salePrice;
+              orderTemp.orderDate = listOrder[i].orderDate;
+              orderTemp.status = listOrder[i].status;
+              orderTemp.createdAt = listOrder[i].createdAt;
+              orderTemp.updatedAt = listOrder[i].updatedAt;
+              Product.findOne(
+                { idProduct: listOrder[i].idProduct },
+                (err, pro) => {
+                  if (!err) {
+                    orderTemp.nameProduct = pro.name;
+                    arrayNew.push(orderTemp);
+                  } else {
+                    res.status(400).json({ error: 'ERROR!!!' });
+                  }
+                }
+              ).lean();
             }
           } else {
             sumPrice = 0;
@@ -202,8 +229,89 @@ class MainController {
                   h: h,
                   m: m,
                   array: array,
-                  listOrder: listOrder,
+                  arrayNew: arrayNew,
                   sumPrice: sumPrice,
+                  sumQuality: sumQuality,
+                  accountId: req.session.accountId,
+                  username: req.session.username,
+                  role: req.session.role,
+                  userId: req.session.userId,
+                  avatar: req.session.avatar,
+                  fullname: req.session.fullname,
+                });
+              } else {
+                res.status(400).json({ error: 'ERROR!!!' });
+              }
+            }).lean();
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  taodonhangchitietds(req, res) {
+    const arrayNew = [];
+    var sumPrice = 0;
+    var sumQuality = 0;
+    if (req.session.isAuth) {
+      Order.find(
+        {
+          idEmployee: req.session.userId,
+          status: 1,
+        },
+        (err, listOrder) => {
+          if (listOrder) {
+            sumQuality = listOrder.length;
+            for (var i = 0; i < listOrder.length; i++) {
+              sumPrice += listOrder[i].salePrice * listOrder[i].quality;
+
+              console.log('=========sumPrice', sumPrice);
+              const orderTemp = new OrderTemp();
+              orderTemp.idOrderTemp = listOrder[i].idOrder;
+              orderTemp.idEmployee = listOrder[i].idEmployee;
+              orderTemp.idProduct = listOrder[i].idProduct;
+              orderTemp.quality = listOrder[i].quality;
+              orderTemp.salePrice = listOrder[i].salePrice;
+              orderTemp.orderDate = listOrder[i].orderDate;
+              orderTemp.status = listOrder[i].status;
+              orderTemp.createdAt = listOrder[i].createdAt;
+              orderTemp.updatedAt = listOrder[i].updatedAt;
+              Product.findOne(
+                { idProduct: listOrder[i].idProduct },
+                (err, pro) => {
+                  if (!err) {
+                    orderTemp.nameProduct = pro.name;
+                    arrayNew.push(orderTemp);
+                  } else {
+                    res.status(400).json({ error: 'ERROR!!!' });
+                  }
+                }
+              ).lean();
+            }
+          } else {
+            sumPrice = 0;
+          }
+          if (!err) {
+            Product.find((err, array) => {
+              if (!err) {
+                var dateNow = new Date();
+                var h = dateNow.getHours();
+                var m = dateNow.getMinutes();
+                if (h <= 9) h = '0' + h;
+                if (m <= 9) m = '0' + m;
+                res.render('taodonhangchitiet', {
+                  dateNow: dateNow,
+                  h: h,
+                  m: m,
+                  array: array,
+                  arrayNew: arrayNew,
+                  sumPrice: sumPrice,
+                  sumQuality: sumQuality,
                   accountId: req.session.accountId,
                   username: req.session.username,
                   role: req.session.role,
@@ -274,6 +382,7 @@ class MainController {
       Order.find(
         {
           idEmployee: req.session.userId,
+          status: 1,
         },
         (err, listOrder) => {
           if (!err) {
@@ -318,9 +427,12 @@ class MainController {
                 .save()
                 .then(() => {
                   for (var i = 0; i < array.length; i++) {
-                    Order.delete({
-                      idOrder: array[i],
-                    })
+                    Order.updateOne(
+                      {
+                        idOrder: array[i],
+                      },
+                      { status: 0 }
+                    )
                       .then(() => {
                         if (i == array.length) {
                           req.flash('success', 'Thanh toán thành công!');
@@ -386,6 +498,95 @@ class MainController {
           res.status(400).json({ error: 'ERROR!!!' });
         }
       }).lean();
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  quanlyxemchitietdonhangds(req, res) {
+    var listIdOrder = [];
+    var listOrder = [];
+    var listOrderTemp = [];
+    var idEmployee;
+    if (req.session.isAuth) {
+      OrderDetails.findOne(
+        { idOrderDetail: Number(req.params.idOrderDetail) },
+        (err, orderDetail) => {
+          if (!err) {
+            if (orderDetail) {
+              listIdOrder = orderDetail.idOrder;
+              for (var i = 0; i < listIdOrder.length; i++) {
+                Order.findOne(
+                  {
+                    idOrder: Number(listIdOrder[i]),
+                  },
+                  (err, order) => {
+                    if (!err) {
+                      if (order) {
+                        idEmployee = order.idEmployee;
+                        console.log('TEST-------idEmployee', idEmployee, i);
+                        listOrder.push(order);
+                        if (i == listIdOrder.length) {
+                          if (listOrder.length > 0) {
+                            console.log(
+                              'TEST-------listOrder',
+                              listOrder.length
+                            );
+                            for (var j = 0; j < listOrder.length; j++) {
+                              const orderTemp = new OrderTemp();
+                              orderTemp.idOrderTemp = listOrder[j].idOrder;
+                              orderTemp.idEmployee = listOrder[j].idEmployee;
+                              orderTemp.idProduct = listOrder[j].idProduct;
+                              orderTemp.quality = listOrder[j].quality;
+                              orderTemp.salePrice = listOrder[j].salePrice;
+                              orderTemp.orderDate = listOrder[j].orderDate;
+                              orderTemp.status = listOrder[j].status;
+                              orderTemp.createdAt = listOrder[j].createdAt;
+                              orderTemp.updatedAt = listOrder[j].updatedAt;
+                              Product.findOne(
+                                { idProduct: listOrder[j].idProduct },
+                                (err, pro) => {
+                                  if (!err) {
+                                    orderTemp.nameProduct = pro.name;
+                                    orderTemp.imageProduct = pro.imageList;
+                                    orderTemp.packingForm = pro.packingForm;
+                                    listOrderTemp.push(orderTemp);
+                                    if (j == listOrder.length) {
+                                      res.render('quanlyxemchitietdonhangds', {
+                                        idOrderDetail: req.params.idOrderDetail,
+                                        orderDetail: orderDetail,
+                                        listOrderTemp: listOrderTemp,
+                                        idEmployee: idEmployee,
+                                        accountId: req.session.accountId,
+                                        username: req.session.username,
+                                        role: req.session.role,
+                                        userId: req.session.userId,
+                                        avatar: req.session.avatar,
+                                        fullname: req.session.fullname,
+                                      });
+                                    }
+                                  } else {
+                                    res.status(400).json({ error: 'ERROR!!!' });
+                                  }
+                                }
+                              ).lean();
+                            }
+                          }
+                        }
+                      }
+                    } else {
+                      res.status(400).json({ error: 'ERROR!!!' });
+                    }
+                  }
+                ).lean();
+              }
+            }
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
     } else {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
