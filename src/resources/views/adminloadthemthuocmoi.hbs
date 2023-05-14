@@ -1,0 +1,200 @@
+<div class="adminloadthemthuocmoi">
+{{!-- Admin --}}
+            {{>menubar}}
+        <div class="home-header-main">
+                {{>header}}
+            <div class="main-home">
+                <div class="title_chucnang">
+                    <i class='fa fa-calendar'></i>
+                    <p>Thêm thuốc mới</p>
+                </div>
+                <div class="line" ></div>
+                <div class="main_body">
+                     <form action="/quanly/themthuocmoi" method="POST">
+                    <div class="body_nhapkho">
+                        <div class="header_nhapkho">
+                            <p>THÔNG TIN THUỐC MỚI</p>
+                        </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Tên thuốc: </label>
+                                         <input  type="text" name="name" value=""
+                                            class="form-control" placeholder="Nhập tên thuốc">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Thuộc danh mục:</label>
+                                         <select class="form-control" id="ChonDanhMuc" name="name">
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Ảnh thuốc:</label>
+                                        <input  type="file" name="imageList" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Ngày sản xuất:</label>
+                                      <input  type="date" name="manufacturingDate" value=""
+                                            class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Ngày hết hạn: </label>
+                                          <input  type="date" name="expiryDate" value=""
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Hình thức: </label>
+                                        <input  type="text" name="form" value=""
+                                            class="form-control" placeholder="Viên nén, viên sủi...">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Giá nhập:</label>
+                                        <input  type="text" name="importPrice" value=""
+                                            class="form-control" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Giá bán:</label>
+                                        <input  type="text" name="salePrice" value=""
+                                                class="form-control" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Đóng gói lẻ:</label>
+                                        <input  type="text" name="idInvoice" value=""
+                                            class="form-control" placeholder="1 vỉ x 10 viên">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Đóng gói:</label>
+                                      <input  type="text" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="Hộp (10 vỉ x 10 viên)">
+                                    </div>
+                                </div>
+                                 <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Công dụng:</label>
+                                        <input  type="text" name="idInvoice" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Thành phần:</label>
+                                      <input  type="text" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Chỉ định:</label>
+                                      <input  type="text" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                 <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Chống chỉ định:</label>
+                                        <input  type="text" name="idInvoice" value=""
+                                            class="form-control" placeholder="">
+                                    </div> 
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Cách sử dụng:</label>
+                                      <input  type="text" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Tác dụng phụ:</label>
+                                      <input  type="text" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                 <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Thận trọng:</label>
+                                        <input  type="text" name="idInvoice" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Thương hiệu:</label>
+                                      <input  type="text" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Nơi sản xuất:</label>
+                                      <input  type="text" name="priceSaleNew" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="div_btnLuu">
+                                <input
+                                    type='submit'
+                                    class='button btnLuu'
+                                    value='LƯU'
+                                />
+                            </div>
+                    
+                    </div>
+                    
+                </form>
+
+                </div>
+            </div>
+        </div>
+ </div>
+        
+        
+        
+<script>
+    $(document).ready(function () {
+        // hiển thị thông tin về các khoa
+        function loadSanPham() {
+            $.ajax({
+                url: '/quanly/loaddanhmuc',
+                type: 'get',
+                dataType: 'json'
+            }).done(function (result) {
+                if (result.length > 0) {
+                    for (let i = 0; i < result.length; i++) {
+
+                        let themDanhMuc = `
+                            <option value = "`+ result[i].idCategory + `">` + result[i].name + `</option>`;
+                        $('#ChonDanhMuc').append(themDanhMuc);
+                    }
+                }
+               
+
+            });
+        }
+        loadSanPham();
+    });
+</script>

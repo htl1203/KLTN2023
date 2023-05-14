@@ -149,6 +149,80 @@ app.use(
 );
 // const data = require('./database/db.config');
 
+// config  aws
+const multer = require('multer');
+const AWS = require('aws-sdk');
+require('aws-sdk/lib/maintenance_mode_message').suppress = true;
+const { v4: uuid } = require('uuid');
+const { error } = require('console');
+const Product = require('./app/model/Product');
+
+const awsConfig = {
+  accessKeyId: 'AKIA5HNAI5CXIHX5736U',
+  secretAccessKey: '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',
+  region: 'ap-southeast-1',
+};
+
+const s3 = new AWS.S3(awsConfig);
+
+const storage = multer.memoryStorage({
+  destination(req, file, callback) {
+    callback(null, '');
+  },
+});
+
+function checkFileType(file, cb) {
+  const fileTypes = /jpeg|jpg|png|gif/;
+
+  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const minetype = fileTypes.test(file.mimetype);
+  if (extname && minetype) {
+    return cb(null, true);
+  }
+
+  return cb('Error: Image Only!');
+}
+
+const upload = multer({
+  storage,
+  limits: { fieldSize: 2000000 },
+  fileFilter(req, file, cb) {
+    checkFileType(file, cb);
+  },
+});
+
+const CLOUND_FONT_URL =
+  'https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/';
+
+app.post('/quanly/themthuocmois', upload.single('image'), async (req, res) => {
+  const { idUser } = req.body;
+  const file = req.file;
+
+  const image = file.originalname.split('.');
+  const fileType = image[image.length - 1];
+  const filePath = `${uuid() + Date.now().toString()}.${fileType}`;
+
+  const params = {
+    Bucket: 'babycaredoan',
+    Key: filePath,
+    Body: file.buffer,
+  };
+
+  s3.upload(params, (error, data) => {
+    if (error) {
+      return res.send('Internal Server Error');
+    } else {
+      const pro = new Product(req.body);
+      pro.imageList = `${CLOUND_FONT_URL}${filePath}`;
+      pro
+        .save()
+        .then(() => res.redirect('/danhsachtincho'))
+        .catch(error => {
+          console.log('-----error----', error);
+        });
+    }
+  });
+});
 global.__basedir = __dirname;
 // force: true will drop the table if it already exists
 // data.sequelize.sync({ force: false }).then(() => {

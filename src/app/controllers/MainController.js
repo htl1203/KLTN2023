@@ -1300,6 +1300,73 @@ class MainController {
     }
   }
 
+  admixoathuoc(req, res) {
+    console.log('=========error', req.params.idProduct);
+    if (req.session.isAuth) {
+      Product.delete({
+        idProduct: req.params.idProduct,
+      })
+        .then(() => {
+          req.flash('success', 'Xoá thuốc thành công!');
+          res.redirect('/quanly/quanlythuoc');
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  adminloadthemthuocmoi(req, res) {
+    var countExpired = 0;
+    if (req.session.isAuth) {
+      Product.find((err, listPro) => {
+        if (!err) {
+          for (var i = 0; i < listPro.length; i++) {
+            var date1 = new Date(); // current date
+            var date2 = new Date(listPro[i].expiryDate); // mm/dd/yyyy format
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime()); // in miliseconds
+            var timeDiffInSecond = Math.ceil(timeDiff / (24 * 3600 * 1000));
+            if (Number(timeDiffInSecond) <= 15) {
+              countExpired = countExpired + 1;
+            }
+          }
+          res.render('adminloadthemthuocmoi', {
+            countExpired: countExpired,
+            accountId: req.session.accountId,
+            username: req.session.username,
+            role: req.session.role,
+            userId: req.session.userId,
+            avatar: req.session.avatar,
+            fullname: req.session.fullname,
+          });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  loaddanhmuc(req, res) {
+    if (req.session.isAuth) {
+      Category.find((err, data) => {
+        if (!err) {
+          res.send(data);
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      });
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
   //===========KHÁCH HÀNG===============
 
   homekh(req, res) {
