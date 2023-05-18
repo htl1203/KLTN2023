@@ -26,21 +26,21 @@
                                                 <th >Nhập số lượng</th>
                                                 <th>Giá bán</th>
                                                 <th>VAT (%)</th>
-                                                <th>Thành tiền</th>
+                                                <th>Ngày hết hạn</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                                {{#each array}}
+                                            {{#each array}}
                                            
-                                            <tr>
+                                            <tr {{#if (isExpires this.expiryDate)}} style="color: red; background-color: #F7F7F8;"{{/if}} {{#if (isQuality (differenceTwoNumber this.quality  this.sold))}} style="color: red; background-color: #F7F7F8;"{{/if}}>
                                                 <td>{{sum @index 1}}</td>
                                                 <td><input type="hidden" name="idProduct"  value="{{this.idProduct}}" class="form-control">{{this.idProduct}}</td>
                                                 <td><input type="hidden" name="salePrice"  value="{{this.salePrice}}" class="form-control">{{this.name}}</td>
-                                                <td>{{this.quality}}</td>
-                                                <th><input name='soluong' type="text" style="width: 80px;"></th>
+                                                <td>{{{differenceTwoNumber this.quality  this.sold}}}</td>
+                                                <th><input name='soluong' type="number" style="width: 80px;" {{#if (isExpires this.expiryDate)}} style="background-color: #cccccc;" readonly{{/if}} {{#if (isQuality (differenceTwoNumber this.quality  this.sold))}} style="background-color: #cccccc;" readonly{{/if}}></th>
                                                 <td>{{{changeNumber this.salePrice}}}</td>
                                                 <td>0</td>
-                                                <td>0</td>
+                                                <td>{{ this.expiryDate}}</td>
                                             </tr>
 
                                             {{/each}}

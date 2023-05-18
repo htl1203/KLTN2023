@@ -46,6 +46,23 @@ app.engine(
         var time = '' + h + ':' + m;
         return time;
       },
+      isQuality: number => {
+        var number1 = Number(number);
+        if (number1 <= 0) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      isExpires: date => {
+        var date1 = new Date(); // current date
+        var date2 = new Date(date);
+        if (date2.getTime() - date1.getTime() < 0) {
+          return true;
+        } else {
+          return false;
+        }
+      },
       changeDiemTichLuy: diemTL => {
         diemTL = diemTL / 1000;
         diemTL = '' + diemTL;

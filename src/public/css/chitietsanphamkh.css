@@ -150,6 +150,15 @@
   font-style: italic;
 }
 
+.chitietsanphamkh .div_btn .btnAddCartdiv{
+  height: 45px;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
 .chitietsanphamkh .div_btn .btnAddCart{
   height: 45px;
   width: 250px;
@@ -162,6 +171,7 @@
   font-weight: 600;
   font-size: 14px;
   font-style: italic;
+  border: none;
 }
 
 .chitietsanphamkh .div_btn .btnAddCart i{

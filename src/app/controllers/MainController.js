@@ -1380,6 +1380,7 @@ class MainController {
 
   homekh(req, res) {
     var numberCart = 0;
+    const arrayNew = [];
     if (req.session.isAuth) {
       if (req.session.role == 1) {
         Category.find((err, danhmuc) => {
@@ -1401,10 +1402,20 @@ class MainController {
                           numberCart = 0;
                         }
                         if (req.session.role == 1) {
+                          for (var i = 0; i < array.length; i++) {
+                            var date1 = new Date(); // current date
+                            var date2 = new Date(array[i].expiryDate);
+                            if (
+                              date2.getTime() - date1.getTime() >= 0 &&
+                              Number(array[i].quality - array[i].sold) > 0
+                            ) {
+                              arrayNew.push(array[i]);
+                            }
+                          }
                           res.render('homekh', {
                             numberCart: numberCart,
                             danhmuc: danhmuc,
-                            array: array,
+                            array: arrayNew,
                             accountId: req.session.accountId,
                             username: req.session.username,
                             role: req.session.role,
@@ -1434,9 +1445,19 @@ class MainController {
           if (danhmuc) {
             Product.find((err, array) => {
               if (!err) {
+                for (var i = 0; i < array.length; i++) {
+                  var date1 = new Date(); // current date
+                  var date2 = new Date(array[i].expiryDate);
+                  if (
+                    date2.getTime() - date1.getTime() >= 0 &&
+                    Number(array[i].quality - array[i].sold) > 0
+                  ) {
+                    arrayNew.push(array[i]);
+                  }
+                }
                 res.render('homekh', {
                   danhmuc: danhmuc,
-                  array: array,
+                  array: arrayNew,
                 });
               } else {
                 res.status(400).json({ error: 'ERROR!!!' });
@@ -1456,6 +1477,7 @@ class MainController {
   }
 
   loginkh(req, res) {
+    const arrayNew = [];
     var numberCart = 0;
     Account.findOne({ username: req.body.username }, function (err, user) {
       if (!err) {
@@ -1504,10 +1526,30 @@ class MainController {
                                           numberCart = 0;
                                         }
                                         if (req.session.role == 1) {
+                                          for (
+                                            var i = 0;
+                                            i < array.length;
+                                            i++
+                                          ) {
+                                            var date1 = new Date(); // current date
+                                            var date2 = new Date(
+                                              array[i].expiryDate
+                                            );
+                                            if (
+                                              date2.getTime() -
+                                                date1.getTime() >=
+                                                0 &&
+                                              Number(
+                                                array[i].quality - array[i].sold
+                                              ) > 0
+                                            ) {
+                                              arrayNew.push(array[i]);
+                                            }
+                                          }
                                           res.render('homekh', {
                                             numberCart: numberCart,
                                             danhmuc: danhmuc,
-                                            array: array,
+                                            array: arrayNew,
                                             accountId: req.session.accountId,
                                             username: req.session.username,
                                             role: req.session.role,

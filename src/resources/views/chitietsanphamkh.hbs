@@ -49,9 +49,15 @@
                         <div class="btnMuaNgay">
                             <a >Mua ngay </a>
                         </div>
-                        <div class="btnAddCart">
-                            <a class=""><i class='fa fa-cart-plus'></i>Thêm vào giỏ hàng </a>
-                        </div>
+                        <form action='/themgiohang' id='form-login' method='POST'>
+                            <input  type="hidden"  name="quality" value=1
+                                                class="form-control" >
+                            <input  type="hidden"  name="idProduct" value={{data.idProduct}}
+                                                class="form-control" >
+                            <input  type="hidden"  name="status" value=1
+                                                class="form-control" >
+                            <input  type='submit' class="btnAddCart" value='Thêm vào giỏ hàng'/>
+                        </form>
                     </div>
                 </div>
 
