@@ -39,6 +39,7 @@ router.post('/quanly/huythuoc', mainController.adminhuythuoc);
 router.get('/quanly/xoathuoc/:idProduct', mainController.admixoathuoc);
 router.get('/quanly/themthuocmoi', mainController.adminloadthemthuocmoi);
 router.get('/quanly/loaddanhmuc', mainController.loaddanhmuc);
+router.get('/quanly/thongkesanpham', mainController.adminthongkesanpham);
 
 //===========KHÁCH HÀNG===============
 router.get('/home', mainController.homekh);

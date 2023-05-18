@@ -487,6 +487,11 @@ class MainController {
     if (req.session.isAuth) {
       OrderDetails.find((err, array) => {
         if (!err) {
+          if (array.length > 0) {
+            array.sort(function (a, b) {
+              return b.time - a.time;
+            });
+          }
           res.render('quanlydonhangds', {
             array: array,
             accountId: req.session.accountId,
@@ -1805,6 +1810,42 @@ class MainController {
     } else {
       req.session.back = '/home';
       res.redirect('/login/');
+    }
+  }
+
+  adminthongkesanpham(req, res) {
+    var array = [];
+    if (req.session.isAuth) {
+      Product.find((err, pro) => {
+        if (!err) {
+          pro.sort(function (a, b) {
+            return b.sold - a.sold; // sắp xếp theo lượng like
+          });
+          if (pro.length > 5) {
+            for (var i = 0; i < 5; i++) {
+              array.push(pro[i]);
+            }
+          } else {
+            for (var i = 0; i < pro.length; i++) {
+              array.push(pro[i]);
+            }
+          }
+          res.render('adminthongkesanpham', {
+            array: array,
+            accountId: req.session.accountId,
+            username: req.session.username,
+            role: req.session.role,
+            userId: req.session.userId,
+            avatar: req.session.avatar,
+            fullname: req.session.fullname,
+          });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
     }
   }
 }
