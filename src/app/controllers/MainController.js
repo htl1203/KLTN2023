@@ -79,6 +79,8 @@ class MainController {
   }
 
   login(req, res) {
+    var text = '123';
+    console.log('123--', Number(text));
     var countExpired = 0;
     Account.findOne({ username: req.body.username }, function (err, user) {
       if (!err) {
@@ -729,6 +731,13 @@ class MainController {
               countExpired = countExpired + 1;
             }
           }
+
+          if (array.length > 0) {
+            array.sort(function (a, b) {
+              return b.dateAdded - a.dateAdded;
+            });
+          }
+
           res.render('adminquanlythuoc', {
             countExpired: countExpired,
             array: array,

@@ -10,7 +10,19 @@
                 </div>
                 <div class="line" ></div>
                 <div class="main_body">
-                     <form action="/quanly/themthuocmoi" method="POST">
+                     <form action="/quanly/themthuocmoi" method="POST" enctype="multipart/form-data">
+                        <input  type="hidden" name="quality" value=0
+                            class="form-control" >
+                        <input  type="hidden" name="sold" value=0
+                            class="form-control" >
+                        <input  type="hidden" name="retailQuantity" value=0
+                            class="form-control" >
+                        <input  type="hidden" name="quantityPerBox" value=0
+                            class="form-control" >
+                        <input  type="hidden" name="retailQuantityPack" value=0
+                            class="form-control" >
+                        <input  type="hidden" name="status" value=1
+                            class="form-control" >
                     <div class="body_nhapkho">
                         <div class="header_nhapkho">
                             <p>THÔNG TIN THUỐC MỚI</p>
@@ -26,7 +38,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Thuộc danh mục:</label>
-                                         <select class="form-control" id="ChonDanhMuc" name="name">
+                                         <select class="form-control" id="ChonDanhMuc" name="idCategory">
                                             
                                         </select>
                                     </div>
@@ -63,42 +75,42 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Giá nhập:</label>
-                                        <input  type="text" name="importPrice" value=""
+                                        <input  type="number" name="importPrice" value=""
                                             class="form-control" placeholder="0.00">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Giá bán:</label>
-                                        <input  type="text" name="salePrice" value=""
+                                        <input  type="number" name="salePrice" value=""
                                                 class="form-control" placeholder="0.00">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Đóng gói lẻ:</label>
-                                        <input  type="text" name="idInvoice" value=""
+                                        <input  type="text" name="format" value=""
                                             class="form-control" placeholder="1 vỉ x 10 viên">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Đóng gói:</label>
-                                      <input  type="text" name="priceSaleNew" value=""
+                                      <input  type="text" name="packingForm" value=""
                                             class="form-control" placeholder="Hộp (10 vỉ x 10 viên)">
                                     </div>
                                 </div>
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Công dụng:</label>
-                                        <input  type="text" name="idInvoice" value=""
+                                        <input  type="text" name="uses" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Thành phần:</label>
-                                      <input  type="text" name="priceSaleNew" value=""
+                                      <input  type="text" name="component" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>
@@ -106,21 +118,21 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Chỉ định:</label>
-                                      <input  type="text" name="priceSaleNew" value=""
+                                      <input  type="text" name="specified" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Chống chỉ định:</label>
-                                        <input  type="text" name="idInvoice" value=""
+                                        <input  type="text" name="antiDefinition" value=""
                                             class="form-control" placeholder="">
                                     </div> 
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Cách sử dụng:</label>
-                                      <input  type="text" name="priceSaleNew" value=""
+                                      <input  type="text" name="dosage" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>
@@ -128,21 +140,28 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Tác dụng phụ:</label>
-                                      <input  type="text" name="priceSaleNew" value=""
+                                      <input  type="text" name="sideEffects" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Thận trọng:</label>
-                                        <input  type="text" name="idInvoice" value=""
+                                        <input  type="text" name="careful" value=""
+                                            class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for="sel1">Bảo quản:</label>
+                                        <input  type="text" name="preserve" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Thương hiệu:</label>
-                                      <input  type="text" name="priceSaleNew" value=""
+                                      <input  type="text" name="trademark" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>
@@ -150,7 +169,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Nơi sản xuất:</label>
-                                      <input  type="text" name="priceSaleNew" value=""
+                                      <input  type="text" name="origin" value=""
                                             class="form-control" placeholder="">
                                     </div>
                                 </div>

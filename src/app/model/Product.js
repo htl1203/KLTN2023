@@ -47,6 +47,7 @@ const Products = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
+Products.plugin(AutoIncrement, { inc_field: 'idProduct' });
 Products.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 
 module.exports = mongoose.model('Products', Products);
