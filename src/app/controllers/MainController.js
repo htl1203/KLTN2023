@@ -11,6 +11,7 @@ const Supplier = require('../model/Supplier');
 const ProductCart = require('../model/ProductCart');
 const ProductTemp = require('../model/ProductTemps');
 const Receipt = require('../model/Receipt');
+const ReceiptTemps = require('../model/ReceiptTemps');
 const ProductNoti = require('../model/ProductNoti');
 const OrderTemp = require('../model/OrderTemp');
 
@@ -1839,6 +1840,67 @@ class MainController {
             avatar: req.session.avatar,
             fullname: req.session.fullname,
           });
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  admindanhsachphieunhapkho(req, res) {
+    var array = [];
+
+    if (req.session.isAuth) {
+      Receipt.find((err, pro) => {
+        if (!err) {
+          for (var i = 0; i < pro.length; i++) {
+            const receiptTemps = new ReceiptTemps();
+            var idSup = '';
+            receiptTemps.idReceiptTemps = pro[i].idReceipt;
+            receiptTemps.time = pro[i].time;
+            receiptTemps.idInvoice = pro[i].idInvoice;
+            receiptTemps.idSupplier = pro[i].idSupplier;
+            receiptTemps.totalMoney = pro[i].totalMoney;
+            receiptTemps.status = pro[i].status;
+            receiptTemps.createdAt = pro[i].createdAt;
+            receiptTemps.updatedAt = pro[i].updatedAt;
+            idSup = pro[i].idSupplier;
+            Product.find(
+              { idReceipt: Number(pro[i].idReceipt) },
+              (err, pros) => {
+                if (!err) {
+                  receiptTemps.totalProducts = pros.length;
+                  Supplier.findOne({ idSupplier: idSup }, (err, sup) => {
+                    if (!err) {
+                      receiptTemps.nameSupplier = sup.name;
+                      array.push(receiptTemps);
+                      if (i == pro.length) {
+                        array.sort(function (a, b) {
+                          return b.time - a.time; // sắp xếp theo lượng like
+                        });
+                        res.render('admindanhsachphieunhapkho', {
+                          array: array,
+                          accountId: req.session.accountId,
+                          username: req.session.username,
+                          role: req.session.role,
+                          userId: req.session.userId,
+                          avatar: req.session.avatar,
+                          fullname: req.session.fullname,
+                        });
+                      }
+                    } else {
+                      res.status(400).json({ error: 'ERROR!!!' });
+                    }
+                  }).lean();
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
+          }
         } else {
           res.status(400).json({ error: 'ERROR!!!' });
         }

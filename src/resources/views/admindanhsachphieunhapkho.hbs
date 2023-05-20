@@ -1,0 +1,56 @@
+<div class="admindanhsachphieunhapkho">
+{{!-- Admin --}}
+            {{>menubar}}
+        <div class="home-header-main">
+                {{>header}}
+            <div class="main-home">
+                <div class="title_chucnang">
+                    <i class='fa fa-file-text-o'></i>
+                    <p>Danh sách phiếu nhập kho</p>
+                </div>
+                <div class="line" ></div>
+                <div id="menu1" class="container tab-pane active div-table-list"><br />
+                    <form action="">
+                        <div class="card mb-4">
+                            <div class="card-header" style="color: #296088;font-weight: 600;display: flex;flex-direction: row; justify-content: space-between;font-size:22px">
+                                Danh sách phiếu nhập kho
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered" id="table_id">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Mã phiếu nhập kho</th>
+                                            <th>Mã hoá đơn</th>
+                                            <th>Nhà cung cấp</th>
+                                            <th>Tổng sản phẩm nhập</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Ngày nhập</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            {{#each array}}
+                                        <tr style="font-style: italic;">
+                                            <td>{{sum @index 1}}</td>
+                                            <td>{{this.idReceiptTemps}}</td>
+                                            <td>{{this.idInvoice}}</td>
+                                            <td>{{this.nameSupplier}}</td>
+                                            <td>{{this.totalProducts}}</td>
+                                            <td style="color: #3871C1;">{{{changeNumber this.totalMoney}}} đ</td>
+                                            <td>{{{changeNgay this.time}}}</td>
+                                            <td><a href="/admin/chitietphieunhapkho/{{this.idReceipt}}" class="btn btn-info">Xem chi tiết</a></td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+        </div>
+ </div>
+        
+        
