@@ -1,51 +1,66 @@
-<div class="homekh">
+<div class="danhsachdonhangkh">
     {{>headerkh}}
     <img src='https://babycaredoan.s3.ap-southeast-1.amazonaws.com/test/banner-header.jpeg' 
         alt="banner" class="img-reponsive" style="height: 75px;  width: 100%; margin-top:120px">
         
      <div class="main-home">
         <div class="main">
-            <div class="danhmuc_left">
-                <div class="name">Danh mục</div>
-                <div class="line"></div>
-
-                {{#each danhmuc}}
-                    <a class="item_danhmuc" href='/sanpham/{{this.idCategory}}'>
-                       {{this.name}}
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-                {{/each}}
+            <div class="map">
+                <a href="/home" style="text-decoration: none;color:#B9C0CC">LenPharmacy</a>
+                <i class="fa fa-angle-right dot" aria-hidden="true"></i>
+                <a style="color: #112950;">Danh sách đơn hàng</a>
             </div>
-            <div class="main-body">
-                
-                {{#each array}}
-                   <a class="item_sanpham" href='/chitietsanpham/{{this.idProduct}}'>
-                        <img src={{this.imageList}} 
-                            alt="banner" class="img-reponsive" style="height: 45%;  width: 100%; margin:10px">
-                        <span class="name">{{this.name}}</span>
-                        <span class="packingForm">{{this.packingForm}}</span>
-                        <span class="price">{{{changeNumber this.salePrice}}}đ/Hộp</span>
-                        <form action='/themgiohang' id='form-login' method='POST'>
-                            <input  type="hidden"  name="quality" value=1
-                                                class="form-control" >
-                            <input  type="hidden"  name="idProduct" value={{this.idProduct}}
-                                                class="form-control" >
-                            <input  type="hidden"  name="status" value=1
-                                                class="form-control" >
-                            <input  type="hidden"  name="salePrice" value={{this.salePrice}}
-                                                class="form-control" >
-                            <input  type='submit' class="btnAddCart" value='Thêm vào giỏ hàng'/>
-                        </form>
-                    </a>
-                {{/each}}
-                <div class='Error'>
-                    {{#if messages.success}}
-                        <input id="change-success" value="success" type="hidden" >
-                        </input>
-                    {{/if}}
-                </div>
+            <div class="main-body-main">
+                {{#each listPayment}}
+                   <div class="body_container" href="/chitietdonhang/{{this.idPayment}}">
+                        <div class="header_body">
+                            <a class="btnBack" href="/home">
+                                
+                            </a>
+
+                            <div class="ma_hoa_don">
+                                <span>
+                                    MÃ HOÁ ĐƠN: {{this.idPayment}}
+                                </span>
+                                <div class="line_col"></div>
+                                <span style="color: #2DC258">
+                                    ĐƠN HÀNG ĐÃ THANH TOÁN
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="main_body">
+                            {{#each listOrderTemp}}
+                                <div class="item_sanpham">
+                                    <img src={{this.imageProduct}}
+                                alt="banner" style="height: 70px;  width: 70px; margin-right:10px; background-color: white;border:1px solid #cccccc;">
+                                    <div class="info_sanpham">
+                                        <span style="font-size: 18px;font-weight:700">{{this.nameProduct}}</span>
+                                        <span style="color:#757575 ;">Đóng gói: {{this.packingForm}}</span>
+                                        <span style="font-size: 14px;">x{{this.quality}}</span>
+                                    </div>
+                                </div>
+                            {{/each}}
+
+                            <div class="tong_tien">
+                                <div class="item_body">
+                                    <div class="title">Tổng tiền</div>
+                                    <div class="content" >{{{changeNumber totalMoney}}}đ</div>
+                                </div>
+                                <div class="item_body_xem">
+                                    <div class="title"></div>
+                                    <a class="btnXem" href="/chitietdonhang/{{this.idPayment}}">Xem chi tiết</a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        </div>
+                    {{/each}}
+               
                  
             </div>
+            
         </div>
         <div class="footer">
             <div class="item_footer">
@@ -127,33 +142,47 @@
             <span class="title">do sở KH & ĐT TP.HCM cấp lần đầu ngày 05/05/2012, đăng ký thay đổi lần thứ: 49, ngày 20/01/2018.</span>
 
         </div>
+         <div class='Error'>
+            {{#if messages.success}}
+                <input id="change-success" value="success" type="hidden" >
+                </input>
+            {{/if}}
+        </div>
 
 
-           
         
     </div>
         
  </div>
         
         
-
 <script>
-const actualBtn = document.getElementById('actual-btn');
-const fileChosen = document.getElementById('file-chosen');
-
-actualBtn.addEventListener('change', function(){
-  fileChosen.textContent = this.files[0].name;
- let themType = `<input type='submit' class='btnDoiAnh' value='Lưu' />`;
- $('#div_btn_save_avatar').append(themType);
+    $('input.input-qty').each(function() {
+  var $this = $(this),
+    qty = $this.parent().find('.is-form'),
+    min = Number($this.attr('min')),
+    max = Number($this.attr('max'))
+  if (min == 0) {
+    var d = 0
+  } else d = min
+  $(qty).on('click', function() {
+    if ($(this).hasClass('minus')) {
+      if (d > min) d += -1
+    } else if ($(this).hasClass('plus')) {
+      var x = Number($this.val()) + 1
+      if (x <= max) d += 1
+    }
+    $this.attr('value', d).val(d)
+  })
 })
-
 </script>
+
 
 <script>
 $(document).ready(function () { myFunction(); });
 function myFunction() {
     if(document.getElementById("change-success").value){
-        customAlert.alert('Thêm vào giỏ hàng thành công!' )
+        customAlertTT.alert('Thanh toán hoá đơn thành công!.' )
     }
     
 } 
@@ -191,8 +220,9 @@ function CustomAlert(){
   setTimeout(function() {  
     document.getElementById('dialogbox').style.display = "none";
     document.getElementById('dialogoverlay').style.display = "none";
-    }, 1000);
+    }, 3000);
 }
 
-let customAlert = new CustomAlert();
+let customAlertTT = new CustomAlert();
 </script>
+        

@@ -9,8 +9,10 @@ const Schema = mongoose.Schema;
 const Payment = new Schema(
   {
     idPayment: { type: Number },
-    idCart: { type: Number },
+    idCart: { type: Array },
+    idCustomer: { type: Number },
     totalMoney: { type: Number },
+    totalQuality: { type: Number },
     paymentType: { type: String, maxLength: 255 },
     paymentDate: { type: Date, default: Date.now },
     status: { type: Number },

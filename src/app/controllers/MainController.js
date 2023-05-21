@@ -1397,6 +1397,7 @@ class MainController {
                   Cart.find(
                     {
                       idCustomer: req.session.userId,
+                      status: 1,
                     },
                     (err, listCart) => {
                       if (!err) {
@@ -1517,6 +1518,7 @@ class MainController {
                                   Cart.find(
                                     {
                                       idCustomer: req.session.userId,
+                                      status: 1,
                                     },
                                     (err, listCart) => {
                                       if (!err) {
@@ -1621,6 +1623,7 @@ class MainController {
                   Cart.find(
                     {
                       idCustomer: req.session.userId,
+                      status: 1,
                     },
                     (err, listCart) => {
                       if (!err) {
@@ -1689,7 +1692,11 @@ class MainController {
     const cart = new Cart(req.body);
     if (req.session.isAuth) {
       Cart.findOne(
-        { idProduct: req.body.idProduct, idCustomer: req.body.idCustomer },
+        {
+          idProduct: req.body.idProduct,
+          idCustomer: req.body.idCustomer,
+          status: 1,
+        },
         (err, isCart) => {
           if (!err) {
             if (isCart) {
@@ -1732,6 +1739,7 @@ class MainController {
       Cart.find(
         {
           idCustomer: req.session.userId,
+          status: 1,
         },
         (err, listCart) => {
           if (!err) {
@@ -1908,6 +1916,364 @@ class MainController {
     } else {
       req.session.back = '/quanly/home';
       res.redirect('/quanly/login/');
+    }
+  }
+
+  sanphamtheodanhmuc(req, res) {
+    var numberCart = 0;
+    const arrayNew = [];
+    if (req.session.isAuth) {
+      if (req.session.role == 1) {
+        Category.find((err, danhmuc) => {
+          if (!err) {
+            if (danhmuc) {
+              Product.find(
+                { idCategory: req.params.idCategory },
+                (err, array) => {
+                  if (!err) {
+                    Cart.find(
+                      {
+                        idCustomer: req.session.userId,
+                        status: 1,
+                      },
+                      (err, listCart) => {
+                        if (!err) {
+                          if (listCart) {
+                            for (var i = 0; i < listCart.length; i++) {
+                              numberCart += listCart[i].quality;
+                            }
+                          } else {
+                            numberCart = 0;
+                          }
+                          if (req.session.role == 1) {
+                            for (var i = 0; i < array.length; i++) {
+                              var date1 = new Date(); // current date
+                              var date2 = new Date(array[i].expiryDate);
+                              if (
+                                date2.getTime() - date1.getTime() >= 0 &&
+                                Number(array[i].quality - array[i].sold) > 0
+                              ) {
+                                arrayNew.push(array[i]);
+                              }
+                            }
+                            res.render('sanphamtheodanhmuc', {
+                              numberCart: numberCart,
+                              danhmuc: danhmuc,
+                              array: arrayNew,
+                              accountId: req.session.accountId,
+                              username: req.session.username,
+                              role: req.session.role,
+                              userId: req.session.userId,
+                              avatar: req.session.avatar,
+                              fullname: req.session.fullname,
+                            });
+                          }
+                        } else {
+                          res.status(400).json({ error: 'ERROR!!!' });
+                        }
+                      }
+                    ).lean();
+                  } else {
+                    res.status(400).json({ error: 'ERROR!!!' });
+                  }
+                }
+              ).lean();
+            }
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }).lean();
+      }
+    } else {
+      Category.find((err, danhmuc) => {
+        if (!err) {
+          if (danhmuc) {
+            Product.find(
+              { idCategory: req.params.idCategory },
+              (err, array) => {
+                if (!err) {
+                  for (var i = 0; i < array.length; i++) {
+                    var date1 = new Date(); // current date
+                    var date2 = new Date(array[i].expiryDate);
+                    if (
+                      date2.getTime() - date1.getTime() >= 0 &&
+                      Number(array[i].quality - array[i].sold) > 0
+                    ) {
+                      arrayNew.push(array[i]);
+                    }
+                  }
+                  res.render('homekh', {
+                    danhmuc: danhmuc,
+                    array: arrayNew,
+                  });
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
+          }
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
+    }
+  }
+
+  thanhtoankh(req, res) {
+    var sumPrice = 0;
+    const array = [];
+    const arrayPro = [];
+    const arrayProQua = [];
+    var sumQuality = 0;
+    if (req.session.isAuth) {
+      Cart.find(
+        {
+          idCustomer: req.session.userId,
+          status: 1,
+        },
+        (err, listOrder) => {
+          if (!err) {
+            if (listOrder.length > 0) {
+              for (var i = 0; i < listOrder.length; i++) {
+                sumPrice += listOrder[i].salePrice * listOrder[i].quality;
+                sumQuality = listOrder.length;
+                array.push(listOrder[i].idCart);
+                arrayPro.push(listOrder[i].idProduct);
+                arrayProQua.push(listOrder[i].quality);
+              }
+              for (var i = 0; i < arrayPro.length; i++) {
+                var qualityNew = 0;
+                qualityNew = arrayProQua[i];
+
+                Product.findOne({ idProduct: arrayPro[i] }, (err, array) => {
+                  if (!err) {
+                    var sold = 0;
+                    sold = array.sold + qualityNew;
+                    Product.updateOne(
+                      { idProduct: array.idProduct },
+                      { sold: sold }
+                    )
+                      .then(() => {
+                        console.log('TRUEEE');
+                      })
+                      .catch(err => {});
+                  } else {
+                    res.status(400).json({ error: 'ERROR!!!' });
+                  }
+                }).lean();
+              }
+
+              const payments = new Payment();
+              payments.idCart = array;
+              payments.totalMoney = sumPrice;
+              payments.totalQuality = sumQuality;
+              payments.paymentType = 'Tiền mặt';
+              payments.status = 1;
+              payments.idCustomer = req.session.userId;
+              payments
+                .save()
+                .then(() => {
+                  for (var i = 0; i < array.length; i++) {
+                    Cart.updateOne(
+                      {
+                        idCart: array[i],
+                      },
+                      { status: 0 }
+                    )
+                      .then(() => {
+                        if (i == array.length) {
+                          req.flash('success', 'Thanh toán thành công!');
+                          res.redirect('/danhsachdonhang');
+                        }
+                      })
+                      .catch(err => {});
+                  }
+                })
+                .catch(error => {});
+            } else {
+              req.flash('error', 'Chưa chọn sản phẩm thanh toán!');
+              res.redirect('/giohang');
+            }
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+    } else {
+      req.session.back = '/home';
+      res.redirect('/login/');
+    }
+  }
+
+  danhsachdonhangkh(req, res) {
+    var listIdOrder = [];
+    var listOrder = [];
+    var listOrderTemp = [];
+    var idEmployee;
+    var numberCart = 0;
+    if (req.session.isAuth) {
+      Cart.find(
+        {
+          idCustomer: req.session.userId,
+          status: 1,
+        },
+        (err, listCart) => {
+          if (!err) {
+            if (listCart) {
+              for (var i = 0; i < listCart.length; i++) {
+                numberCart += listCart[i].quality;
+              }
+            } else {
+              numberCart = 0;
+            }
+            Payment.find(
+              {
+                idCustomer: req.session.userId,
+                status: 1,
+              },
+              (err, listPayment) => {
+                if (!err) {
+                  res.render('danhsachdonhangkh', {
+                    numberCart: numberCart,
+                    listPayment: listPayment,
+                    accountId: req.session.accountId,
+                    username: req.session.username,
+                    role: req.session.role,
+                    userId: req.session.userId,
+                    avatar: req.session.avatar,
+                    fullname: req.session.fullname,
+                  });
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+    } else {
+      req.session.back = '/home';
+      res.redirect('/login/');
+    }
+  }
+
+  chitietdonhangkh(req, res) {
+    var listIdOrder = [];
+    var listOrder = [];
+    var listOrderTemp = [];
+    var idEmployee;
+    var numberCart = 0;
+    if (req.session.isAuth) {
+      Cart.find(
+        {
+          idCustomer: req.session.userId,
+          status: 1,
+        },
+        (err, listCart) => {
+          if (!err) {
+            if (listCart) {
+              for (var i = 0; i < listCart.length; i++) {
+                numberCart += listCart[i].quality;
+              }
+            } else {
+              numberCart = 0;
+            }
+            res.render('chitietdonhangkh', {
+              numberCart: numberCart,
+              accountId: req.session.accountId,
+              username: req.session.username,
+              role: req.session.role,
+              userId: req.session.userId,
+              avatar: req.session.avatar,
+              fullname: req.session.fullname,
+            });
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+      // OrderDetails.findOne(
+      //   { idOrderDetail: Number(req.params.idOrderDetail) },
+      //   (err, orderDetail) => {
+      //     if (!err) {
+      //       if (orderDetail) {
+      //         listIdOrder = orderDetail.idOrder;
+      //         for (var i = 0; i < listIdOrder.length; i++) {
+      //           Order.findOne(
+      //             {
+      //               idOrder: Number(listIdOrder[i]),
+      //             },
+      //             (err, order) => {
+      //               if (!err) {
+      //                 if (order) {
+      //                   idEmployee = order.idEmployee;
+      //                   console.log('TEST-------idEmployee', idEmployee, i);
+      //                   listOrder.push(order);
+      //                   if (i == listIdOrder.length) {
+      //                     if (listOrder.length > 0) {
+      //                       console.log(
+      //                         'TEST-------listOrder',
+      //                         listOrder.length
+      //                       );
+      //                       for (var j = 0; j < listOrder.length; j++) {
+      //                         const orderTemp = new OrderTemp();
+      //                         orderTemp.idOrderTemp = listOrder[j].idOrder;
+      //                         orderTemp.idEmployee = listOrder[j].idEmployee;
+      //                         orderTemp.idProduct = listOrder[j].idProduct;
+      //                         orderTemp.quality = listOrder[j].quality;
+      //                         orderTemp.salePrice = listOrder[j].salePrice;
+      //                         orderTemp.orderDate = listOrder[j].orderDate;
+      //                         orderTemp.status = listOrder[j].status;
+      //                         orderTemp.createdAt = listOrder[j].createdAt;
+      //                         orderTemp.updatedAt = listOrder[j].updatedAt;
+      //                         Product.findOne(
+      //                           { idProduct: listOrder[j].idProduct },
+      //                           (err, pro) => {
+      //                             if (!err) {
+      //                               orderTemp.nameProduct = pro.name;
+      //                               orderTemp.imageProduct = pro.imageList;
+      //                               orderTemp.packingForm = pro.packingForm;
+      //                               listOrderTemp.push(orderTemp);
+      //                               if (j == listOrder.length) {
+      //                                 res.render('danhsachdonhangkh', {
+      //                                   idOrderDetail: req.params.idOrderDetail,
+      //                                   orderDetail: orderDetail,
+      //                                   listOrderTemp: listOrderTemp,
+      //                                   idEmployee: idEmployee,
+      //                                   accountId: req.session.accountId,
+      //                                   username: req.session.username,
+      //                                   role: req.session.role,
+      //                                   userId: req.session.userId,
+      //                                   avatar: req.session.avatar,
+      //                                   fullname: req.session.fullname,
+      //                                 });
+      //                               }
+      //                             } else {
+      //                               res.status(400).json({ error: 'ERROR!!!' });
+      //                             }
+      //                           }
+      //                         ).lean();
+      //                       }
+      //                     }
+      //                   }
+      //                 }
+      //               } else {
+      //                 res.status(400).json({ error: 'ERROR!!!' });
+      //               }
+      //             }
+      //           ).lean();
+      //         }
+      //       }
+      //     } else {
+      //       res.status(400).json({ error: 'ERROR!!!' });
+      //     }
+      //   }
+      // ).lean();
+    } else {
+      req.session.back = '/home';
+      res.redirect('/login/');
     }
   }
 }

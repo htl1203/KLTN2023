@@ -53,5 +53,9 @@ router.get('/register', mainController.register);
 router.get('/chitietsanpham/:idProduct', mainController.chitietsanphamkh);
 router.post('/themgiohang', mainController.themgiohangkh);
 router.get('/giohang', mainController.giohangkh);
+router.get('/thanhtoan', mainController.thanhtoankh);
+router.get('/danhsachdonhang', mainController.danhsachdonhangkh);
+router.get('/chitietdonhang/:idPayment', mainController.chitietdonhangkh);
+router.get('/sanpham/:idCategory', mainController.sanphamtheodanhmuc);
 
 module.exports = router;

@@ -12,6 +12,7 @@ const Cart = new Schema(
     idProduct: { type: Number },
     quality: { type: Number },
     idCustomer: { type: Number },
+    salePrice: { type: Number },
     orderDate: { type: Date, default: Date.now },
     status: { type: Number },
     createdAt: { type: Date, default: Date.now },
