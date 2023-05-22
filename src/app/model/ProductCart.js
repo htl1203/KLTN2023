@@ -36,6 +36,7 @@ const ProductCart = new Schema(
     quantityPerBox: { type: Number },
     retailQuantityPack: { type: Number },
     status: { type: Number },
+    isLimit: { type: Number },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     idCart: { type: Number },

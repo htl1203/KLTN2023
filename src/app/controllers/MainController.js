@@ -847,6 +847,7 @@ class MainController {
               proNew.quantityPerBox = listPro[i].quantityPerBox;
               proNew.retailQuantityPack = listPro[i].retailQuantityPack;
               proNew.status = listPro[i].status;
+              proNew.isLimit = listPro[i].isLimit;
               proNew.countProExpired = timeDiffInSecond;
               array.push(proNew);
             }
@@ -1285,6 +1286,7 @@ class MainController {
               proNew.retailQuantity = listPro[i].retailQuantity;
               proNew.quantityPerBox = listPro[i].quantityPerBox;
               proNew.retailQuantityPack = listPro[i].retailQuantityPack;
+              proNew.isLimit = listPro[i].isLimit;
               proNew.status = listPro[i].status;
               if (date2.getTime() - date1.getTime() < 0) {
                 proNew.countProExpired = -timeDiffInSecond;
@@ -1691,23 +1693,39 @@ class MainController {
     req.body.idCustomer = req.session.userId;
     const cart = new Cart(req.body);
     if (req.session.isAuth) {
-      Cart.findOne(
-        {
-          idProduct: req.body.idProduct,
-          idCustomer: req.body.idCustomer,
-          status: 1,
-        },
-        (err, isCart) => {
-          if (!err) {
-            if (isCart) {
-              if (isCart.quality == 5) {
-                req.flash('error', 'Bạn đã thêm quá số lượng thuốc quy định!');
-                res.redirect('/giohang');
+      if (Number(req.body.isLimit) == 1) {
+        req.flash('errorchitiet', 'Cần tham khảo ý kiến Bác Sĩ!');
+        res.redirect(`/chitietsanpham/${req.body.idProduct}`);
+      } else {
+        Cart.findOne(
+          {
+            idProduct: req.body.idProduct,
+            idCustomer: req.body.idCustomer,
+            status: 1,
+          },
+          (err, isCart) => {
+            if (!err) {
+              if (isCart) {
+                if (isCart.quality == 5) {
+                  req.flash(
+                    'error',
+                    'Bạn đã thêm quá số lượng thuốc quy định!'
+                  );
+                  res.redirect('/giohang');
+                } else {
+                  Cart.updateOne(
+                    { idCart: isCart.idCart },
+                    { quality: isCart.quality + 1 }
+                  )
+                    .then(() => {
+                      req.flash('success', 'Thêm vào giỏ hàng thành công!');
+                      res.redirect('/home');
+                    })
+                    .catch(error => {});
+                }
               } else {
-                Cart.updateOne(
-                  { idCart: isCart.idCart },
-                  { quality: isCart.quality + 1 }
-                )
+                cart
+                  .save()
                   .then(() => {
                     req.flash('success', 'Thêm vào giỏ hàng thành công!');
                     res.redirect('/home');
@@ -1715,19 +1733,11 @@ class MainController {
                   .catch(error => {});
               }
             } else {
-              cart
-                .save()
-                .then(() => {
-                  req.flash('success', 'Thêm vào giỏ hàng thành công!');
-                  res.redirect('/home');
-                })
-                .catch(error => {});
+              res.status(400).json({ error: 'ERROR!!!' });
             }
-          } else {
-            res.status(400).json({ error: 'ERROR!!!' });
           }
-        }
-      ).lean();
+        ).lean();
+      }
     } else {
       req.session.back = '/home';
       res.redirect('/login/');
@@ -1791,6 +1801,7 @@ class MainController {
                       productCart.quantityPerBox = pro.quantityPerBox;
                       productCart.retailQuantityPack = pro.retailQuantityPack;
                       productCart.status = pro.status;
+                      productCart.isLimit = pro.isLimit;
                       sumPrice += pro.salePrice * productCart.qualityCart;
                       array.push(productCart);
 

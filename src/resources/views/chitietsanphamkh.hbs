@@ -19,7 +19,9 @@
                 <div class="div_middle">
                     <span class="name">{{data.name}} </span>
                     <span class="packingForm">Đóng gói: {{data.packingForm}} </span>
-
+                    {{#ifCond data.isLimit '==' 1}}
+                        <span class="limit" style="color: red;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Thuốc này chỉ mang tính chất tham khảo, liên hệ Bác Sĩ để được tư vấn thêm!</span>
+                    {{/ifCond}}
                     <div class="div_price">
                         <span class="price">{{{changeNumber data.salePrice}}} đ</span>
                         <span class="nameTL">Mua hàng và tích <label>{{{changeDiemTichLuy data.salePrice}}} điểm</label> thành viên </span>
@@ -56,9 +58,11 @@
                                                 class="form-control" >
                             <input  type="hidden"  name="status" value=1
                                                 class="form-control" >
-                             <input  type="hidden"  name="salePrice" value={{data.salePrice}}
+                            <input  type="hidden"  name="salePrice" value={{data.salePrice}}
                                                 class="form-control" >
-                            <input  type='submit' class="btnAddCart" value='Thêm vào giỏ hàng'/>
+                            <input  type="hidden"  name="isLimit" value={{data.isLimit}}
+                                                class="form-control" >
+                            <input {{#ifCond data.isLimit '==' 1}} readonly required style="background-color:#D9D9D9"  {{/ifCond}} type='submit' class="btnAddCart" value='Thêm vào giỏ hàng'/>
                         </form>
                     </div>
                 </div>
@@ -127,6 +131,12 @@
                     <div class="item_mota">
                         <span class="item">Nơi sản xuất: <label>{{data.origin}}</span>
                     </div>
+                {{/if}}
+            </div>
+            <div class='Error'>
+                {{#if messages.errorchitiet}}
+                    <input id="success-faild-chitiet" value="success-faild-add" type="hidden" >
+                    </input>
                 {{/if}}
             </div>
         </div>
@@ -238,4 +248,54 @@
     $this.attr('value', d).val(d)
   })
 })
+</script>
+
+
+
+<script>
+$(document).ready(function () { myFunction(); });
+function myFunction() {
+    if(document.getElementById("success-faild-chitiet").value){
+        customAlertFaildChiTiet.alert("Thuốc này chỉ mang tính chất tham khảo, liên hệ Bác Sĩ để được tư vấn thêm!",'Chú ý!')
+    }
+    
+} 
+function CustomAlertFaildChiTiet(){
+  this.alert = function(message,title){
+    document.body.innerHTML = document.body.innerHTML + '<div id="dialogoverlay"></div><div id="dialogboxfail" class="slit-in-vertical"><div><div id="dialogboxhead"></div><div id="dialogboxbody"></div><div id="dialogboxfoot"></div></div></div>';
+
+    let dialogoverlay = document.getElementById('dialogoverlay');
+    let dialogbox = document.getElementById('dialogboxfail');
+    
+    let winH = window.innerHeight;
+    dialogoverlay.style.height = winH+"px";
+    
+    dialogbox.style.top = "100px";
+
+    dialogoverlay.style.display = "block";
+    dialogbox.style.display = "block";
+    
+    document.getElementById('dialogboxhead').style.display = 'block';
+
+    if(typeof title === 'undefined') {
+      document.getElementById('dialogboxhead').style.display = 'none';
+    } else {
+      document.getElementById('dialogboxhead').innerHTML = '<i class="fa fa-exclamation-circle" aria-hidden="true"></i> '+ title;
+    }
+    document.getElementById('dialogboxbody').innerHTML = message;
+    {{!-- document.getElementById('dialogboxfoot').innerHTML = '<button class="pure-material-button-contained active" onclick="customAlert.ok()">OK</button>'; --}}
+  }
+  
+  this.ok = function(){
+    document.getElementById('dialogboxfail').style.display = "none";
+    document.getElementById('dialogoverlay').style.display = "none";
+  }
+
+  setTimeout(function() {  
+    document.getElementById('dialogboxfail').style.display = "none";
+    document.getElementById('dialogoverlay').style.display = "none";
+    }, 3000);
+}
+
+let customAlertFaildChiTiet = new CustomAlertFaildChiTiet();
 </script>

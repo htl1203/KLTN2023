@@ -36,6 +36,7 @@ const Products = new Schema(
     retailQuantity: { type: Number },
     quantityPerBox: { type: Number },
     retailQuantityPack: { type: Number },
+    isLimit: { type: Number },
     status: { type: Number },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
