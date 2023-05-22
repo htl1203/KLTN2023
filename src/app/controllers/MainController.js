@@ -1001,6 +1001,7 @@ class MainController {
                       }
                     }
                     res.render('adminquanlynhapkho', {
+                      date: new Date(),
                       countExpired: countExpired,
                       array: array,
                       supplier: supplier[0],
@@ -1097,92 +1098,112 @@ class MainController {
   }
 
   adminluunhapkho(req, res) {
+    var arrayNew = [];
     var receipt = new Receipt(req.body);
     console.log('=========body receipt', receipt);
     if (req.session.isAuth) {
-      receipt
-        .save()
-        .then(() => {
-          Receipt.findOne(
-            {
-              idInvoice: Number(req.body.idInvoice),
-              totalMoney: Number(req.body.totalMoney),
-            },
-            (err, data) => {
-              if (!err) {
-                if (data) {
-                  var idNew = data.idReceipt;
-                  console.log('=========body idNew', idNew);
-                  ProductTemp.find((err, array) => {
-                    if (!err) {
-                      if (array) {
-                        for (var i = 0; i < array.length; i++) {
-                          const proNew = new Product();
-                          proNew.idProduct = array[i].idProduct;
-                          proNew.name = array[i].name;
-                          proNew.idCategory = array[i].idCategory;
-                          proNew.idReceipt = idNew;
-                          proNew.manufacturingDate = array[i].manufacturingDate;
-                          proNew.expiryDate = array[i].expiryDate;
-                          proNew.imageList = array[i].imageList;
-                          proNew.importPrice = array[i].priceImport;
-                          proNew.salePrice = array[i].priceSaleNew;
-                          proNew.format = array[i].format;
-                          proNew.packingForm = array[i].packingForm;
-                          proNew.uses = array[i].uses;
-                          proNew.component = array[i].component;
-                          proNew.specified = array[i].specified;
-                          proNew.antiDefinition = array[i].antiDefinition;
-                          proNew.dosage = array[i].dosage;
-                          proNew.sideEffects = array[i].sideEffects;
-                          proNew.careful = array[i].careful;
-                          proNew.preserve = array[i].preserve;
-                          proNew.trademark = array[i].trademark;
-                          proNew.origin = array[i].origin;
-                          proNew.quality = array[i].quality;
-                          proNew.sold = array[i].sold;
-                          proNew.retailQuantity = array[i].retailQuantity;
-                          proNew.quantityPerBox = array[i].quantityPerBox;
-                          proNew.retailQuantityPack =
-                            array[i].retailQuantityPack;
-                          proNew.status = array[i].status;
-
-                          proNew
-                            .save()
-                            .then(() => {
-                              if (i == array.length) {
-                                ProductTemp.find((err, temp) => {
-                                  for (var i = 0; i < temp.length; i++) {
-                                    ProductTemp.delete({
-                                      idProductTemp: temp[i].idProductTemp,
-                                    })
-                                      .then(() => {
-                                        if (i == temp.length) {
-                                          res.redirect('/quanly/quanlythuoc');
-                                        }
-                                      })
-                                      .catch(err => {});
-                                  }
-                                }).lean();
-                              }
-                            })
-                            .catch(error => {
-                              console.log('=========error', error);
-                            });
-                        }
-                      }
-                    } else {
-                      res.status(400).json({ error: 'ERROR!!!' });
-                    }
-                  }).lean();
-                }
-              } else {
-                res.status(400).json({ error: 'ERROR!!!' });
-              }
+      ProductTemp.find((err, arrayNews) => {
+        if (!err) {
+          if (arrayNews) {
+            for (var i = 0; i < arrayNews.length; i++) {
+              arrayNew.push(arrayNews[i]);
             }
-          );
-        })
-        .catch(error => {});
+          }
+        }
+      }).lean();
+      if (req.body.idInvoice.length <= 0) {
+        req.flash('error', 'Mã hoá đơn không hợp lệ!');
+        res.redirect('/quanly/quanlynhapkho/');
+      } else if (arrayNew.length <= 0) {
+        req.flash('error', 'Bạn chưa thêm sản phẩm nhập kho!');
+        res.redirect('/quanly/quanlynhapkho/');
+      } else {
+        receipt
+          .save()
+          .then(() => {
+            Receipt.findOne(
+              {
+                idInvoice: Number(req.body.idInvoice),
+                totalMoney: Number(req.body.totalMoney),
+              },
+              (err, data) => {
+                if (!err) {
+                  if (data) {
+                    var idNew = data.idReceipt;
+                    console.log('=========body idNew', idNew);
+                    ProductTemp.find((err, array) => {
+                      if (!err) {
+                        if (array) {
+                          for (var i = 0; i < array.length; i++) {
+                            const proNew = new Product();
+                            proNew.idProduct = array[i].idProduct;
+                            proNew.name = array[i].name;
+                            proNew.idCategory = array[i].idCategory;
+                            proNew.idReceipt = idNew;
+                            proNew.manufacturingDate =
+                              array[i].manufacturingDate;
+                            proNew.expiryDate = array[i].expiryDate;
+                            proNew.imageList = array[i].imageList;
+                            proNew.importPrice = array[i].priceImport;
+                            proNew.salePrice = array[i].priceSaleNew;
+                            proNew.format = array[i].format;
+                            proNew.packingForm = array[i].packingForm;
+                            proNew.uses = array[i].uses;
+                            proNew.component = array[i].component;
+                            proNew.specified = array[i].specified;
+                            proNew.antiDefinition = array[i].antiDefinition;
+                            proNew.dosage = array[i].dosage;
+                            proNew.sideEffects = array[i].sideEffects;
+                            proNew.careful = array[i].careful;
+                            proNew.preserve = array[i].preserve;
+                            proNew.trademark = array[i].trademark;
+                            proNew.origin = array[i].origin;
+                            proNew.quality = array[i].quality;
+                            proNew.sold = array[i].sold;
+                            proNew.retailQuantity = array[i].retailQuantity;
+                            proNew.quantityPerBox = array[i].quantityPerBox;
+                            proNew.retailQuantityPack =
+                              array[i].retailQuantityPack;
+                            proNew.status = array[i].status;
+
+                            proNew
+                              .save()
+                              .then(() => {
+                                if (i == array.length) {
+                                  ProductTemp.find((err, temp) => {
+                                    for (var i = 0; i < temp.length; i++) {
+                                      ProductTemp.delete({
+                                        idProductTemp: temp[i].idProductTemp,
+                                      })
+                                        .then(() => {
+                                          if (i == temp.length) {
+                                            res.redirect('/quanly/quanlythuoc');
+                                          }
+                                        })
+                                        .catch(err => {});
+                                    }
+                                  }).lean();
+                                }
+                              })
+                              .catch(error => {
+                                console.log('=========error', error);
+                              });
+                          }
+                        }
+                      } else {
+                        res.status(400).json({ error: 'ERROR!!!' });
+                      }
+                    }).lean();
+                  }
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            );
+          })
+          .catch(error => {});
+      }
+
       // console.log('=========body 553', req.body);
     } else {
       req.session.back = '/quanly/home';
@@ -2210,86 +2231,58 @@ class MainController {
           }
         }
       ).lean();
-      // OrderDetails.findOne(
-      //   { idOrderDetail: Number(req.params.idOrderDetail) },
-      //   (err, orderDetail) => {
-      //     if (!err) {
-      //       if (orderDetail) {
-      //         listIdOrder = orderDetail.idOrder;
-      //         for (var i = 0; i < listIdOrder.length; i++) {
-      //           Order.findOne(
-      //             {
-      //               idOrder: Number(listIdOrder[i]),
-      //             },
-      //             (err, order) => {
-      //               if (!err) {
-      //                 if (order) {
-      //                   idEmployee = order.idEmployee;
-      //                   console.log('TEST-------idEmployee', idEmployee, i);
-      //                   listOrder.push(order);
-      //                   if (i == listIdOrder.length) {
-      //                     if (listOrder.length > 0) {
-      //                       console.log(
-      //                         'TEST-------listOrder',
-      //                         listOrder.length
-      //                       );
-      //                       for (var j = 0; j < listOrder.length; j++) {
-      //                         const orderTemp = new OrderTemp();
-      //                         orderTemp.idOrderTemp = listOrder[j].idOrder;
-      //                         orderTemp.idEmployee = listOrder[j].idEmployee;
-      //                         orderTemp.idProduct = listOrder[j].idProduct;
-      //                         orderTemp.quality = listOrder[j].quality;
-      //                         orderTemp.salePrice = listOrder[j].salePrice;
-      //                         orderTemp.orderDate = listOrder[j].orderDate;
-      //                         orderTemp.status = listOrder[j].status;
-      //                         orderTemp.createdAt = listOrder[j].createdAt;
-      //                         orderTemp.updatedAt = listOrder[j].updatedAt;
-      //                         Product.findOne(
-      //                           { idProduct: listOrder[j].idProduct },
-      //                           (err, pro) => {
-      //                             if (!err) {
-      //                               orderTemp.nameProduct = pro.name;
-      //                               orderTemp.imageProduct = pro.imageList;
-      //                               orderTemp.packingForm = pro.packingForm;
-      //                               listOrderTemp.push(orderTemp);
-      //                               if (j == listOrder.length) {
-      //                                 res.render('danhsachdonhangkh', {
-      //                                   idOrderDetail: req.params.idOrderDetail,
-      //                                   orderDetail: orderDetail,
-      //                                   listOrderTemp: listOrderTemp,
-      //                                   idEmployee: idEmployee,
-      //                                   accountId: req.session.accountId,
-      //                                   username: req.session.username,
-      //                                   role: req.session.role,
-      //                                   userId: req.session.userId,
-      //                                   avatar: req.session.avatar,
-      //                                   fullname: req.session.fullname,
-      //                                 });
-      //                               }
-      //                             } else {
-      //                               res.status(400).json({ error: 'ERROR!!!' });
-      //                             }
-      //                           }
-      //                         ).lean();
-      //                       }
-      //                     }
-      //                   }
-      //                 }
-      //               } else {
-      //                 res.status(400).json({ error: 'ERROR!!!' });
-      //               }
-      //             }
-      //           ).lean();
-      //         }
-      //       }
-      //     } else {
-      //       res.status(400).json({ error: 'ERROR!!!' });
-      //     }
-      //   }
-      // ).lean();
     } else {
       req.session.back = '/home';
       res.redirect('/login/');
+    }
+  }
+
+  adminchitietphieunhapkho(req, res) {
+    var listIdOrder = [];
+    var listOrder = [];
+    var listOrderTemp = [];
+    var idEmployee;
+    if (req.session.isAuth) {
+      Receipt.findOne(
+        { idReceipt: Number(req.params.idReceipt) },
+        (err, orderDetail) => {
+          if (orderDetail) {
+            listOrder.push(orderDetail);
+          }
+          if (!err) {
+            Product.find(
+              {
+                idReceipt: Number(req.params.idReceipt),
+              },
+              (err, order) => {
+                if (!err) {
+                  if (order) {
+                    console.log('----------', listOrder[0]);
+                    console.log('----------order', order.length);
+                    res.render('adminchitietphieunhapkho', {
+                      orderDetail: orderDetail,
+                      order: order,
+                      accountId: req.session.accountId,
+                      username: req.session.username,
+                      role: req.session.role,
+                      userId: req.session.userId,
+                      avatar: req.session.avatar,
+                      fullname: req.session.fullname,
+                    });
+                  }
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }
+      ).lean();
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
     }
   }
 }

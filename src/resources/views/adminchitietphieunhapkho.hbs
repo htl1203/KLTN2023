@@ -1,0 +1,72 @@
+<div class="adminchitietphieunhapkho">
+{{!-- Admin --}}
+            {{>menubar}}
+        <div class="home-header-main">
+                {{>header}}
+            <div class="main-home">
+                <div class="title_chucnang">
+                    <i class='fa fa-file-text-o'></i>
+                    <p>Danh sách phiếu nhập kho</p>
+                </div>
+                <div class="line" ></div>
+                  <div id="menu1" class="container">
+                    <div class="body_container">
+                        <div class="header_body">
+                            <a class="btnBack" href="/quanly/danhsachphieunhapkho">
+                                <i class="fa fa-angle-left" aria-hidden="true" style=" font-size: 24px; margin-right:5px"></i>
+                               <span>
+                                    TRỞ LẠI
+                                </span>
+                            </a>
+
+                            <div class="ma_hoa_don" style="font-size: 18px;font-weight: 600;">
+                                <span>
+                                    MÃ PHIẾU NHẬP KHO: <span style="font-weight: 700; color: #3871C1;">{{orderDetail.idReceipt}}</span>
+                                </span>
+                                <div class="line_col"></div>
+                                <span>
+                                    MÃ HOÁ ĐƠN: {{orderDetail.idInvoice}}
+                                </span>
+                                <div class="line_col"></div>
+                                <span>
+                                    NGÀY NHẬP: {{{changeNgay orderDetail.time}}}
+                                </span>
+                                <div class="line_col"></div>
+                                <span style="color: #2DC258">
+                                    ĐÃ THANH TOÁN
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="main_body">
+                            {{#each order}}
+                                <div class="item_sanpham">
+                                    <img src={{this.imageList}}
+                                alt="banner" style="height: 70px;  width: 70px; margin-right:10px; background-color: white;border:1px solid #cccccc;">
+                                    <div class="info_sanpham">
+                                        <span style="font-size: 18px;font-weight:700">{{this.name}}</span>
+                                        <span style="color:#757575 ;">Đóng gói: {{this.packingForm}}</span>
+                                        <span style="font-size: 14px;">x{{this.quality}}</span>
+                                    </div>
+                                </div>
+                            {{/each}}
+
+                            <div class="tong_tien">
+                                <div class="item_body">
+                                    <div class="title">TỔNG TIỀN</div>
+                                    <div class="content" >{{{changeNumber orderDetail.totalMoney}}}đ</div>
+                                </div>
+                                
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+ </div>
+        
+        

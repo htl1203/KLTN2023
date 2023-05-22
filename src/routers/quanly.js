@@ -44,6 +44,10 @@ router.get(
   '/quanly/danhsachphieunhapkho',
   mainController.admindanhsachphieunhapkho
 );
+router.get(
+  '/quanly/chitietphieunhapkho/:idReceipt',
+  mainController.adminchitietphieunhapkho
+);
 
 //===========KHÁCH HÀNG===============
 router.get('/home', mainController.homekh);

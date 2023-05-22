@@ -39,7 +39,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for="sel1">Ngày nhập:</label>
-                                      <input  type="date" name="priceSaleNew" value=""
+                                      <input  type="date" name="priceSaleNew" value={{date}}
                                             class="form-control" placeholder="0.00">
                                     </div>
                                 </div>
@@ -96,6 +96,13 @@
                                         {{/each}}
                                     </tbody>
                                 </table>
+                                 <div class='Error'>
+                                    {{#if messages.error}}
+                                    <p style='color:red'>
+                                        {{messages.error}}
+                                    </p>
+                                    {{/if}}
+                                </div>
                                 <div class="div_btnLuu">
                                     <input
                                         type='submit'
