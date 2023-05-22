@@ -39,7 +39,7 @@
 .danhsachdonhangkh    .main .main-body-main{
   width: 90%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   align-self: center;
@@ -52,6 +52,7 @@
   width: 100%;
   background-color: white;
   flex-direction: column;
+  margin-bottom: 20px;
 } 
 
 .danhsachdonhangkh   .body_container .header_body{
