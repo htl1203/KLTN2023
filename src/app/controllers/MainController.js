@@ -1700,15 +1700,20 @@ class MainController {
         (err, isCart) => {
           if (!err) {
             if (isCart) {
-              Cart.updateOne(
-                { idCart: isCart.idCart },
-                { quality: isCart.quality + 1 }
-              )
-                .then(() => {
-                  req.flash('success', 'Thêm vào giỏ hàng thành công!');
-                  res.redirect('/home');
-                })
-                .catch(error => {});
+              if (isCart.quality == 5) {
+                req.flash('error', 'Bạn đã thêm quá số lượng thuốc quy định!');
+                res.redirect('/giohang');
+              } else {
+                Cart.updateOne(
+                  { idCart: isCart.idCart },
+                  { quality: isCart.quality + 1 }
+                )
+                  .then(() => {
+                    req.flash('success', 'Thêm vào giỏ hàng thành công!');
+                    res.redirect('/home');
+                  })
+                  .catch(error => {});
+              }
             } else {
               cart
                 .save()

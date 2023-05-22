@@ -73,12 +73,19 @@
                     </div>
                     <div class="div_btn">
                         <div class="btnMuaThem">
-                            <a >Mua thêm </a>
+                            <a  href="/home" style="text-decoration: none;color:#0F62F9">Mua thêm </a>
                         </div>
                         <div class="btnDatHang">
-                            <a class="" href="/thanhtoan" style="text-decoration: none;">Đặt hàng<i class='fa fa-angle-right dot' style="margin-left:5px; font-size:20px"></i> </a>
+                            <a class="" href="/thanhtoan" style="text-decoration: none;color:white">Đặt hàng<i class='fa fa-angle-right dot' style="margin-left:5px; font-size:20px"></i> </a>
                         </div>
                     </div>
+                </div>
+
+                <div class='Error'>
+                    {{#if messages.error}}
+                        <input id="success-faild-add" value="success-faild-add" type="hidden" >
+                        </input>
+                    {{/if}}
                 </div>
                  
             </div>
@@ -192,4 +199,54 @@
     $this.attr('value', d).val(d)
   })
 })
+</script>
+
+
+
+<script>
+$(document).ready(function () { myFunction(); });
+function myFunction() {
+    if(document.getElementById("success-faild-add").value){
+        customAlertFaild.alert("Hãy liên hệ Bác Sĩ để được tư vấn thêm!",'Bạn đã thêm quá số lượng thuốc quy định!')
+    }
+    
+} 
+function CustomAlertFaild(){
+  this.alert = function(message,title){
+    document.body.innerHTML = document.body.innerHTML + '<div id="dialogoverlay"></div><div id="dialogboxfail" class="slit-in-vertical"><div><div id="dialogboxhead"></div><div id="dialogboxbody"></div><div id="dialogboxfoot"></div></div></div>';
+
+    let dialogoverlay = document.getElementById('dialogoverlay');
+    let dialogbox = document.getElementById('dialogboxfail');
+    
+    let winH = window.innerHeight;
+    dialogoverlay.style.height = winH+"px";
+    
+    dialogbox.style.top = "100px";
+
+    dialogoverlay.style.display = "block";
+    dialogbox.style.display = "block";
+    
+    document.getElementById('dialogboxhead').style.display = 'block';
+
+    if(typeof title === 'undefined') {
+      document.getElementById('dialogboxhead').style.display = 'none';
+    } else {
+      document.getElementById('dialogboxhead').innerHTML = '<i class="fa fa-exclamation-circle" aria-hidden="true"></i> '+ title;
+    }
+    document.getElementById('dialogboxbody').innerHTML = message;
+    {{!-- document.getElementById('dialogboxfoot').innerHTML = '<button class="pure-material-button-contained active" onclick="customAlert.ok()">OK</button>'; --}}
+  }
+  
+  this.ok = function(){
+    document.getElementById('dialogboxfail').style.display = "none";
+    document.getElementById('dialogoverlay').style.display = "none";
+  }
+
+  setTimeout(function() {  
+    document.getElementById('dialogboxfail').style.display = "none";
+    document.getElementById('dialogoverlay').style.display = "none";
+    }, 3000);
+}
+
+let customAlertFaild = new CustomAlertFaild();
 </script>

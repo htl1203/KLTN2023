@@ -424,4 +424,48 @@
   padding:10px; 
   text-align:right; 
 }
+
+
+/* FAIL */
+#dialogboxfail{
+  display: none;
+  position: absolute;
+  background: red;
+  border-radius:7px; 
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.575);
+  transition: 0.3s;
+  width: 25%;
+  z-index: 10;
+  top:-10px;
+  left: 75%;
+  right: 0;
+  margin: auto;
+}
+
+#dialogboxfail > div{ 
+  background:#FFF; 
+  margin:8px; 
+}
+
+#dialogboxfail > div > #dialogboxhead{ 
+  background: red; 
+  font-size:20px; 
+  padding:10px; 
+  color:rgb(255, 255, 255); 
+  font-family: Verdana, Geneva, Tahoma, sans-serif ;
+  font-weight: 700;
+}
+
+#dialogboxfail > div > #dialogboxbody{ 
+  background:red;
+  padding:20px; 
+  color:#FFF; 
+  font-family: Verdana, Geneva, Tahoma, sans-serif ;
+}
+
+#dialogboxfail > div > #dialogboxfoot{ 
+  background:red;
+  padding:10px; 
+  text-align:right; 
+}
 /*#endregion Alert*/

@@ -44,6 +44,7 @@
                         </input>
                     {{/if}}
                 </div>
+                
                  
             </div>
         </div>
@@ -153,11 +154,11 @@ actualBtn.addEventListener('change', function(){
 $(document).ready(function () { myFunction(); });
 function myFunction() {
     if(document.getElementById("change-success").value){
-        customAlert.alert('Thêm vào giỏ hàng thành công!' )
+        customAlertAdd.alert('Thêm vào giỏ hàng thành công!' )
     }
     
 } 
-function CustomAlert(){
+function CustomAlertAdd(){
   this.alert = function(message,title){
     document.body.innerHTML = document.body.innerHTML + '<div id="dialogoverlay"></div><div id="dialogbox" class="slit-in-vertical"><div><div id="dialogboxhead"></div><div id="dialogboxbody"></div><div id="dialogboxfoot"></div></div></div>';
 
@@ -194,5 +195,5 @@ function CustomAlert(){
     }, 1000);
 }
 
-let customAlert = new CustomAlert();
+let customAlertAdd = new CustomAlertAdd();
 </script>
