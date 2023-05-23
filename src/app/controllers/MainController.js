@@ -1779,7 +1779,7 @@ class MainController {
         },
         (err, listCart) => {
           if (!err) {
-            if (listCart) {
+            if (listCart.length > 0) {
               for (var i = 0; i < listCart.length; i++) {
                 numberCart += listCart[i].quality;
                 const productCart = new ProductCart();
@@ -1847,6 +1847,17 @@ class MainController {
               }
             } else {
               numberCart = 0;
+              res.render('giohangkh', {
+                numberCart: 0,
+                array: array,
+                sumPrice: 0,
+                accountId: req.session.accountId,
+                username: req.session.username,
+                role: req.session.role,
+                userId: req.session.userId,
+                avatar: req.session.avatar,
+                fullname: req.session.fullname,
+              });
             }
           } else {
             res.status(400).json({ error: 'ERROR!!!' });
