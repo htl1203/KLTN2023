@@ -48,11 +48,10 @@
 }
 
 
-.chitietdonhangkh  .container .body_container{
+.chitietdonhangkh  .body_container{
   display: flex;
   width: 100%;
   background-color: white;
-  height: 1000px;
   flex-direction: column;
 } 
 

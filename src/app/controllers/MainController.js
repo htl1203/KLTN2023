@@ -14,6 +14,7 @@ const Receipt = require('../model/Receipt');
 const ReceiptTemps = require('../model/ReceiptTemps');
 const ProductNoti = require('../model/ProductNoti');
 const OrderTemp = require('../model/OrderTemp');
+const PaymentTemp = require('../model/PaymentTemp');
 
 const readXlsxFile = require('read-excel-file/node');
 const bcrypt = require('bcryptjs');
@@ -1876,7 +1877,7 @@ class MainController {
       Product.find((err, pro) => {
         if (!err) {
           pro.sort(function (a, b) {
-            return b.sold - a.sold; // sắp xếp theo lượng like
+            return b.sold - a.sold;
           });
           if (pro.length > 5) {
             for (var i = 0; i < 5; i++) {
@@ -2181,6 +2182,11 @@ class MainController {
               },
               (err, listPayment) => {
                 if (!err) {
+                  if (listPayment.length > 0) {
+                    listPayment.sort(function (a, b) {
+                      return b.paymentDate - a.paymentDate;
+                    });
+                  }
                   res.render('danhsachdonhangkh', {
                     numberCart: numberCart,
                     listPayment: listPayment,
@@ -2208,10 +2214,8 @@ class MainController {
   }
 
   chitietdonhangkh(req, res) {
-    var listIdOrder = [];
-    var listOrder = [];
-    var listOrderTemp = [];
-    var idEmployee;
+    var listIdCart = [];
+    var listProduct = [];
     var numberCart = 0;
     if (req.session.isAuth) {
       Cart.find(
@@ -2228,15 +2232,57 @@ class MainController {
             } else {
               numberCart = 0;
             }
-            res.render('chitietdonhangkh', {
-              numberCart: numberCart,
-              accountId: req.session.accountId,
-              username: req.session.username,
-              role: req.session.role,
-              userId: req.session.userId,
-              avatar: req.session.avatar,
-              fullname: req.session.fullname,
-            });
+            Payment.findOne(
+              {
+                idPayment: Number(req.params.idPayment),
+                status: 1,
+              },
+              (err, payment) => {
+                if (!err) {
+                  listIdCart = payment.idCart;
+                  for (var i = 0; i < payment.idCart.length; i++) {
+                    const product = new Product();
+                    Cart.findOne(
+                      { idCart: Number(listIdCart[i]) },
+                      function (err, cart) {
+                        if (!err) {
+                          product.quality = cart.quality;
+                          console.log('quality====', cart.quality);
+                          Product.findOne(
+                            { idProduct: Number(cart.idProduct) },
+                            function (err, pro) {
+                              if (!err) {
+                                product.idProduct = pro.idProduct;
+                                product.name = pro.name;
+                                product.imageList = pro.imageList;
+                                product.salePrice = pro.salePrice;
+                                product.form = pro.form;
+                                product.format = pro.format;
+                                product.packingForm = pro.packingForm;
+                                listProduct.push(product);
+                              }
+                            }
+                          ).lean();
+                        }
+                      }
+                    ).lean();
+                  }
+                  res.render('chitietdonhangkh', {
+                    payment: payment,
+                    listProduct: listProduct,
+                    numberCart: numberCart,
+                    accountId: req.session.accountId,
+                    username: req.session.username,
+                    role: req.session.role,
+                    userId: req.session.userId,
+                    avatar: req.session.avatar,
+                    fullname: req.session.fullname,
+                  });
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }
+            ).lean();
           } else {
             res.status(400).json({ error: 'ERROR!!!' });
           }

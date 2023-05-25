@@ -15,7 +15,7 @@
             <div class="main-body-main">
                 <div class="body_container">
                         <div class="header_body">
-                            <a class="btnBack" href="/quanly/quanlydonhang">
+                            <a class="btnBack" href="/danhsachdonhang">
                                 <i class="fa fa-angle-left" aria-hidden="true" style=" font-size: 24px; margin-right:5px"></i>
                                <span>
                                     TRỞ LẠI
@@ -24,11 +24,11 @@
 
                             <div class="ma_hoa_don">
                                 <span>
-                                    MÃ NHÂN VIÊN: {{idEmployee}}
+                                    MÃ ĐƠN HÀNG: {{payment.idPayment}}
                                 </span>
                                 <div class="line_col"></div>
                                 <span>
-                                    MÃ HOÁ ĐƠN: {{idOrderDetail}}
+                                    NGÀY THANH TOÁN: {{{getTime payment.createdAt}}} - {{{changeNgay payment.createdAt}}}
                                 </span>
                                 <div class="line_col"></div>
                                 <span style="color: #2DC258">
@@ -38,12 +38,12 @@
                         </div>
 
                         <div class="main_body">
-                            {{#each listOrderTemp}}
+                            {{#each listProduct}}
                                 <div class="item_sanpham">
-                                    <img src={{this.imageProduct}}
+                                    <img src={{this.imageList}}
                                 alt="banner" style="height: 70px;  width: 70px; margin-right:10px; background-color: white;border:1px solid #cccccc;">
                                     <div class="info_sanpham">
-                                        <span style="font-size: 18px;font-weight:700">{{this.nameProduct}}</span>
+                                        <span style="font-size: 18px;font-weight:700">{{this.name}}</span>
                                         <span style="color:#757575 ;">Đóng gói: {{this.packingForm}}</span>
                                         <span style="font-size: 14px;">x{{this.quality}}</span>
                                     </div>
@@ -52,16 +52,12 @@
 
                             <div class="tong_tien">
                                 <div class="item_body">
-                                    <div class="title">Tên khách hàng</div>
-                                    <div class="content" >Khách lẻ</div>
-                                </div>
-                                <div class="item_body">
                                     <div class="title">Tổng sản phẩm</div>
-                                    <div class="content" >{{orderDetail.totalQuality}}</div>
+                                    <div class="content" >{{payment.totalQuality}}</div>
                                 </div>
                                 <div class="item_body">
                                     <div class="title">Tổng tiền</div>
-                                    <div class="content" >{{{changeNumber orderDetail.totalMoney}}} đ</div>
+                                    <div class="content" >{{{changeNumber payment.totalMoney}}} đ</div>
                                 </div>
                                 <div class="item_body">
                                     <div class="title">Giảm giá</div>
@@ -69,15 +65,11 @@
                                 </div>
                                  <div class="item_body">
                                     <div class="title">Thành tiền</div>
-                                    <div class="content" style="color: #3871C1; font-size: 22px;">{{{changeNumber orderDetail.totalMoney}}} đ</div>
-                                </div>
-                                <div class="item_body">
-                                    <div class="title">Khách trả</div>
-                                    <div class="content" >{{{changeNumber orderDetail.totalMoney}}} đ</div>
+                                    <div class="content" style="color: #3871C1; font-size: 22px;">{{{changeNumber payment.totalMoney}}} đ</div>
                                 </div>
                                 <div class="item_body">
                                     <div class="title">Phương thức thành toán</div>
-                                    <div class="content" >{{orderDetail.paymentType}}</div>
+                                    <div class="content" >{{payment.paymentType}}</div>
                                 </div>
 
                             </div>
