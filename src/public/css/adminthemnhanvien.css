@@ -1,0 +1,120 @@
+.adminthemnhanvien {
+  background-color: #F7F7F8;
+}
+.adminthemnhanvien .home-header-main {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  margin-left: 20.4%;
+  height: 100%;
+}
+.adminthemnhanvien .main-home{
+  display: flex;
+  margin-top: 60px;
+  width: 100%;
+  flex-direction: column;
+}
+.adminthemnhanvien .main-home .title_chucnang{
+  display: flex;
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+}
+.adminthemnhanvien .main-home .title_chucnang p{
+  font-size: 26px;
+  font-weight: 600;
+  color: #3871C1;
+}
+.adminthemnhanvien .main-home .title_chucnang i{
+  font-size:26px;
+  margin-right: 5px;
+  color: #3871C1;
+  margin-top: 8px;
+}
+.adminthemnhanvien .main-home .line {
+  height: 1px;
+  background-color: #cccccc;
+  width: 100%;
+} 
+
+.adminthemnhanvien .main-home .main_body {
+  display: flex;
+  width: 100%;
+  padding: 10px 30px;
+  flex-direction: column;
+} 
+
+.adminthemnhanvien .main-home .main_body label{
+  font-weight: 600;
+} 
+
+.adminthemnhanvien .main-home .main_body label span{
+  font-weight: 600;
+  color: red;
+} 
+
+
+.adminthemnhanvien .main-home .body_nhapkho {
+  display: flex;
+  width: 100%;
+  padding: 10px 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 5px #E6E6E6;
+  flex-direction: column;
+
+} 
+
+.adminthemnhanvien .main-home .body_nhapkho .header_nhapkho{
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+
+} 
+
+.adminthemnhanvien .main-home .body_nhapkho p{
+  color: #3871C1;
+  font-size: 20px;
+  font-weight: 600;
+
+} 
+
+.adminthemnhanvien .main-home .body_nhapkho a{
+  background-color: #3871C1;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  height: 40px;
+  margin-left: 5px;
+} 
+
+.adminthemnhanvien .main-home .body_nhapkho label{
+  font-size: 14px;
+} 
+
+.adminthemnhanvien .main-home .body_nhapkho select,
+.adminthemnhanvien .main-home .body_nhapkho input{
+  height: 35px;
+  font-size: 14px;
+} 
+
+.adminthemnhanvien .main-home .div_btnLuu {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 20px;
+} 
+.adminthemnhanvien .main-home .div_btnLuu .btnLuu{
+  display: flex;
+  height: 40px;
+  width: 300px;
+  justify-content: center;
+  border: none;
+  background-color: #3871C1;
+  color: white;
+  font-weight: 700;
+  font-size: 22px;
+  border-radius: 10px;
+
+} 

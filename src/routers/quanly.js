@@ -49,6 +49,10 @@ router.get(
   mainController.adminchitietphieunhapkho
 );
 
+router.get('/quanly/xoanhanvien/:idEmployee', mainController.adminxoanhanvien);
+router.get('/quanly/themnhanvien', mainController.adminRenderThemnhanvien);
+router.post('/quanly/themnhanvien', mainController.adminthemnhanvien);
+
 //===========KHÁCH HÀNG===============
 router.get('/home', mainController.homekh);
 router.get('/login', mainController.loginqlkh);

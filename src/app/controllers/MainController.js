@@ -1408,6 +1408,141 @@ class MainController {
     }
   }
 
+  adminxoanhanvien(req, res) {
+    if (req.session.isAuth) {
+      Employee.delete({
+        idEmployee: req.params.idEmployee,
+      })
+        .then(() => {
+          Account.delete({
+            username: req.params.idEmployee,
+          })
+            .then(() => {
+              req.flash('successdeleteem', 'Xoá thành công!');
+              res.redirect('/quanly/quanlynhanvien');
+            })
+            .catch(err => next(err));
+        })
+        .catch(err => next(err));
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  adminRenderThemnhanvien(req, res) {
+    var countExpired = 0;
+    if (req.session.isAuth) {
+      res.render('adminthemnhanvien', {
+        accountId: req.session.accountId,
+        username: req.session.username,
+        role: req.session.role,
+        userId: req.session.userId,
+        avatar: req.session.avatar,
+        fullname: req.session.fullname,
+      });
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
+  adminthemnhanvien(req, res, next) {
+    console.log('BODY--', req.body);
+    if (req.session.isAuth) {
+      var date1 = new Date(); // current date
+      var date2 = new Date(req.body.dateOfBirth); // mm/dd/yyyy format
+      var date3 = new Date(req.body.dateOfBirth); // mm/dd/yyyy format
+      var phoneformat = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+      var mailformat =
+        /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      if (
+        req.body.username.length <= 0 ||
+        req.body.name.length <= 0 ||
+        req.body.dateOfBirth.length <= 0 ||
+        req.body.phoneNumber.length <= 0 ||
+        req.body.email.length <= 0 ||
+        req.body.address.length <= 0 ||
+        req.body.dateStartWork.length <= 0
+      ) {
+        req.flash('error', 'Phải nhập đầy đủ các trường thông tin!');
+        res.redirect('/quanly/themnhanvien');
+      } else {
+        Account.findOne({ username: req.body.username }, (err, data) => {
+          if (!err) {
+            if (data) {
+              req.flash('error', 'Tên đăng nhập này đã tồn tại!');
+              res.redirect('/quanly/themnhanvien');
+            } else {
+              if (req.body.name.length < 6) {
+                req.flash('error', 'Họ và tên quá ngắn!');
+                res.redirect('/quanly/themnhanvien');
+              } else if (date2.getTime() - date1.getTime() >= 0) {
+                req.flash('error', 'Ngày sinh phải nhỏ hơn ngày hiện tại!');
+                res.redirect('/quanly/themnhanvien');
+              } else if (date3.getTime() - date1.getTime() > 0) {
+                req.flash(
+                  'error',
+                  'Ngày bắt đầu làm việc phải nhỏ hơn hoặc bằng ngày hiện tại!'
+                );
+                res.redirect('/quanly/themnhanvien');
+              } else if (!req.body.phoneNumber.match(phoneformat)) {
+                req.flash('error', 'Số điện thoại sai định dạng!');
+                res.redirect('/quanly/themnhanvien');
+              } else if (!req.body.email.match(mailformat)) {
+                req.flash('error', 'Email sai định dạng!');
+                res.redirect('/quanly/themnhanvien');
+              } else {
+                const account = new Account();
+                account.username = req.body.username;
+                account.password = '12345678';
+                account.role = 2;
+                account
+                  .save()
+                  .then(() => {
+                    Account.findOne(
+                      { username: req.body.username },
+                      (err, acc) => {
+                        if (!err) {
+                          if (acc) {
+                            const user = new Employee(req.body);
+                            user.idAccount = acc.idAccount;
+                            user.idEmployee = acc.username;
+                            user
+                              .save()
+                              .then(() => {
+                                req.flash(
+                                  'successAddEm',
+                                  'Thêm nhân viên mới thành công!'
+                                );
+                                res.redirect('/quanly/quanlynhanvien');
+                              })
+                              .catch(error => {
+                                console.log('ERRORR Employee', error);
+                              });
+                          } else {
+                            res.status(400).json({ error: 'ERROR!!!' });
+                          }
+                        } else {
+                          res.status(400).json({ error: 'ERROR!!!' });
+                        }
+                      }
+                    ).lean();
+                  })
+                  .catch(error => {});
+              }
+            }
+          } else {
+            res.status(400).json({ error: 'ERROR!!!' });
+          }
+        }).lean();
+      }
+    } else {
+      req.session.back = '/quanly/home';
+      res.redirect('/quanly/login/');
+    }
+  }
+
   //===========KHÁCH HÀNG===============
 
   homekh(req, res) {
