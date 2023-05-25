@@ -53,7 +53,10 @@ router.get(
 router.get('/home', mainController.homekh);
 router.get('/login', mainController.loginqlkh);
 router.post('/login', mainController.loginkh);
-router.get('/register', mainController.register);
+router.get('/register', mainController.renderRegister);
+router.post('/register', mainController.register);
+router.get('/verify/:username', mainController.renderVerification);
+router.post('/verify', mainController.verification);
 router.get('/chitietsanpham/:idProduct', mainController.chitietsanphamkh);
 router.post('/themgiohang', mainController.themgiohangkh);
 router.get('/giohang', mainController.giohangkh);

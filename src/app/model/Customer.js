@@ -28,7 +28,7 @@ const Customer = new Schema(
 
 // Add plugin
 mongoose.plugin(slug);
-Customer.plugin(AutoIncrement, { inc_field: 'id' });
+Customer.plugin(AutoIncrement, { inc_field: 'idCustomer' });
 Customer.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 
 module.exports = mongoose.model('Customer', Customer);

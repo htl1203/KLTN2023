@@ -62,6 +62,12 @@
                   </p>
                 {{/if}}
               </div>
+              <div class='Error'>
+                {{#if messages.success}}
+                  <input id="change-success" value="success" type="hidden" >
+                  </input>
+                {{/if}}
+              </div>
 
               <div class='div_btn'>
                 <a class='' href='/quanly/home'>
@@ -121,11 +127,11 @@
 $(document).ready(function () { myFunction(); });
 function myFunction() {
     if(document.getElementById("change-success").value){
-        customAlert.alert('Đăng nhập để tiếp tục','Đăng ký tài khoản thành công!' )
+        customAlertLogin.alert('Đăng nhập để tiếp tục','Đăng ký tài khoản thành công!' )
     }
     
 } 
-function CustomAlert(){
+function CustomAlertLogin(){
   this.alert = function(message,title){
     document.body.innerHTML = document.body.innerHTML + '<div id="dialogoverlay"></div><div id="dialogbox" class="slit-in-vertical"><div><div id="dialogboxhead"></div><div id="dialogboxbody"></div><div id="dialogboxfoot"></div></div></div>';
 
@@ -162,5 +168,5 @@ function CustomAlert(){
     }, 3000);
 }
 
-let customAlert = new CustomAlert();
+let customAlertLogin = new CustomAlertLogin();
 </script>

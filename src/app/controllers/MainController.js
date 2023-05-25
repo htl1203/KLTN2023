@@ -15,10 +15,12 @@ const ReceiptTemps = require('../model/ReceiptTemps');
 const ProductNoti = require('../model/ProductNoti');
 const OrderTemp = require('../model/OrderTemp');
 const PaymentTemp = require('../model/PaymentTemp');
+const EmailOTP = require('../model/EmailOTP');
 
 const readXlsxFile = require('read-excel-file/node');
 const bcrypt = require('bcryptjs');
 var moment = require('moment');
+const nodemailer = require('nodemailer');
 class MainController {
   // [GET] /home
   home(req, res) {
@@ -1628,8 +1630,187 @@ class MainController {
     });
   }
 
-  register(req, res) {
+  renderRegister(req, res) {
     res.render('register');
+  }
+
+  register = (req, res, next) => {
+    const { username, email, password, repassword, role } = req.body;
+    console.log('========log', req.body);
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (username.length < 6) {
+      req.flash('error', 'Tên đăng nhập phải trên 6 ký tự!');
+      res.redirect('/register');
+    } else {
+      Account.findOne({ username: username }, (err, data) => {
+        if (!err) {
+          if (data) {
+            req.flash('error', 'Tên đăng nhập đã tồn tại!');
+            res.redirect('/register');
+          } else {
+            if (email.match(mailformat)) {
+              Customer.findOne({ email: email }, (err, data) => {
+                if (!err) {
+                  if (data) {
+                    req.flash('error', 'Email đã tồn tại!');
+                    res.redirect('/register');
+                  } else {
+                    if (password.length < 8) {
+                      req.flash('error', 'Mật khẩu phải từ 8 ký tự!');
+                      res.redirect('/register');
+                    } else {
+                      if (password == repassword) {
+                        const account = new Account();
+                        account.username = username;
+                        account.password = password;
+                        account.role = role;
+                        // babycare032023@gmail.com
+                        account
+                          .save()
+                          .then(() => {
+                            Account.findOne(
+                              { username: username },
+                              (err, data) => {
+                                if (!err) {
+                                  if (data) {
+                                    const user = new Customer();
+                                    user.email = email;
+                                    user.idAccount = data.idAccount;
+                                    user.status = 0;
+                                    user
+                                      .save()
+                                      .then(() => {
+                                        // sendOTPEmail({ username, email });
+                                        // 12345678
+
+                                        let transporter =
+                                          nodemailer.createTransport({
+                                            host: 'smtp.gmail.com',
+                                            port: 465,
+                                            secure: true,
+                                            auth: {
+                                              type: 'login',
+                                              user: 'haphuong09031993@gmail.com',
+                                              pass: 'aoayfjhrxdjzceux',
+                                            },
+                                          });
+
+                                        const otp = `${Math.floor(
+                                          1000 + Math.random() * 9000
+                                        )}`;
+
+                                        const mailOptions = {
+                                          from: 'haphuong09031993@gmail.com',
+                                          to: email,
+                                          subject:
+                                            'LenPharmacy! Xác thực email của bạn',
+                                          html: `<p> Mã xác nhận của bạn tại LenPharmacy là: <b>${otp}</b></p>`,
+                                        };
+
+                                        const otpEmail = new EmailOTP({
+                                          userName: username,
+                                          otp: otp,
+                                          createAt: Date.now(),
+                                          expireAt: Date.now() + 3600000,
+                                        });
+
+                                        otpEmail
+                                          .save()
+                                          .then(() => {
+                                            transporter.sendMail(mailOptions);
+                                            res.redirect(`/verify/${username}`);
+                                          })
+                                          .catch(error => {
+                                            console.log(
+                                              'ERRORR otpEmail',
+                                              error
+                                            );
+                                          });
+                                      })
+                                      .catch(error => {
+                                        console.log('ERRORR Customer', error);
+                                      });
+                                  } else {
+                                    res.status(400).json({ error: 'ERROR!!!' });
+                                  }
+                                } else {
+                                  res.status(400).json({ error: 'ERROR!!!' });
+                                }
+                              }
+                            ).lean();
+                          })
+                          .catch(error => {});
+                      } else {
+                        req.flash('error', 'Mật khẩu nhập lại không trùng!');
+                        res.redirect('/register');
+                      }
+                    }
+                  }
+                } else {
+                  res.status(400).json({ error: 'ERROR!!!' });
+                }
+              }).lean();
+            } else {
+              req.flash('error', 'Email sai định dạng!');
+              res.redirect('/register');
+            }
+          }
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
+    }
+  };
+
+  renderVerification(req, res) {
+    Account.findOne({ username: req.params.username }, (err, data) => {
+      if (!err) {
+        if (data) {
+          Customer.findOne({ idAccount: data.idAccount }, (err, dataUser) => {
+            if (!err) {
+              if (dataUser) {
+                res.render('otpverification', {
+                  dataUser: dataUser,
+                  username: req.params.username,
+                });
+              }
+            } else {
+              res.status(400).json({ error: 'ERROR!!!' });
+            }
+          }).lean();
+        }
+      } else {
+        res.status(400).json({ error: 'ERROR!!!' });
+      }
+    }).lean();
+  }
+
+  verification(req, res) {
+    EmailOTP.findOne({ userName: req.body.userName }, (err, data) => {
+      if (!err) {
+        if (data) {
+          if (bcrypt.compareSync(req.body.optEmail, data.otp)) {
+            Customer.updateOne(
+              { idCustomer: Number(req.body.idCustomer) },
+              { status: 1, avatar: req.body.avatar }
+            )
+              .then(() => {
+                req.flash('success', 'Đăng ký tài khoản thành công!');
+                res.redirect('/login');
+              })
+              .catch(err => {
+                console.log('=========err', err);
+              });
+          } else {
+            usertest;
+            req.flash('error', 'Mã OTP chưa chính xác!');
+            res.redirect(`/verify/${req.body.userName}`);
+          }
+        }
+      } else {
+        res.status(400).json({ error: 'ERROR!!!' });
+      }
+    }).lean();
   }
 
   // [GET] /chitietsanpham/:idProduct

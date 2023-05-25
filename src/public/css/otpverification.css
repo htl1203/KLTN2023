@@ -12,56 +12,45 @@
   -textmiddle022: #0c6fbe;
   -inputdadien: #e8f0fe;
 }
-.register {
+.otpverification {
   background-color: #DCDFE4;
   height: 100%;
   /* background-image: url('http://datkham.kcb.vn/background-login.a55dfdeefbadaa0db071.png'); */
 }
-.register .img_background_login {
-  position: relative;
-}
-
-.register .bodyMainLogin{
+.otpverification .img_background_login {
   display: flex; 
-  height: 120%;
   justify-content: center;
   background-color: #DCDFE4;
 }
 
-
-.register .mainLogin{
+.mainLogin{
   display: flex; 
-  height: 800px;
+  height: 710px;
   justify-content: center;
-  margin-top: 130px;
+  margin-top: 70px;
   border-radius: 20px;
   background-color:white;
 }
 
-.register .logo{
-  height: 130px;
-}
-
-.register .mainLoginKH{
+.mainLoginKH{
   display: flex; 
   height: 90%;
   justify-content: center;
   width: 98%;
   padding-top: 10px;
 }
-.register .mainLoginKH .textLogin{
+.mainLoginKH .textLogin{
   width: 100%;
   display: flex; 
-  height: 60px;
+  height: 80px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 18px;
 }
-.register h1 {
-  color: #3871C1;
+.otpverification h1 {
+  color: #296088;
   font-weight: 600;
 }
-.register .div_input {
+.otpverification .div_input {
   /* flex-direction: column; */
   display: flex;
   width: 100%;
@@ -70,21 +59,24 @@
   height: 90%;
 }
 
-.register .div_input form{
+.otpverification .div_input form{
   flex-direction: column;
   display: flex;
   width: 90%;
   align-items: center;
   height: 100%;
 }
-.register .div_input .div_input_row{
+.otpverification .div_input .div_input_row{
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   display: flex;
-  width: 100%;
+  width: 80%;
   margin-bottom: 15px;
+  margin-top: 20px;
 }
-.register .div_input .div_input_row #btnRePassword,
-.register .div_input .div_input_row #btnPassword{
+.otpverification .div_input .div_input_row #btnRePassword,
+.otpverification .div_input .div_input_row #btnPassword{
   border: none;
   height: 43px;
   width: 50px;
@@ -97,77 +89,77 @@
 }
 
 
-.register .div_input .div_input_row label{
-  color: #3871C1;
+.otpverification .div_input .div_input_row label{
+  color: #296088;
   font-size: 18px;
   font-weight: 550;
 }
 /* .login .Error, */
-.register #UserName,
-.register #Email,
-.register #RePassword,
-.register #Password {
+.otpverification #UserName,
+.otpverification #Email,
+.otpverification #RePassword,
+.otpverification #Password {
   width: 100%;
   height: 43px;
   border-radius: 6px;
-  border: 1px solid #3871C1;
-  color: #3871C1;
+  border: 1px solid #296088;
+  color: #296088;
   font-style: italic;
   font-size: 14px;
   padding-left: 15px;
   outline: none;
 }
-.register .div_btn{
-  width: 100%;
+.otpverification .div_btn{
+  width: 50%;
   flex-direction:row;
   display: flex;
   justify-content: space-between;
 }
-.register .div_btn a{
+.otpverification .div_btn a{
   text-decoration: none
 }
-.register .div_btn p{
-  color: #3871C1;
+.otpverification .div_btn p{
+  color: #296088;
   font-size: 16px;
 }
-.register .btnDangNhap {
+.otpverification .btnDangNhap {
   width: 100%;
   height: 48px;
-  background-color: #3871C1;
+  background-color: #296088;
   border: none;
   color: white;
   font-size: 22px;
   font-weight: 600;
   border-radius: 10px;
 }
-.register .btnDangKy {
+.otpverification .btnDangKy {
   width: 48%;
   height: 48px;
   background-color: white;
-  border: 1px solid #3871C1;
+  border: 1px solid #296088;
   border-radius: 10px;
   justify-content: center;
   align-items: center;
   display: flex;
 }
-.register .btnDangKy p{
+.otpverification .btnDangKy p{
   margin-top: 15px;
   color: #296088;
   font-size: 22px;
   font-weight: 600;
 }
 
-.register .div_btn_line{
+.otpverification .div_btn_line{
   margin-top: 20px;
   width: 100%;
   flex-direction:row;
   display: flex;
   justify-content: space-between;
 }
-.register .div_btn_line p{
-  color: #3871C1;
+.otpverification .div_btn_line p{
+  color: #296088;
 }
-.register .div_btn_line .div_line_or{
+.otpverification .div_btn_line .div_line_or{
   width: 35%;
   height: 25px;
   flex-direction:row;
@@ -175,26 +167,26 @@
   justify-content: center;
   align-items: center;
 }
-.register .div_btn_line .div_line_or .line_or{
+.otpverification .div_btn_line .div_line_or .line_or{
   width: 100%;
   height: 2px;
-  background-color: #3871C1;
+  background-color: #296088;
 }
-.register ::placeholder {
-  color: #3871C1;
+.otpverification ::placeholder {
+  color: #296088;
 }
-.register .div_btn_social{
+.otpverification .div_btn_social{
   width: 100%;
   height: 43px;
   border-radius: 6px;
-  border: 2px solid #3871C1;
+  border: 2px solid #296088;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.register .div_btn_social a{
+.otpverification .div_btn_social a{
   width: 100%;
   height: 43px; 
   flex-direction:row;
@@ -203,44 +195,41 @@
   align-items: center;
   text-decoration: none
 }
-.register .div_btn_social a i{
-  color: #3871C1;
+.otpverification .div_btn_social a i{
+  color: #296088;
   font-size: 22px;
   margin-right: 10px;
   /* cursor: pointer; */
 }
-.register .div_btn_social a p{
-  color: #3871C1;
+.otpverification .div_btn_social a p{
+  color: #296088;
   font-size: 16px;
   margin-top: 15px;
 }
-.register .fa-google {
+.otpverification .fa-google {
   background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
-.register .fa-facebook-square {
+.otpverification .fa-facebook-square {
   color: blue;
   background-color: #fff;
 }
-.register .div_btn_login{
+.otpverification .div_btn_login{
   width: 100%;
   flex-direction:row;
   display: flex;
-  margin-top: 10px;
 }
-.register .div_btn_login label{
-  color: #3871C1;
-  font-size: 18px;
+.otpverification .div_btn_login label{
+  color: #296088;
 }
-.register .div_btn_login p{
-  color: #3871C1;
-  font-weight: 700;
-  font-size: 18px;
+.otpverification .div_btn_login p{
+  color: #296088;
+  font-weight: 600;
 }
 
-.register .div_btn_login a{
+.otpverification .div_btn_login a{
   text-decoration: none
 }
