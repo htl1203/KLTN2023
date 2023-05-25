@@ -2273,13 +2273,21 @@ class MainController {
 
   admindanhsachphieunhapkho(req, res) {
     var array = [];
-
+    var arrayPro = [];
+    var arrayLast = [];
+    var idSup = '';
     if (req.session.isAuth) {
+      Supplier.find((err, sup) => {
+        if (!err) {
+          idSup = sup[0].name;
+        } else {
+          res.status(400).json({ error: 'ERROR!!!' });
+        }
+      }).lean();
       Receipt.find((err, pro) => {
         if (!err) {
           for (var i = 0; i < pro.length; i++) {
             const receiptTemps = new ReceiptTemps();
-            var idSup = '';
             receiptTemps.idReceiptTemps = pro[i].idReceipt;
             receiptTemps.time = pro[i].time;
             receiptTemps.idInvoice = pro[i].idInvoice;
@@ -2288,40 +2296,34 @@ class MainController {
             receiptTemps.status = pro[i].status;
             receiptTemps.createdAt = pro[i].createdAt;
             receiptTemps.updatedAt = pro[i].updatedAt;
-            idSup = pro[i].idSupplier;
+            receiptTemps.nameSupplier = idSup;
             Product.find(
               { idReceipt: Number(pro[i].idReceipt) },
               (err, pros) => {
                 if (!err) {
                   receiptTemps.totalProducts = pros.length;
-                  Supplier.findOne({ idSupplier: idSup }, (err, sup) => {
-                    if (!err) {
-                      receiptTemps.nameSupplier = sup.name;
-                      array.push(receiptTemps);
-                      if (i == pro.length) {
-                        array.sort(function (a, b) {
-                          return b.time - a.time; // sắp xếp theo lượng like
-                        });
-                        res.render('admindanhsachphieunhapkho', {
-                          array: array,
-                          accountId: req.session.accountId,
-                          username: req.session.username,
-                          role: req.session.role,
-                          userId: req.session.userId,
-                          avatar: req.session.avatar,
-                          fullname: req.session.fullname,
-                        });
-                      }
-                    } else {
-                      res.status(400).json({ error: 'ERROR!!!' });
-                    }
-                  }).lean();
+                  array.push(receiptTemps);
                 } else {
                   res.status(400).json({ error: 'ERROR!!!' });
                 }
               }
             ).lean();
           }
+
+          setTimeout(function () {
+            array.sort(function (a, b) {
+              return b.time - a.time; // sắp xếp theo lượng like
+            });
+            res.render('admindanhsachphieunhapkho', {
+              array: array,
+              accountId: req.session.accountId,
+              username: req.session.username,
+              role: req.session.role,
+              userId: req.session.userId,
+              avatar: req.session.avatar,
+              fullname: req.session.fullname,
+            });
+          }, 500);
         } else {
           res.status(400).json({ error: 'ERROR!!!' });
         }
@@ -2678,8 +2680,17 @@ class MainController {
               (err, order) => {
                 if (!err) {
                   if (order) {
-                    console.log('----------', listOrder[0]);
-                    console.log('----------order', order.length);
+                    res.render('adminchitietphieunhapkho', {
+                      orderDetail: orderDetail,
+                      order: order,
+                      accountId: req.session.accountId,
+                      username: req.session.username,
+                      role: req.session.role,
+                      userId: req.session.userId,
+                      avatar: req.session.avatar,
+                      fullname: req.session.fullname,
+                    });
+                  } else {
                     res.render('adminchitietphieunhapkho', {
                       orderDetail: orderDetail,
                       order: order,
