@@ -33,9 +33,9 @@
                                                 <td>{{sum @index 1}}</td>
                                                 <td>{{this.idProduct}}</td>
                                                  <td>{{this.nameProduct}}</td>
-                                                <td>{{this.salePrice}}</td>
+                                                <td>{{{changeNumber this.salePrice}}}</td>
                                                 <td>{{this.quality}}</td>
-                                                <td>{{{sumCart this.quality this.salePrice}}}</td>
+                                                <td style="color: #3871C1;font-weight: 600;">{{{sumCart this.quality this.salePrice}}}</td>
                                             </tr>
 
                                             {{/each}}

@@ -18,7 +18,7 @@
 
     <div class='header-left' id='navbarSupportedContent'>
       <a class='thongbao_div' href='/quanly/thongbao'><i
-          class='fa fa-bell-o'
+           {{#ifCond role '==' 3}}class='fa fa-bell-o'{{/ifCond}}
           aria-hidden='true'
         ></i>
         {{#if countExpired}}

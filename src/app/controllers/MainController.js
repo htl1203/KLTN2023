@@ -342,35 +342,74 @@ class MainController {
 
   laydonhangds(req, res) {
     const array = [];
+    var isCreate = 0;
     if (req.session.isAuth) {
+      console.log('req.body', req.body);
       for (var i = 0; i < req.body.soluong.length; i++) {
-        if (req.body.soluong[i]) {
-          const order = new Order();
-          order.idEmployee = req.session.userId;
-          order.idProduct = req.body.idProduct[i];
-          order.quality = req.body.soluong[i];
-          order.salePrice = req.body.salePrice[i];
-          order.status = 1;
-          array.push(order);
+        if (req.body.soluong[i] > 0) {
+          isCreate = 1;
         }
       }
-      for (var i = 0; i < array.length; i++) {
-        const newOrder = new Order();
-        newOrder.idEmployee = array[i].idEmployee;
-        newOrder.idProduct = array[i].idProduct;
-        newOrder.quality = array[i].quality;
-        newOrder.salePrice = array[i].salePrice;
-        newOrder.orderDate = array[i].orderDate;
-        newOrder.status = array[i].status;
-        newOrder.createdAt = array[i].createdAt;
-        newOrder.updatedAt = array[i].updatedAt;
+      if (isCreate == 0) {
+        req.flash('error', 'Chưa chọn sản phẩm tạo đơn hàng!');
+        res.redirect('/quanly/taodonhang/');
+      } else {
+        for (var i = 0; i < req.body.soluong.length; i++) {
+          if (req.body.soluong[i]) {
+            const order = new Order();
+            order.idEmployee = req.session.userId;
+            order.idProduct = req.body.idProduct[i];
+            order.quality = req.body.soluong[i];
+            order.salePrice = req.body.salePrice[i];
+            order.status = 1;
+            array.push(order);
+          }
+        }
+        for (var i = 0; i < array.length; i++) {
+          const newOrder = new Order();
+          newOrder.idEmployee = array[i].idEmployee;
+          newOrder.idProduct = array[i].idProduct;
+          newOrder.quality = array[i].quality;
+          newOrder.salePrice = array[i].salePrice;
+          newOrder.orderDate = array[i].orderDate;
+          newOrder.status = array[i].status;
+          newOrder.createdAt = array[i].createdAt;
+          newOrder.updatedAt = array[i].updatedAt;
 
-        newOrder
-          .save()
-          .then(() => {
-            if (i == array.length) res.redirect('/quanly/taodonhang');
-          })
-          .catch(error => {});
+          Order.find(
+            { idProduct: Number(newOrder.idProduct), status: 1 },
+            (err, isOrder) => {
+              if (!err) {
+                if (isOrder.length > 0) {
+                  var newQuality = isOrder[0].quality + newOrder.quality;
+                  Order.updateOne(
+                    { idProduct: Number(newOrder.idProduct), status: 1 },
+                    {
+                      quality: newQuality,
+                    }
+                  )
+                    .then(() => {
+                      res.redirect('/quanly/taodonhang');
+                    })
+                    .catch(err => {
+                      console.log('=========err', err);
+                    });
+                } else {
+                  newOrder
+                    .save()
+                    .then(() => {
+                      if (i == array.length) res.redirect('/quanly/taodonhang');
+                    })
+                    .catch(error => {
+                      console.log('ERROR', error);
+                    });
+                }
+              } else {
+                res.status(400).json({ error: 'ERROR!!!' });
+              }
+            }
+          ).lean();
+        }
       }
     } else {
       req.session.back = '/quanly/home';

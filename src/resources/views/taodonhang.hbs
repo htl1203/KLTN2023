@@ -37,7 +37,7 @@
                                                 <td><input type="hidden" name="idProduct"  value="{{this.idProduct}}" class="form-control">{{this.idProduct}}</td>
                                                 <td><input type="hidden" name="salePrice"  value="{{this.salePrice}}" class="form-control">{{this.name}}</td>
                                                 <td>{{{differenceTwoNumber this.quality  this.sold}}}</td>
-                                                <th><input name='soluong' type="number" style="width: 80px;" {{#if (isExpires this.expiryDate)}} style="background-color: #cccccc;" readonly{{/if}} {{#if (isQuality (differenceTwoNumber this.quality  this.sold))}} style="background-color: #cccccc;" readonly{{/if}}></th>
+                                                <th><input name='soluong' type="number" style="width: 80px;" min="1" max="{{{differenceTwoNumber this.quality  this.sold}}}" {{#if (isExpires this.expiryDate)}} style="background-color: #cccccc;" readonly{{/if}} {{#if (isQuality (differenceTwoNumber this.quality  this.sold))}} style="background-color: #cccccc;" readonly{{/if}}></th>
                                                 <td>{{{changeNumber this.salePrice}}}</td>
                                                 <td>0</td>
                                                 <td>{{ this.expiryDate}}</td>
@@ -47,6 +47,13 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+                            <div class='Error'>
+                                {{#if messages.error}}
+                                <p style='color:red'>
+                                    {{messages.error}}
+                                </p>
+                                {{/if}}
                             </div>
                             <div class="div_btnTaoDon">
                                 <input
