@@ -1004,7 +1004,7 @@ class MainController {
                       }
                     }
                     res.render('adminquanlynhapkho', {
-                      date: new Date(),
+                      date: date1,
                       countExpired: countExpired,
                       array: array,
                       supplier: supplier[0],
@@ -1103,109 +1103,118 @@ class MainController {
   adminluunhapkho(req, res) {
     var arrayNew = [];
     var receipt = new Receipt(req.body);
-    console.log('=========body receipt', receipt);
     if (req.session.isAuth) {
       ProductTemp.find((err, arrayNews) => {
         if (!err) {
-          if (arrayNews) {
+          if (arrayNews.length > 0) {
             for (var i = 0; i < arrayNews.length; i++) {
               arrayNew.push(arrayNews[i]);
             }
-          }
-        }
-      }).lean();
-      if (req.body.idInvoice.length <= 0) {
-        req.flash('error', 'Mã hoá đơn không hợp lệ!');
-        res.redirect('/quanly/quanlynhapkho/');
-      } else if (arrayNew.length <= 0) {
-        req.flash('error', 'Bạn chưa thêm sản phẩm nhập kho!');
-        res.redirect('/quanly/quanlynhapkho/');
-      } else {
-        receipt
-          .save()
-          .then(() => {
-            Receipt.findOne(
-              {
-                idInvoice: Number(req.body.idInvoice),
-                totalMoney: Number(req.body.totalMoney),
-              },
-              (err, data) => {
-                if (!err) {
-                  if (data) {
-                    var idNew = data.idReceipt;
-                    console.log('=========body idNew', idNew);
-                    ProductTemp.find((err, array) => {
+            if (req.body.idInvoice.length <= 0) {
+              req.flash('error', 'Mã hoá đơn không hợp lệ!');
+              res.redirect('/quanly/quanlynhapkho/');
+            } else {
+              receipt
+                .save()
+                .then(() => {
+                  Receipt.findOne(
+                    {
+                      idInvoice: Number(req.body.idInvoice),
+                      totalMoney: Number(req.body.totalMoney),
+                    },
+                    (err, data) => {
                       if (!err) {
-                        if (array) {
-                          for (var i = 0; i < array.length; i++) {
-                            const proNew = new Product();
-                            proNew.idProduct = array[i].idProduct;
-                            proNew.name = array[i].name;
-                            proNew.idCategory = array[i].idCategory;
-                            proNew.idReceipt = idNew;
-                            proNew.manufacturingDate =
-                              array[i].manufacturingDate;
-                            proNew.expiryDate = array[i].expiryDate;
-                            proNew.imageList = array[i].imageList;
-                            proNew.importPrice = array[i].priceImport;
-                            proNew.salePrice = array[i].priceSaleNew;
-                            proNew.format = array[i].format;
-                            proNew.packingForm = array[i].packingForm;
-                            proNew.uses = array[i].uses;
-                            proNew.component = array[i].component;
-                            proNew.specified = array[i].specified;
-                            proNew.antiDefinition = array[i].antiDefinition;
-                            proNew.dosage = array[i].dosage;
-                            proNew.sideEffects = array[i].sideEffects;
-                            proNew.careful = array[i].careful;
-                            proNew.preserve = array[i].preserve;
-                            proNew.trademark = array[i].trademark;
-                            proNew.origin = array[i].origin;
-                            proNew.quality = array[i].quality;
-                            proNew.sold = array[i].sold;
-                            proNew.retailQuantity = array[i].retailQuantity;
-                            proNew.quantityPerBox = array[i].quantityPerBox;
-                            proNew.retailQuantityPack =
-                              array[i].retailQuantityPack;
-                            proNew.status = array[i].status;
+                        if (data) {
+                          var idNew = data.idReceipt;
+                          console.log('=========body idNew', idNew);
+                          ProductTemp.find((err, array) => {
+                            if (!err) {
+                              if (array) {
+                                for (var i = 0; i < array.length; i++) {
+                                  const proNew = new Product();
+                                  proNew.idProduct = array[i].idProduct;
+                                  proNew.name = array[i].name;
+                                  proNew.idCategory = array[i].idCategory;
+                                  proNew.idReceipt = idNew;
+                                  proNew.manufacturingDate =
+                                    array[i].manufacturingDate;
+                                  proNew.expiryDate = array[i].expiryDate;
+                                  proNew.imageList = array[i].imageList;
+                                  proNew.importPrice = array[i].priceImport;
+                                  proNew.salePrice = array[i].priceSaleNew;
+                                  proNew.format = array[i].format;
+                                  proNew.packingForm = array[i].packingForm;
+                                  proNew.uses = array[i].uses;
+                                  proNew.component = array[i].component;
+                                  proNew.specified = array[i].specified;
+                                  proNew.antiDefinition =
+                                    array[i].antiDefinition;
+                                  proNew.dosage = array[i].dosage;
+                                  proNew.sideEffects = array[i].sideEffects;
+                                  proNew.careful = array[i].careful;
+                                  proNew.preserve = array[i].preserve;
+                                  proNew.trademark = array[i].trademark;
+                                  proNew.origin = array[i].origin;
+                                  proNew.quality = array[i].quality;
+                                  proNew.sold = array[i].sold;
+                                  proNew.retailQuantity =
+                                    array[i].retailQuantity;
+                                  proNew.quantityPerBox =
+                                    array[i].quantityPerBox;
+                                  proNew.retailQuantityPack =
+                                    array[i].retailQuantityPack;
+                                  proNew.status = array[i].status;
 
-                            proNew
-                              .save()
-                              .then(() => {
-                                if (i == array.length) {
-                                  ProductTemp.find((err, temp) => {
-                                    for (var i = 0; i < temp.length; i++) {
-                                      ProductTemp.delete({
-                                        idProductTemp: temp[i].idProductTemp,
-                                      })
-                                        .then(() => {
-                                          if (i == temp.length) {
-                                            res.redirect('/quanly/quanlythuoc');
+                                  proNew
+                                    .save()
+                                    .then(() => {
+                                      if (i == array.length) {
+                                        ProductTemp.find((err, temp) => {
+                                          for (
+                                            var i = 0;
+                                            i < temp.length;
+                                            i++
+                                          ) {
+                                            ProductTemp.delete({
+                                              idProductTemp:
+                                                temp[i].idProductTemp,
+                                            })
+                                              .then(() => {
+                                                if (i == temp.length) {
+                                                  res.redirect(
+                                                    '/quanly/quanlythuoc'
+                                                  );
+                                                }
+                                              })
+                                              .catch(err => {});
                                           }
-                                        })
-                                        .catch(err => {});
-                                    }
-                                  }).lean();
+                                        }).lean();
+                                      }
+                                    })
+                                    .catch(error => {
+                                      console.log('=========error', error);
+                                    });
                                 }
-                              })
-                              .catch(error => {
-                                console.log('=========error', error);
-                              });
-                          }
+                              }
+                            } else {
+                              res.status(400).json({ error: 'ERROR!!!' });
+                            }
+                          }).lean();
                         }
                       } else {
                         res.status(400).json({ error: 'ERROR!!!' });
                       }
-                    }).lean();
-                  }
-                } else {
-                  res.status(400).json({ error: 'ERROR!!!' });
-                }
-              }
-            );
-          })
-          .catch(error => {});
-      }
+                    }
+                  );
+                })
+                .catch(error => {});
+            }
+          } else {
+            req.flash('error', 'Bạn chưa thêm sản phẩm nhập kho!');
+            res.redirect('/quanly/quanlynhapkho/');
+          }
+        }
+      }).lean();
 
       // console.log('=========body 553', req.body);
     } else {
